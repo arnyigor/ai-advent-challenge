@@ -1,0 +1,7 @@
+{
+  "githubRepo": "https://github.com/arnyigor/ai-advance-challenge",
+  "branch": "main",
+  "videoRemote": "yandex_challenge",
+  "videoDirectory": "AI Advance Challenge",
+  "videoFilePattern": "day{day}-demo.mp4"
+}

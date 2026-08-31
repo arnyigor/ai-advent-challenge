@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Demo — day01</title>
+<style>
+  :root {
+    --bg: #0b0e14;
+    --panel: #12161f;
+    --panel2: #171c28;
+    --border: #232a3a;
+    --text: #e6ebf4;
+    --dim: #8b95a8;
+    --accent: #7c6cff;
+    --accent2: #00d4ff;
+    --ok: #2dd4a0;
+    --err: #ff5c7a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; height: 100vh; overflow: hidden; color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(124,108,255,.18), transparent 60%),
+      radial-gradient(900px 500px at 10% 110%, rgba(0,212,255,.12), transparent 60%),
+      var(--bg);
+    display: flex; flex-direction: column;
+  }
+  header {
+    padding: 18px 24px 10px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .logo {
+    font-size: 20px; font-weight: 700; letter-spacing: .3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--dim); font-size: 13px; }
+  #backends { display: flex; gap: 8px; flex-wrap: wrap; padding: 6px 24px 12px; }
+  .chip {
+    display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 999px;
+    padding: 6px 14px; font-size: 13px; color: var(--dim);
+    transition: all .15s;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--text); }
+  .chip.active {
+    border-color: var(--accent); color: var(--text);
+    background: linear-gradient(135deg, rgba(124,108,255,.22), rgba(0,212,255,.12));
+    box-shadow: 0 0 18px rgba(124,108,255,.25);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #3a4356; }
+  .dot.on { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  .dot.off { background: #4a3540; }
+  .chip.disabled { opacity: .45; cursor: not-allowed; }
+
+  main { flex: 1; min-height: 0; max-width: 860px; width: 100%; margin: 0 auto; padding: 0 16px; display: flex; flex-direction: column; }
+  #chat { flex: 1; overflow-y: auto; padding: 8px 8px 16px; display: flex; flex-direction: column; gap: 12px; min-height: 300px; }
+  .msg { max-width: 82%; padding: 12px 16px; border-radius: 16px; line-height: 1.55; font-size: 14.5px; white-space: pre-wrap; word-break: break-word; }
+  .msg.user {
+    align-self: flex-end; border-bottom-right-radius: 4px;
+    background: linear-gradient(135deg, var(--accent), #5a48e0); color: #fff;
+  }
+  .msg.assistant {
+    align-self: flex-start; border-bottom-left-radius: 4px;
+    background: var(--panel2); border: 1px solid var(--border);
+  }
+  .msg.error { background: rgba(255,92,122,.12); border: 1px solid var(--err); color: #ffb3c2; }
+  .meta { font-size: 11.5px; color: var(--dim); margin-top: 8px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .cursor { display: inline-block; width: 8px; height: 16px; background: var(--accent2); vertical-align: -2px; animation: blink .8s infinite; border-radius: 2px; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  #suggest { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 8px 10px; }
+  .sug {
+    font-size: 12.5px; color: var(--dim); background: var(--panel);
+    border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer;
+  }
+  .sug:hover { color: var(--text); border-color: var(--accent2); }
+
+  form {
+    display: flex; gap: 10px; padding: 10px 8px 20px;
+    background: linear-gradient(0deg, var(--bg) 60%, transparent);
+  }
+  #prompt {
+    flex: 1; resize: none; min-height: 52px; max-height: 160px;
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+    font: inherit; outline: none; transition: border-color .15s;
+  }
+  #prompt:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,108,255,.18); }
+  button#send {
+    border: none; border-radius: 14px; padding: 0 22px; cursor: pointer;
+    font: inherit; font-weight: 600; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    transition: transform .1s, opacity .15s;
+  }
+  button#send:hover { transform: translateY(-1px); }
+  button#send:disabled { opacity: .5; cursor: wait; transform: none; }
+  footer { text-align: center; color: var(--dim); font-size: 12px; padding: 0 0 14px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">✦ LLM Demo</div>
+  <div class="sub">day01 · запрос в LLM через API · стриминг по токенам</div>
+</header>
+
+<div id="backends"></div>
+
+<main>
+  <div id="chat">
+    <div class="msg assistant">Привет! Выберите источник LLM (зелёная точка = доступно) и напишите что-нибудь.
+Если ничего нет — выберите <b>Mock</b>, он всегда работает.</div>
+  </div>
+  <div id="suggest">
+    <span class="sug">Расскажи, что ты умеешь</span>
+    <span class="sug">Напиши функцию fizzbuzz на Python</span>
+    <span class="sug">Объясни рекурсию одной метафорой</span>
+    <span class="sug">Придумай имя для кота-программиста</span>
+  </div>
+  <form id="form">
+    <textarea id="prompt" placeholder="Ваш вопрос к LLM… (Enter — отправить, Shift+Enter — новая строка)"></textarea>
+    <button id="send" type="submit">➤</button>
+  </form>
+</main>
+<footer>Один сервер без зависимостей: server.mjs · бэкенды: llama.cpp / Ollama / DeepSeek / OpenAI / Gemini / Mock</footer>
+
+<script>
+const chat = document.getElementById('chat');
+const form = document.getElementById('form');
+const promptEl = document.getElementById('prompt');
+const sendBtn = document.getElementById('send');
+const backendsEl = document.getElementById('backends');
+let activeBackend = null;
+let busy = false;
+
+function addMsg(role, text) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+function chipsRefresh(id) {
+  [...backendsEl.children].forEach((c) => {
+    c.classList.toggle('active', c.dataset.id === id);
+  });
+}
+
+function rebuildChips(list) {
+  backendsEl.innerHTML = '';
+  for (const b of list) {
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (b.available ? '' : ' disabled');
+    chip.dataset.id = b.id;
+    chip.innerHTML = `<span class="dot ${b.available ? 'on' : 'off'}"></span>${b.label}`;
+    if (b.available) chip.onclick = () => { activeBackend = b.id; chipsRefresh(b.id); };
+    backendsEl.appendChild(chip);
+  }
+}
+
+async function loadBackends() {
+  const r = await fetch('/api/backends');
+  const { backends } = await r.json();
+  rebuildChips(backends);
+  const first = backends.find((b) => b.available && b.kind !== 'mock') || backends.find((b) => b.available);
+  if (first && !activeBackend) { activeBackend = first.id; chipsRefresh(first.id); }
+}
+
+async function send(text) {
+  if (!text.trim() || busy) return;
+  busy = true; sendBtn.disabled = true;
+  addMsg('user', text);
+  promptEl.value = '';
+
+  const a = addMsg('assistant', '');
+  a.innerHTML = '<span class="cursor"></span>';
+  let acc = '';
+
+  try {
+    const r = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ backend: activeBackend, messages: [{ role: 'user', content: text }] }),
+    });
+    const reader = r.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    let meta = null, error = null;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let idx;
+      while ((idx = buf.indexOf('\n\n')) >= 0) {
+        const frame = buf.slice(0, idx); buf = buf.slice(idx + 2);
+        for (const line of frame.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          const j = JSON.parse(line.slice(6));
+          if (j.type === 'token') {
+            acc += j.text;
+            a.textContent = acc;
+            chat.scrollTop = chat.scrollHeight;
+          } else if (j.type === 'done') meta = j.meta;
+          else if (j.type === 'error') error = j.error;
+        }
+      }
+    }
+    if (error) {
+      a.className = 'msg error';
+      a.textContent = 'Ошибка: ' + error + '\n\nПопробуйте другой бэкенд или Mock.';
+    } else {
+      const m = document.createElement('div');
+      m.className = 'meta';
+      m.innerHTML = `⚡ ${meta?.time ?? '?'} c · ${meta?.backend ?? ''} · ${acc.length} симв.`;
+      a.appendChild(m);
+    }
+  } catch (e) {
+    a.className = 'msg error';
+    a.textContent = 'Сетевая ошибка: ' + e.message;
+  }
+  busy = false; sendBtn.disabled = false;
+  chat.scrollTop = chat.scrollHeight;
+}
+
+form.onsubmit = (e) => { e.preventDefault(); send(promptEl.value); };
+promptEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(promptEl.value); }
+});
+document.querySelectorAll('.sug').forEach((s) => {
+  s.onclick = () => { promptEl.value = s.textContent; send(s.textContent); };
+});
+
+loadBackends();
+</script>
+</body>
+</html>
