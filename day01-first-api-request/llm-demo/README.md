@@ -1,7 +1,7 @@
 # ✦ LLM Demo — day01
 
 > **Задача дня:** отправить запрос в LLM через API и вывести ответ.
-> **Результат:** Web-чат с токеновым стримингом + CLI, 6 бэкендов, ноль npm-зависимостей.
+> **Результат:** Web-чат с токеновым стримингом + CLI, 7 бэкендов, ноль npm-зависимостей.
 
 ---
 
@@ -39,10 +39,10 @@
 
 ---
 
-## 🎬 Слайд 1 — Демо (24 сек)
+## 🎬 Слайд 1 — Демо (32 сек)
 
-**[▶ Смотреть видео](https://yadi.sk/i/5KO4MRfWbBFABQ)** — все 4 доступных бэкенда подряд:
-`llama.cpp → DeepSeek → Gemini → Mock`
+**[▶ Смотреть видео](https://yadi.sk/i/kc7JTm_s2sYGnw)** — все 5 доступных бэкендов подряд:
+`llama.cpp → DeepSeek → RouterAI → Gemini → Mock`
 
 Каждый кадр: **печать запроса посимвольно → ожидание → ответ приходит стримом по токенам** + метрики (время, символы).
 
@@ -71,7 +71,7 @@ node cli.mjs --backend mock "тест" # принудительный бэкен
 
 ---
 
-## 🧩 Слайд 3 — Шесть источников LLM
+## 🧩 Слайд 3 — Семь источников LLM
 
 | Бэкенд | Тип | Как включается |
 |---|---|---|
@@ -79,6 +79,7 @@ node cli.mjs --backend mock "тест" # принудительный бэкен
 | **Ollama** | локальный | `ollama serve` на `127.0.0.1:11434` |
 | **DeepSeek** | облако | `DEEPSEEK_API_KEY` в окружении |
 | **OpenAI** | облако | `OPENAI_API_KEY` в окружении |
+| **RouterAI** | облако | `ROUTERAI_API_KEY` в окружении (модель `qwen/qwen3.8-27b`, `https://routerai.ru/api/v1/chat/completions`) |
 | **Gemini** | облако | `GEMINI_API_KEY` в окружении |
 | **Mock** | встроенный | **всегда работает**, без сети — гарантированный fallback |
 
@@ -90,6 +91,7 @@ node cli.mjs --backend mock "тест" # принудительный бэкен
 ```bash
 DEEPSEEK_API_KEY=sk-...     # DeepSeek
 OPENAI_API_KEY=sk-...       # OpenAI
+ROUTERAI_API_KEY=...        # RouterAI (https://routerai.ru)
 GEMINI_API_KEY=AIza...      # Gemini
 LLAMACPP_URL=http://127.0.0.1:8080   # свой адрес llama.cpp
 OLLAMA_URL=http://127.0.0.1:11434    # свой адрес Ollama
@@ -146,7 +148,7 @@ llm-demo/
 ├── cli.mjs           # CLI: один запрос или интерактив, авто-детект
 ├── run.bat / run.sh  # запуск в один клик
 ├── record-video.mjs  # запись демо-видео (headless Chrome + CDP + ffmpeg)
-├── video/full-demo.mp4 # готовое демо-видео (24 с, 4 бэкенда, локально, не в git)
+├── video/full-demo.mp4 # готовое демо-видео (32 с, 5 бэкендов, локально, не в git)
 └── README.md
 ```
 

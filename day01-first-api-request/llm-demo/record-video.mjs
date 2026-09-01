@@ -49,6 +49,7 @@ const SCENARIO = {
   'ollama':    { label: 'Ollama',    prompt: 'Скажи одно слово: приветствие' },
   'deepseek':  { label: 'DeepSeek',  prompt: 'Одно предложение: что такое LLM?' },
   'openai':    { label: 'OpenAI',    prompt: 'Одно предложение: что такое API?' },
+  'routerai':  { label: 'RouterAI',  prompt: 'Скажи 3 слова про нейросети' },
   'gemini':    { label: 'Gemini',    prompt: 'Скажи 3 слова про космос' },
   'mock':      { label: 'Mock',      prompt: 'тест' },
 };

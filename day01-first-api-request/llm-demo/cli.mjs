@@ -22,25 +22,34 @@ const BACKENDS = {
     url: process.env.LLAMACPP_URL || 'http://127.0.0.1:8080',
     chatPath: '/v1/chat/completions',
     defaultModel: 'qwen-27b',
-    available: async () => ok(await fetch(this.url + '/health', { signal: AbortSignal.timeout(1000) })),
+    async available() { return ok(await fetch(this.url + '/health', { signal: AbortSignal.timeout(1000) })); },
   },
   ollama: {
     url: process.env.OLLAMA_URL || 'http://127.0.0.1:11434',
     chatPath: '/api/chat',
     defaultModel: 'llama3.2',
-    available: async () => ok(await fetch(this.url + '/api/tags', { signal: AbortSignal.timeout(1000) })),
+    async available() { return ok(await fetch(this.url + '/api/tags', { signal: AbortSignal.timeout(1000) })); },
   },
   deepseek: {
     url: 'https://api.deepseek.com/v1',
     chatPath: '/chat/completions',
     defaultModel: 'deepseek-chat',
+    keyName: 'DEEPSEEK_API_KEY',
     available: () => !!key('DEEPSEEK_API_KEY'),
   },
   openai: {
     url: 'https://api.openai.com/v1',
     chatPath: '/chat/completions',
     defaultModel: 'gpt-4o-mini',
+    keyName: 'OPENAI_API_KEY',
     available: () => !!key('OPENAI_API_KEY'),
+  },
+  routerai: {
+    url: 'https://routerai.ru/api/v1',
+    chatPath: '/chat/completions',
+    defaultModel: 'qwen/qwen3.8-27b',
+    keyName: 'ROUTERAI_API_KEY',
+    available: () => !!key('ROUTERAI_API_KEY'),
   },
   gemini: {
     url: 'https://generativelanguage.googleapis.com/v1beta',
@@ -58,7 +67,7 @@ async function pickBackend() {
     if (!b) throw new Error('Неизвестный бэкенд: ' + backend + '. Есть: ' + Object.keys(BACKENDS).join(', '));
     return backend;
   }
-  for (const id of ['llama.cpp', 'ollama', 'deepseek', 'openai', 'gemini']) {
+  for (const id of ['llama.cpp', 'ollama', 'deepseek', 'openai', 'routerai', 'gemini']) {
     if (await BACKENDS[id].available()) return id;
   }
   console.error('⚠ Ничего не найдено (ни локальная LLM, ни API-ключи) → использую mock.');
@@ -84,7 +93,7 @@ async function ask(id, text) {
   } else {
     const m = model || b.defaultModel;
     const headers = { 'Content-Type': 'application/json' };
-    const apiKey = key(id === 'deepseek' ? 'DEEPSEEK_API_KEY' : 'OPENAI_API_KEY');
+    const apiKey = key(b.keyName);
     if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
     const url = b.url + b.chatPath;
     const body = id === 'ollama'

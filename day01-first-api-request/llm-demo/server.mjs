@@ -123,6 +123,15 @@ const BACKENDS = [
     },
   },
   {
+    id: 'routerai', label: 'RouterAI', kind: 'cloud',
+    url: 'https://routerai.ru/api/v1',
+    keyName: 'ROUTERAI_API_KEY', defaultModel: 'qwen/qwen3.8-27b',
+    async detect() { return !!key(this.keyName); },
+    async *stream({ messages, model }) {
+      yield* openaiStream(this.url, key(this.keyName), model || this.defaultModel, messages);
+    },
+  },
+  {
     id: 'gemini', label: 'Gemini', kind: 'cloud',
     url: 'https://generativelanguage.googleapis.com/v1beta',
     keyName: 'GEMINI_API_KEY', defaultModel: 'gemini-3.5-flash-lite',

@@ -67,4 +67,4 @@ node record-video.mjs --backends mock,llama.cpp   # только выбранн�
 
 ## Текущее видео
 
-- `video/full-demo.mp4` — все 4 доступных бэкенда (llama.cpp, DeepSeek, Gemini, Mock), ~29 с.
+- `video/full-demo.mp4` — все 5 доступных бэкендов (llama.cpp, DeepSeek, RouterAI, Gemini, Mock), ~32 с.
