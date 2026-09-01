@@ -11,7 +11,7 @@ $found = $false
 Get-ChildItem -Path $Path -Recurse -File -Include *.py,*.js,*.json,*.env,*.ps1,*.md |
     Where-Object { $_.FullName -notmatch '\\\.git\\' } |
     ForEach-Object {
-        $lines = Get-Content $_.FullName
+        $lines = Get-Content $_.FullName -Encoding UTF8
         for ($i = 0; $i -lt $lines.Count; $i++) {
             foreach ($p in $patterns) {
                 if ($lines[$i] -match $p) {

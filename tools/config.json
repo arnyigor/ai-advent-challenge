@@ -1,7 +1,7 @@
 {
-  "githubRepo": "https://github.com/arnyigor/ai-advance-challenge",
+  "githubRepo": "https://github.com/arnyigor/ai-advent-challenge",
   "branch": "main",
   "videoRemote": "yandex_challenge",
-  "videoDirectory": "AI Advance Challenge",
+  "videoDirectory": "AI Advent Challenge",
   "videoFilePattern": "day{day}-demo.mp4"
 }

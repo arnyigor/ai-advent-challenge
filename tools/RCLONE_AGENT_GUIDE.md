@@ -25,7 +25,7 @@
 
 ```
 REMOTE = yandex_challenge
-ROOT_FOLDER = "AI Advance Challenge"
+ROOT_FOLDER = "AI Advent Challenge"
 VIDEO_LOCAL_DIR = <папка с записанными видео>   (настраивается пользователем, напр. %USERPROFILE%\Videos\ChallengeVideos)
 VIDEO_NAMING = dayNN-demo.mp4   (NN — номер дня с ведущим нулём, напр. day02-demo.mp4)
 ```
@@ -62,24 +62,24 @@ powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' lsd yandex_challenge:"
 
 **Шаг 3 — создать папку дня (безопасно вызывать даже если папка уже есть, mkdir идемпотентен):**
 ```powershell
-powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' mkdir 'yandex_challenge:AI Advance Challenge/Day NN'"
+powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' mkdir 'yandex_challenge:AI Advent Challenge/Day NN'"
 ```
 
 **Шаг 4 — залить видео:**
 ```powershell
-powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' copyto '<VIDEO_LOCAL_DIR>dayNN-demo.mp4' 'yandex_challenge:AI Advance Challenge/Day NN/dayNN-demo.mp4' --yandex-upload-wait 2s"
+powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' copyto '<VIDEO_LOCAL_DIR>dayNN-demo.mp4' 'yandex_challenge:AI Advent Challenge/Day NN/dayNN-demo.mp4' --yandex-upload-wait 2s"
 ```
 Флаг `--yandex-upload-wait 2s` обязателен — Яндекс.Диск иногда сообщает о завершении загрузки чуть раньше, чем реально готов файл, из-за чего следующая команда (`lsjson`/`link`) может вернуть ошибку 500.
 
 **Шаг 5 — получить публичную ссылку:**
 ```powershell
-powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' link 'yandex_challenge:AI Advance Challenge/Day NN/dayNN-demo.mp4'"
+powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' link 'yandex_challenge:AI Advent Challenge/Day NN/dayNN-demo.mp4'"
 ```
 
 **Шаг 6 — сверить размер (локальный vs залитый), обязательный шаг верификации:**
 ```powershell
 powershell.exe -NoProfile -Command "Get-Item '<VIDEO_LOCAL_DIR>dayNN-demo.mp4' | Select-Object Length"
-powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' lsl 'yandex_challenge:AI Advance Challenge/Day NN'"
+powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' lsl 'yandex_challenge:AI Advent Challenge/Day NN'"
 ```
 Размеры должны совпадать побайтово. Если не совпадают — не считать загрузку успешной, сообщить пользователю.
 
@@ -87,12 +87,12 @@ powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' lsl 'yandex_challenge:AI Ad
 
 **Посмотреть все папки дней на Диске:**
 ```powershell
-powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' lsd 'yandex_challenge:AI Advance Challenge'"
+powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' lsd 'yandex_challenge:AI Advent Challenge'"
 ```
 
 **Посмотреть содержимое конкретного дня:**
 ```powershell
-powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' lsjson 'yandex_challenge:AI Advance Challenge/Day NN'"
+powershell.exe -NoProfile -Command "& '<RCLONE_EXE>' lsjson 'yandex_challenge:AI Advent Challenge/Day NN'"
 ```
 `lsjson` удобнее для программной обработки (даёт структурированные данные: имя, размер, дату изменения), `ls`/`lsl` — для быстрого визуального просмотра.
 
@@ -116,7 +116,7 @@ Get-ChildItem <VIDEO_LOCAL_DIR> -Filter "day*-demo.mp4"
 |---|---|
 | `couldn't read OAuth token` / `invalid character` | Токен в конфиге битый. НЕ чинить самостоятельно — это OAuth-зона, только пользователь. |
 | `500 Internal Server Error` сразу после `copyto` | Забыт флаг `--yandex-upload-wait 2s`. Подождать 5-10 сек и повторить `lsjson`/`link` для уже залитого файла — сам файл обычно цел. |
-| `directory not found` при `mkdir`/`copyto` | Проверить точное написание пути — регистр и пробелы в `"AI Advance Challenge/Day NN"` должны совпадать один в один с уже существующими папками. |
+| `directory not found` при `mkdir`/`copyto` | Проверить точное написание пути — регистр и пробелы в `"AI Advent Challenge/Day NN"` должны совпадать один в один с уже существующими папками. |
 | Размер файла на Диске не совпадает с локальным | Файл залился не полностью (обрыв сети). Повторить `copyto` с тем же путём — перезапишет. |
 | `rclone` не находится (command not found) | PATH не подхватился в bash-сессии — использовать полный путь через `RCLONE_EXE`, не рассчитывать на глобальный `rclone`. |
 

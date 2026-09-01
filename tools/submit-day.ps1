@@ -43,7 +43,7 @@ rclone copyto $Video $remotePath
 $videoLink = (rclone link $remotePath).Trim()
 
 $result = @"
-AI Advance Challenge — Day $d
+AI Advent Challenge — Day $d
 
 Код:
 $($config.githubRepo)/tree/$($config.branch)/$($dayFolder.Name)
