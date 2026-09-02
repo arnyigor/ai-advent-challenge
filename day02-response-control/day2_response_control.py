@@ -24,6 +24,16 @@ try:
 except Exception:
     pass
 
+
+def _retry_banner(message):
+    """Жёлтый retry-баннер в text-режиме (tools/llm печатает его без цвета).
+
+    Передаётся как retry_logger в call_gemini_with_retries. Без этого
+    видео-рекордер, который парсит ANSI-цвета, увидит молча изменившийся кадр
+    на редкой ветке 429/503. quiet=True (JSON-режим) баннер не печатает."""
+    print(f"{YELLOW}{message}{RESET}")
+
+
 BASE_PROMPT = (
     "Объясни, что такое RAG (Retrieval-Augmented Generation), как он работает, "
     "какие у него основные преимущества и ограничения и когда его стоит использовать."
@@ -104,7 +114,8 @@ def run_experiment(word_limit, stop_sequence, max_output_tokens, model_chain, qu
     for model in model_chain:
         try:
             t_a = time.monotonic()
-            data_a = call_gemini_with_retries(model, BASE_PROMPT, base_config, quiet=quiet)
+            data_a = call_gemini_with_retries(model, BASE_PROMPT, base_config,
+                                              quiet=quiet, retry_logger=_retry_banner)
             latency_a = time.monotonic() - t_a
             resp_a = extract_response(data_a)
             stats_a = calculate_stats(resp_a["text"])
@@ -113,6 +124,7 @@ def run_experiment(word_limit, stop_sequence, max_output_tokens, model_chain, qu
             data_b = call_gemini_with_retries(
                 model, BASE_PROMPT, controlled_config,
                 system_instruction=system_instruction, quiet=quiet,
+                retry_logger=_retry_banner,
             )
             latency_b = time.monotonic() - t_b
             resp_b = extract_response(data_b)

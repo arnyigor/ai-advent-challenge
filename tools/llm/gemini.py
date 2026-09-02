@@ -98,6 +98,9 @@ def call_gemini_with_retries(
                 else:
                     print(message)
             time.sleep(wait)
+    assert (
+        last_error is not None
+    )  # цикл выполняется хотя бы раз (MAX_RETRIES_PER_MODEL >= 1)
     raise last_error
 
 
