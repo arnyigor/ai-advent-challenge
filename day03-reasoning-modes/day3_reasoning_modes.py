@@ -1,15 +1,16 @@
-"""Day 3 — Reasoning Modes: direct / cot / self_prompt / panel (chain).
+"""Day 3 — Reasoning Modes: direct / cot / self_prompt / panel (expert group).
 
 Сравнение четырёх способов рассуждения на трёх задачах (по одному инстансу
 на семейство) с повторами. Одна модель на всю матрицу; fallback — как в day2:
 если модель отвалилась посреди, вся матрица перезапускается на следующей
 (иначе методы сравнивались бы на разных моделях).
 
-Бюджет: direct+cot+self_prompt+panel = 1+1+2+4 = 8 вызовов на (задачу, повтор).
-3 задачи x 3 повтора x 8 = 72. Пейсер --rpm 12 → ~10 минут основного прогона.
+Бюджет: direct+cot+self_prompt+panel = 1+1+2+1 = 5 вызовов на (задачу, повтор).
+3 задачи x 3 повтора x 5 = 45. Пейсер --rpm 12 → ~4 минуты основного прогона.
 """
 
 import argparse
+from contextlib import nullcontext
 import json
 import sys
 import time
@@ -26,8 +27,10 @@ except Exception:
 
 from tools.llm.gemini import (
     MODEL_CHAIN,
+    GeminiCancelledError,
     GeminiRetryableError,
     ModelUnavailableError,
+    call_gemini_stream_with_retries,
     call_gemini_with_retries,
     has_gemini_api_key,
 )
@@ -42,8 +45,21 @@ from tools.llm.ui import (
 )
 
 from methods import METHOD_ORDER, METHOD_RUNNERS, make_generation_config
+from methods import MethodResult, StageResult
 from scoring import accuracy, cost_per_correct, self_consistency
 from tasks import TASKS, verify_gold
+from ui.events import (
+    ExperimentFinished,
+    ExperimentStarted,
+    FallbackTriggered,
+    MethodFinished,
+    MethodStarted,
+    NullReporter,
+    RequestRetrying,
+    RequestStateChanged,
+    StageOutputDelta,
+    TaskStarted,
+)
 
 
 def _retry_logger(message):
@@ -53,38 +69,99 @@ def _retry_logger(message):
 class Pacer:
     """Минимальный пейсер: gap между вызовами по rpm."""
 
-    def __init__(self, rpm):
+    def __init__(self, rpm, cancel_event=None):
         self.gap = 60.0 / rpm if rpm and rpm > 0 else 0.0
         self._last = None
+        self.cancel_event = cancel_event
 
     def wait(self):
         now = time.monotonic()
         if self._last is not None and self.gap:
             d = self.gap - (now - self._last)
             if d > 0:
-                time.sleep(d)
+                if self.cancel_event is not None:
+                    if self.cancel_event.wait(d):
+                        raise RunCancelled()
+                else:
+                    time.sleep(d)
         self._last = time.monotonic()
 
 
 class Client:
     """Привязывает одну модель к вызовам; применяет пейсер и ретраи."""
 
-    def __init__(self, model, pacer, quiet):
+    def __init__(self, model, pacer, quiet, cancel_event=None, stream=False):
         self.model = model
         self.pacer = pacer
         self.quiet = quiet
+        self.cancel_event = cancel_event
+        self.stream = stream
 
     def call(self, prompt, gcfg=None, system_instruction=None):
+        if self.cancel_event is not None and self.cancel_event.is_set():
+            raise RunCancelled()
         if self.pacer:
             self.pacer.wait()
-        return call_gemini_with_retries(
-            self.model,
-            prompt,
-            gcfg,
-            system_instruction=system_instruction,
-            quiet=self.quiet,
-            retry_logger=None if self.quiet else _retry_logger,
-        )
+        try:
+            return call_gemini_with_retries(
+                self.model,
+                prompt,
+                gcfg,
+                system_instruction=system_instruction,
+                quiet=self.quiet,
+                retry_logger=None if self.quiet else _retry_logger,
+                cancel_event=self.cancel_event,
+            )
+        except GeminiCancelledError:
+            raise RunCancelled() from None
+
+    def call_stage(
+        self,
+        prompt,
+        gcfg=None,
+        method="",
+        stage="",
+        reporter=None,
+        system_instruction=None,
+    ):
+        if not self.stream:
+            return self.call(prompt, gcfg, system_instruction=system_instruction)
+        if self.cancel_event is not None and self.cancel_event.is_set():
+            raise RunCancelled()
+        if self.pacer:
+            self.pacer.wait()
+
+        def emit(event):
+            if reporter is not None:
+                reporter.emit(event)
+
+        try:
+            return call_gemini_stream_with_retries(
+                self.model,
+                prompt,
+                gcfg,
+                system_instruction=system_instruction,
+                quiet=self.quiet,
+                retry_logger=None if self.quiet else _retry_logger,
+                cancel_event=self.cancel_event,
+                on_state=lambda state: emit(
+                    RequestStateChanged(method=method, stage=stage, state=state)
+                ),
+                on_text=lambda text: emit(
+                    StageOutputDelta(method=method, stage=stage, text=text)
+                ),
+                on_retry=lambda attempt, wait_s, reason: emit(
+                    RequestRetrying(
+                        method=method,
+                        stage=stage,
+                        attempt=attempt,
+                        wait_s=wait_s,
+                        reason=reason[:200],
+                    )
+                ),
+            )
+        except GeminiCancelledError:
+            raise RunCancelled() from None
 
 
 # ---------------------------------------------------------------------------
@@ -92,35 +169,127 @@ class Client:
 # ---------------------------------------------------------------------------
 
 
-def run_matrix(repeats, methods, tasks, model, gcfg, pacer, quiet):
+CALLS_PER_METHOD = {"direct": 1, "cot": 1, "self_prompt": 2, "panel": 1}
+
+
+class RunCancelled(RuntimeError):
+    """Кооперативная отмена: поднимается между вызовами/стадиями, а не внутри
+    уже выполняющегося синхронного HTTP-запроса."""
+
+
+def estimate_calls(repeats, methods, tasks):
+    return repeats * len(tasks) * sum(CALLS_PER_METHOD.get(m, 1) for m in methods)
+
+
+def run_matrix(
+    repeats,
+    methods,
+    tasks,
+    model,
+    gcfg,
+    pacer,
+    quiet,
+    reporter=None,
+    cancel_event=None,
+    stream=False,
+):
     """repeat -> task -> method: повтор снаружи, чтобы деградация модели во
     времени не била систематически по одному методу."""
+    reporter = reporter or NullReporter()
     results = []
+    reporter.emit(
+        ExperimentStarted(
+            model=model,
+            thinking=(gcfg.get("thinkingConfig") or {}).get("thinkingLevel", "-"),
+            repeats=repeats,
+            tasks_total=len(tasks),
+            methods=list(methods),
+            total_calls_estimate=estimate_calls(repeats, methods, tasks),
+        )
+    )
     for repeat in range(repeats):
-        for task in tasks:
-            for name in methods:
-                runner = METHOD_RUNNERS[name]
-                results.append(
-                    runner(
-                        task,
-                        Client(model, pacer, quiet),
-                        gcfg,
-                        model=model,
-                        repeat=repeat,
-                    )
+        for task_index, task in enumerate(tasks, 1):
+            if cancel_event is not None and cancel_event.is_set():
+                raise RunCancelled()
+            reporter.emit(
+                TaskStarted(
+                    task_id=task.id,
+                    family=task.family,
+                    prompt=task.prompt,
+                    repeat=repeat,
+                    repeat_total=repeats,
+                    task_index=task_index,
+                    task_total=len(tasks),
+                    baseline=task.baseline(),
                 )
+            )
+            for name in methods:
+                if cancel_event is not None and cancel_event.is_set():
+                    raise RunCancelled()
+                runner = METHOD_RUNNERS[name]
+                reporter.emit(MethodStarted(method=name))
+                result = runner(
+                    task,
+                    Client(
+                        model,
+                        pacer,
+                        quiet,
+                        cancel_event=cancel_event,
+                        stream=stream,
+                    ),
+                    gcfg,
+                    model=model,
+                    repeat=repeat,
+                    reporter=reporter,
+                )
+                results.append(result)
+                reporter.emit(MethodFinished(result=result))
+    reporter.emit(ExperimentFinished(results=results, model=model))
     return results
 
 
-def run_with_fallback(repeats, methods, tasks, model_chain, gcfg, rpm, quiet):
+def run_with_fallback(
+    repeats,
+    methods,
+    tasks,
+    model_chain,
+    gcfg,
+    rpm,
+    quiet,
+    reporter=None,
+    cancel_event=None,
+    stream=False,
+):
+    reporter = reporter or NullReporter()
     attempts = []
-    pacer = Pacer(rpm)
-    for model in model_chain:
+    pacer = Pacer(rpm, cancel_event=cancel_event)
+    for index, model in enumerate(model_chain):
         try:
-            results = run_matrix(repeats, methods, tasks, model, gcfg, pacer, quiet)
+            results = run_matrix(
+                repeats,
+                methods,
+                tasks,
+                model,
+                gcfg,
+                pacer,
+                quiet,
+                reporter=reporter,
+                cancel_event=cancel_event,
+                stream=stream,
+            )
             return results, model, attempts
         except (ModelUnavailableError, GeminiRetryableError) as e:
             attempts.append({"model": model, "status": "failed", "error": str(e)[:200]})
+            next_model = (
+                model_chain[index + 1] if index + 1 < len(model_chain) else None
+            )
+            reporter.emit(
+                FallbackTriggered(
+                    old_model=model,
+                    new_model=next_model,
+                    reason=str(e)[:200],
+                )
+            )
             if not quiet:
                 print(f"{YELLOW}  [{model}] недоступна: {e}{RESET}")
     raise RuntimeError(
@@ -327,10 +496,12 @@ def build_json_document(
     agg,
     failures,
     model_used,
+    results=None,
     attempts=None,
     error=None,
     v=None,
 ):
+    results = results or []
     doc = {
         "day": 3,
         "model_chain": model_chain,
@@ -345,6 +516,7 @@ def build_json_document(
             {"id": t.id, "family": t.family, "gold": t.gold, "baseline": t.baseline()}
             for t in tasks
         ],
+        "runs": [r.to_json() for r in results],
         "matrix": agg,
         "failures": failures,
         "verdict": v,
@@ -352,7 +524,45 @@ def build_json_document(
     return doc
 
 
-def run_json_mode(repeats, thinking, rpm, methods, tasks, model_chain, quiet=True):
+def _result_from_json(row):
+    stages = [StageResult(**s) for s in row.get("stages", [])]
+    allowed = {
+        "method",
+        "task_id",
+        "repeat",
+        "status",
+        "answer_raw",
+        "answer_norm",
+        "correct",
+        "calls",
+        "prompt_tokens",
+        "output_tokens",
+        "latency_s",
+        "model",
+        "prompts",
+        "failed_stage",
+    }
+    data = {k: row.get(k) for k in allowed if k in row}
+    return MethodResult(**data, stages=stages)
+
+
+def load_results_document(path):
+    with open(path, "r", encoding="utf-8") as f:
+        doc = json.load(f)
+    return doc, [_result_from_json(row) for row in doc.get("runs", [])]
+
+
+def write_json_document(path, doc):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(doc, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+
+def run_json_mode(
+    repeats, thinking, rpm, methods, tasks, model_chain, quiet=True, out_path=None
+):
+    verify_gold()
     if not has_gemini_api_key():
         doc = build_json_document(
             repeats,
@@ -366,6 +576,8 @@ def run_json_mode(repeats, thinking, rpm, methods, tasks, model_chain, quiet=Tru
             None,
             error="GEMINI_API_KEY not set",
         )
+        if out_path:
+            write_json_document(out_path, doc)
         print(json.dumps(doc, ensure_ascii=False, indent=2))
         sys.exit(1)
 
@@ -387,6 +599,8 @@ def run_json_mode(repeats, thinking, rpm, methods, tasks, model_chain, quiet=Tru
             None,
             error=str(e),
         )
+        if out_path:
+            write_json_document(out_path, doc)
         print(json.dumps(doc, ensure_ascii=False, indent=2))
         sys.exit(1)
 
@@ -403,54 +617,189 @@ def run_json_mode(repeats, thinking, rpm, methods, tasks, model_chain, quiet=Tru
         agg,
         fail,
         model_used,
+        results=results,
         attempts=attempts,
         v=v,
     )
+    if out_path:
+        write_json_document(out_path, doc)
     print(json.dumps(doc, ensure_ascii=False, indent=2))
 
 
-def run_text_mode(repeats, thinking, rpm, methods, tasks, model_chain, interactive):
+def _resolve_ui(ui):
+    if ui != "auto":
+        return ui
+    return "dashboard" if sys.stdout.isatty() else "plain"
+
+
+def _make_reporter(ui, methods, tasks, video_mode=False, video_columns=None):
+    if ui == "none":
+        return NullReporter(), nullcontext()
+    if ui == "dashboard":
+        try:
+            from ui.dashboard import DashboardReporter
+
+            reporter = DashboardReporter(
+                methods, tasks, video_mode=video_mode, width=video_columns
+            )
+            return reporter, reporter
+        except ImportError:
+            from ui.plain import PlainReporter
+
+            return PlainReporter(), nullcontext()
+    from ui.plain import PlainReporter
+
+    return PlainReporter(), nullcontext()
+
+
+def run_text_mode(
+    repeats,
+    thinking,
+    rpm,
+    methods,
+    tasks,
+    model_chain,
+    interactive,
+    ui="auto",
+    out_path=None,
+    video_mode=False,
+    video_columns=None,
+):
     if not has_gemini_api_key():
         print(f"{RED}[ERROR]{RESET} GEMINI_API_KEY не найден в переменных окружения.")
         sys.exit(1)
 
     verify_gold()
-    print_intro(repeats, thinking, methods, rpm)
-    scene("day3.intro")
-    if interactive:
-        wait_for_enter()
+    ui = _resolve_ui(ui)
+    if ui == "plain":
+        print_intro(repeats, thinking, methods, rpm)
+        scene("day3.intro")
+        if interactive:
+            wait_for_enter()
 
-    print_scene_banner("ЗАДАЧИ")
-    scene("day3.tasks")
-    print_tasks()
-    if interactive:
-        wait_for_enter("Нажмите Enter для запуска матрицы методов...")
+        print_scene_banner("ЗАДАЧИ")
+        scene("day3.tasks")
+        print_tasks()
+        if interactive:
+            wait_for_enter("Нажмите Enter для запуска матрицы методов...")
 
     gcfg = make_generation_config(thinking)
+    reporter, reporter_context = _make_reporter(
+        ui, methods, tasks, video_mode=video_mode, video_columns=video_columns
+    )
     try:
-        results, model_used, attempts = run_with_fallback(
-            repeats, methods, tasks, model_chain, gcfg, rpm, quiet=False
-        )
+        with reporter_context:
+            results, model_used, attempts = run_with_fallback(
+                repeats,
+                methods,
+                tasks,
+                model_chain,
+                gcfg,
+                rpm,
+                quiet=(ui == "dashboard"),
+                reporter=reporter,
+            )
     except RuntimeError as e:
         print(f"\n{RED}[ERROR]{RESET} Запрос не выполнен: {e}")
         sys.exit(1)
 
-    if attempts:
+    if attempts and ui == "plain":
         print()
         print(f"{YELLOW}[FALLBACK]{RESET} Использована модель: {model_used}")
-
-    print_scene_banner("ОТВЕТЫ МЕТОДОВ (примеры)")
-    scene("day3.methods")
-    print_representative(results, methods)
 
     agg = aggregate(results, methods, tasks)
     fail = failure_counts(results)
     v = verdict(agg, methods)
+    doc = build_json_document(
+        repeats,
+        thinking,
+        rpm,
+        methods,
+        tasks,
+        model_chain,
+        agg,
+        fail,
+        model_used,
+        results=results,
+        attempts=attempts,
+        v=v,
+    )
+    if out_path:
+        write_json_document(out_path, doc)
 
-    print_matrix(agg, methods)
-    print_cost(agg, methods)
-    print_failures(fail)
-    print_verdict(v)
+    if ui == "plain":
+        print_scene_banner("ОТВЕТЫ МЕТОДОВ (примеры)")
+        scene("day3.methods")
+        print_representative(results, methods)
+
+        print_matrix(agg, methods)
+        print_cost(agg, methods)
+        print_failures(fail)
+        print_verdict(v)
+    elif ui == "none":
+        print(json.dumps(doc, ensure_ascii=False, indent=2))
+
+
+def replay_results(path, ui, methods=None, video_mode=False, video_columns=None):
+    from ui.events import StageFinished, StageStarted
+
+    doc, results = load_results_document(path)
+    methods = methods or doc.get("methods") or METHOD_ORDER
+    selected = [r for r in results if r.method in methods]
+    tasks_by_id = {t.id: t for t in TASKS}
+    repeats = doc.get("repeats") or (max((r.repeat for r in selected), default=-1) + 1)
+    reporter, reporter_context = _make_reporter(
+        _resolve_ui(ui),
+        methods,
+        TASKS,
+        video_mode=video_mode,
+        video_columns=video_columns,
+    )
+    model = doc.get("model_used") or "-"
+    thinking = doc.get("thinking_level") or "-"
+
+    with reporter_context:
+        reporter.emit(
+            ExperimentStarted(
+                model=model,
+                thinking=thinking,
+                repeats=repeats,
+                tasks_total=len(TASKS),
+                methods=list(methods),
+                total_calls_estimate=estimate_calls(repeats, methods, TASKS),
+            )
+        )
+        order = {task.id: i for i, task in enumerate(TASKS)}
+        selected.sort(
+            key=lambda r: (r.repeat, order.get(r.task_id, 999), methods.index(r.method))
+        )
+        grouped = {}
+        for result in selected:
+            grouped.setdefault((result.repeat, result.task_id), []).append(result)
+
+        for (repeat, task_id), group in grouped.items():
+            task = tasks_by_id.get(task_id)
+            if task is None:
+                continue
+            reporter.emit(
+                TaskStarted(
+                    task_id=task.id,
+                    family=task.family,
+                    prompt=task.prompt,
+                    repeat=repeat,
+                    repeat_total=repeats,
+                    task_index=TASKS.index(task) + 1,
+                    task_total=len(TASKS),
+                    baseline=task.baseline(),
+                )
+            )
+            for result in group:
+                reporter.emit(MethodStarted(method=result.method))
+                for stage in result.stages:
+                    reporter.emit(StageStarted(method=result.method, stage=stage.name))
+                    reporter.emit(StageFinished(method=result.method, stage=stage))
+                reporter.emit(MethodFinished(result=result))
+        reporter.emit(ExperimentFinished(results=selected, model=model))
 
 
 # ---------------------------------------------------------------------------
@@ -461,6 +810,12 @@ def run_text_mode(repeats, thinking, rpm, methods, tasks, model_chain, interacti
 def parse_args():
     parser = argparse.ArgumentParser(description="Day 3 — Reasoning Modes")
     parser.add_argument("--mode", choices=["text", "json"], default="text")
+    parser.add_argument(
+        "--ui",
+        choices=["auto", "dashboard", "plain", "none"],
+        default="auto",
+        help="интерфейс для text/replay режима",
+    )
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument(
         "--rpm", type=float, default=12.0, help="лимит запросов в минуту (пейсер)"
@@ -473,6 +828,14 @@ def parse_args():
         help=f"зафиксировать одну модель (по умолчанию цепочка: {', '.join(MODEL_CHAIN)})",
     )
     parser.add_argument("--no-interactive", action="store_true")
+    parser.add_argument("--out", default=None, help="сохранить полный JSON run")
+    parser.add_argument(
+        "--replay-results",
+        default=None,
+        help="отрисовать сохранённый JSON без API-вызовов",
+    )
+    parser.add_argument("--video-mode", action="store_true")
+    parser.add_argument("--video-columns", type=int, default=None)
     return parser.parse_args()
 
 
@@ -482,10 +845,25 @@ def main():
     unknown = set(methods) - set(METHOD_ORDER)
     if unknown:
         raise SystemExit(f"Неизвестные методы: {sorted(unknown)}")
+    if args.replay_results:
+        replay_results(
+            args.replay_results,
+            args.ui,
+            methods=methods,
+            video_mode=args.video_mode,
+            video_columns=args.video_columns,
+        )
+        return
     model_chain = [args.model] if args.model else MODEL_CHAIN
     if args.mode == "json":
         run_json_mode(
-            args.repeats, args.thinking, args.rpm, methods, TASKS, model_chain
+            args.repeats,
+            args.thinking,
+            args.rpm,
+            methods,
+            TASKS,
+            model_chain,
+            out_path=args.out,
         )
     else:
         run_text_mode(
@@ -496,6 +874,10 @@ def main():
             TASKS,
             model_chain,
             interactive=not args.no_interactive,
+            ui=args.ui,
+            out_path=args.out,
+            video_mode=args.video_mode,
+            video_columns=args.video_columns,
         )
 
 

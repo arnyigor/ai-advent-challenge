@@ -11,7 +11,7 @@ import day3_reasoning_modes as day3
 from day3_reasoning_modes import build_json_document
 from tasks import TASKS
 
-from methods import METHOD_ORDER
+from methods import METHOD_ORDER, MethodResult, StageResult
 
 
 def _key_tree(obj):
@@ -25,7 +25,7 @@ def _key_tree(obj):
 
 def _sample_agg_full():
     """Имитация агрегата от успешного прогона всех методов (3 задачи x 3 повтора)."""
-    calls_per_unit = {"direct": 1, "cot": 1, "self_prompt": 2, "panel": 4}
+    calls_per_unit = {"direct": 1, "cot": 1, "self_prompt": 2, "panel": 1}
     agg = {}
     for name in METHOD_ORDER:
         fam = {f: {"correct": 1, "total": 3} for f in ("logic", "counting", "analytic")}
@@ -118,9 +118,9 @@ def test_schema_single_method_has_same_structure():
 
 
 def test_build_document_aggregate_cardinality():
-    """calls == суммарное число вызовов: direct=1, cot=1, self_prompt=2, panel=4."""
+    """calls == суммарное число вызовов: direct=1, cot=1, self_prompt=2, panel=1."""
     agg = _sample_agg_full()
-    expected = {"direct": 1, "cot": 1, "self_prompt": 2, "panel": 4}
+    expected = {"direct": 1, "cot": 1, "self_prompt": 2, "panel": 1}
     for name, calls in expected.items():
         assert agg[name]["calls"] == calls * 3 * 3  # вызовы на задачу*повтор
 
@@ -140,3 +140,46 @@ def test_json_document_roundtrip_serializable():
         v=None,
     )
     json.dumps(doc, ensure_ascii=False)  # не должно бросить
+
+
+def test_json_document_includes_full_runs_with_stages():
+    result = MethodResult(
+        method="direct",
+        task_id="counting-01",
+        repeat=0,
+        status="ok",
+        answer_raw="ANSWER: 120",
+        answer_norm="120",
+        correct=True,
+        calls=1,
+        prompt_tokens=100,
+        output_tokens=20,
+        latency_s=1.2,
+        model="m1",
+        stages=[
+            StageResult(
+                name="solve",
+                status="ok",
+                finish_reason="STOP",
+                prompt_tokens=100,
+                output_tokens=20,
+                latency_s=1.2,
+            )
+        ],
+    )
+    doc = build_json_document(
+        repeats=1,
+        thinking="low",
+        rpm=12,
+        methods=["direct"],
+        tasks=TASKS,
+        model_chain=["m1"],
+        agg=day3.aggregate([result], ["direct"], TASKS),
+        failures=_failures_zero(),
+        model_used="m1",
+        results=[result],
+        v=None,
+    )
+    assert doc["runs"][0]["method"] == "direct"
+    assert doc["runs"][0]["tokens"] == 120
+    assert doc["runs"][0]["stages"][0]["name"] == "solve"

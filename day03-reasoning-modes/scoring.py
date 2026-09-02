@@ -10,6 +10,7 @@ import re
 
 ANSWER_MARKER = "ANSWER:"
 STOP_SEQUENCE = "<END_RESPONSE>"
+_ANSWER_MARKER_RE = re.compile(r"answer\s*:", re.IGNORECASE)
 
 # Визуальные омоглифы: латинская буква -> кириллическая (после casefold).
 # Модель регулярно пишет «Гaммa» с латинскими a — без замены это wrong
@@ -66,10 +67,11 @@ def parse_answer(text: str, finish_reason: str | None) -> tuple[str, str | None]
     """
     if finish_reason == "MAX_TOKENS":
         return "truncated", None
-    if ANSWER_MARKER not in text:
+    matches = list(_ANSWER_MARKER_RE.finditer(text))
+    if not matches:
         return "unparseable", None
 
-    after = text.rsplit(ANSWER_MARKER, 1)[1]
+    after = text[matches[-1].end() :]
     if STOP_SEQUENCE in after:
         after = after.split(STOP_SEQUENCE, 1)[0]
 

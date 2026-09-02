@@ -26,6 +26,8 @@ from scoring import (
     "text,finish_reason,expected",
     [
         ("ANSWER: 120\n<END_RESPONSE>", "STOP", ("ok", "120")),
+        ("Answer: 120", "STOP", ("ok", "120")),
+        ("answer: 120", "STOP", ("ok", "120")),
         ("ANSWER: 120", "STOP", ("ok", "120")),  # маркер вырезан API
         ("ANSWER: **Гамма**", "STOP", ("ok", "гамма")),
         ("ANSWER: Гамма.", "STOP", ("ok", "гамма")),

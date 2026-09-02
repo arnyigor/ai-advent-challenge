@@ -16,6 +16,7 @@ from methods import (
     run_self_prompt,
 )
 from scoring import answer_contract
+from ui.events import RecordingReporter, StageFinished, StageStarted
 
 import tasks as tasks_mod
 from tasks import TASKS
@@ -67,8 +68,11 @@ def test_direct_one_call_no_step_words(gcfg, counting):
     assert res.calls == 1
     assert res.status == "ok"
     assert res.correct
+    assert res.stages[0].name == "solve"
+    assert res.stages[0].status == "ok"
     prompt = client.calls[0][0]
     assert "пошагово" not in prompt and "шаг" not in prompt
+    assert "Реши задачу" not in prompt
 
 
 def test_cot_one_call_has_step_instruction(gcfg, counting):
@@ -94,6 +98,32 @@ def test_self_prompt_clean_two_calls(gcfg, counting):
     assert res.status == "ok"
     assert res.correct
     assert res.calls == 2
+    assert [s.name for s in res.stages] == ["generate_prompt", "leak_check", "solve"]
+
+
+def test_method_emits_stage_events(gcfg, counting):
+    reporter = RecordingReporter()
+    client = FakeClient([_answer_data("120")])
+    run_direct(counting, client, gcfg, model="m", reporter=reporter)
+    assert any(
+        isinstance(event, StageStarted) and event.stage == "solve"
+        for event in reporter.events
+    )
+    assert any(
+        isinstance(event, StageFinished) and event.stage.name == "solve"
+        for event in reporter.events
+    )
+
+
+def test_stage_started_includes_prompt(gcfg, counting):
+    """StageStarted несёт отправленный промпт — UI может показать его сразу,
+    не дожидаясь ответа модели."""
+    reporter = RecordingReporter()
+    client = FakeClient([_answer_data("120")])
+    run_direct(counting, client, gcfg, model="m", reporter=reporter)
+    started = next(e for e in reporter.events if isinstance(e, StageStarted))
+    assert started.prompt == client.calls[0][0]
+    assert "ANSWER:" in started.prompt
 
 
 def test_self_prompt_contaminated_stops_after_first(gcfg):
@@ -109,6 +139,8 @@ def test_self_prompt_contaminated_stops_after_first(gcfg):
     assert res.status == "contaminated"
     assert res.calls == 1  # второй вызов не сделан
     assert res.correct is False
+    assert res.failed_stage == "leak_check"
+    assert [s.status for s in res.stages] == ["ok", "contaminated", "skipped"]
 
 
 def test_self_prompt_option_restatement_is_not_contaminated(gcfg):
@@ -143,49 +175,35 @@ def test_self_prompt_counting_numeric_leak_is_contaminated(gcfg, counting):
     assert res.calls == 1
 
 
-# --- 5/6: panel chain ----------------------------------------------------------
+# --- 5/6: panel (группа экспертов в одном вызове) -----------------------------
 
 
-def test_panel_four_calls_and_role_chain(gcfg, counting):
-    client = FakeClient(
-        [
-            ("Разбор: нужны числа, делящиеся на 3 или 5, исключая кратные 7.", "STOP"),
-            ("Решение инженера: 120.", "STOP"),
-            ("Проверка: подсчёт верен.", "STOP"),
-            _answer_data("120"),
-        ]
-    )
+def test_panel_single_call_expert_group(gcfg, counting):
+    client = FakeClient([_answer_data("120")])
     res = run_panel(counting, client, gcfg, model="m")
-    assert res.calls == 4
+    assert res.calls == 1
     assert res.status == "ok"
     assert res.correct
-    prompts = [c[0] for c in client.calls]
-    # вход роли N содержит выход роли N-1
-    assert "Разбор: нужны числа" in prompts[1]
-    assert "Решение инженера: 120." in prompts[2]
-    assert "Проверка: подсчёт верен." in prompts[3]
+    assert [s.name for s in res.stages] == ["experts"]
+    prompt = client.calls[0][0]
+    assert "АНАЛИТИК" in prompt
+    assert "ИНЖЕНЕР" in prompt
+    assert "КРИТИК" in prompt
 
 
-def test_panel_arbiter_tail_equals_direct_tail(gcfg, counting):
+def test_panel_tail_equals_direct_tail(gcfg, counting):
     direct_client = FakeClient([_answer_data("120")])
     run_direct(counting, direct_client, gcfg, model="m", repeat=0)
-    panel_client = FakeClient(
-        [
-            ("Разбор…", "STOP"),
-            ("Решение: 120.", "STOP"),
-            ("Ок.", "STOP"),
-            _answer_data("120"),
-        ]
-    )
+    panel_client = FakeClient([_answer_data("120")])
     run_panel(counting, panel_client, gcfg, model="m", repeat=0)
     direct_prompt = direct_client.calls[0][0]
-    arbiter_prompt = panel_client.calls[3][0]
-    # хвост арбитра побайтно равен хвосту direct
+    panel_prompt = panel_client.calls[0][0]
+    # хвост-контракт побайтно равен хвосту direct
     assert direct_prompt.endswith(answer_contract())
-    assert arbiter_prompt.endswith(answer_contract())
+    assert panel_prompt.endswith(answer_contract())
     assert (
         direct_prompt[direct_prompt.index(answer_contract()) :]
-        == arbiter_prompt[arbiter_prompt.index(answer_contract()) :]
+        == panel_prompt[panel_prompt.index(answer_contract()) :]
     )
 
 
@@ -204,6 +222,30 @@ def test_max_tokens_is_truncated(gcfg, counting):
     res = run_direct(counting, client, gcfg, model="m")
     assert res.status == "truncated"
     assert res.correct is False
+    assert res.failed_stage == "solve"
+
+
+def test_self_prompt_max_tokens_stops_before_solve(gcfg, counting):
+    client = FakeClient(
+        [
+            ("Слишком длинный промпт", "MAX_TOKENS"),
+            _answer_data("120"),
+        ]
+    )
+    res = run_self_prompt(counting, client, gcfg, model="m")
+    assert res.status == "truncated"
+    assert res.calls == 1
+    assert len(client.calls) == 1
+    assert [s.status for s in res.stages] == ["truncated", "skipped"]
+    assert res.failed_stage == "generate_prompt"
+
+
+def test_panel_max_tokens_is_truncated(gcfg, counting):
+    client = FakeClient([("Рассуждение... ANSWER: 120", "MAX_TOKENS")])
+    res = run_panel(counting, client, gcfg, model="m")
+    assert res.status == "truncated"
+    assert res.calls == 1
+    assert res.failed_stage == "experts"
 
 
 # --- 9: GENERATION_CONFIG идентичен у всех четырёх ------------------------------
@@ -216,14 +258,7 @@ def test_generation_config_identical_across_methods(gcfg, counting, name):
     if name == "self_prompt":
         client = FakeClient([("Разбор.", "STOP"), _answer_data("120")])
     elif name == "panel":
-        client = FakeClient(
-            [
-                ("Разбор.", "STOP"),
-                ("Решение: 120.", "STOP"),
-                ("Ок.", "STOP"),
-                _answer_data("120"),
-            ]
-        )
+        client = FakeClient([_answer_data("120")])
     else:
         client = FakeClient([_answer_data("120")])
     runner(counting, client, gcfg, model="m")
@@ -235,6 +270,20 @@ def test_generation_config_identical_across_methods(gcfg, counting, name):
 def test_method_order_is_stable():
     assert methods.METHOD_ORDER == ["direct", "cot", "self_prompt", "panel"]
     assert set(METHOD_RUNNERS) == set(methods.METHOD_ORDER)
+
+
+def test_pacer_cancellation_raises():
+    """Пейсер прерывает ожидание между вызовами при отмене."""
+    import threading
+
+    from day3_reasoning_modes import Pacer, RunCancelled
+
+    cancel = threading.Event()
+    pacer = Pacer(12, cancel_event=cancel)
+    pacer.wait()  # первый вызов: паузы нет
+    cancel.set()
+    with pytest.raises(RunCancelled):
+        pacer.wait()
 
 
 def test_tasks_verify_gold_passes():

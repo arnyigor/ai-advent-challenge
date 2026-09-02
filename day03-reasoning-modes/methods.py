@@ -9,7 +9,7 @@
 
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 
 from tools.llm.gemini import extract_response, extract_usage
 
@@ -39,6 +39,34 @@ _SELF_PROMPT_INSTRUCTION = """Ниже — задача. НЕ решай её. �
 _COT_INSTRUCTION = """
 Решай пошагово. Покажи рассуждение, затем дай итог."""
 
+_PANEL_INSTRUCTION = """
+Рассмотри задачу как группа из трёх независимых экспертов.
+
+АНАЛИТИК:
+проанализируй условия и предложи решение.
+
+ИНЖЕНЕР:
+реши задачу своим способом и объясни результат.
+
+КРИТИК:
+независимо проверь предыдущие рассуждения, укажи возможные ошибки
+и дай свой вариант ответа.
+
+После этого сопоставь три позиции и сформулируй общий итог."""
+
+
+@dataclass
+class StageResult:
+    name: str
+    status: str = "waiting"  # waiting | ok | truncated | blocked | skipped | error
+    finish_reason: str | None = None
+    prompt_tokens: int = 0
+    output_tokens: int = 0
+    latency_s: float = 0.0
+
+    def to_json(self) -> dict:
+        return asdict(self)
+
 
 @dataclass
 class MethodResult:
@@ -57,6 +85,13 @@ class MethodResult:
     latency_s: float = 0.0
     model: str = ""
     prompts: list = field(default_factory=list)
+    stages: list[StageResult] = field(default_factory=list)
+    failed_stage: str | None = None
+
+    def to_json(self) -> dict:
+        data = asdict(self)
+        data["tokens"] = (self.prompt_tokens or 0) + (self.output_tokens or 0)
+        return data
 
 
 def make_generation_config(thinking_level: str) -> dict:
@@ -66,10 +101,41 @@ def make_generation_config(thinking_level: str) -> dict:
     return cfg
 
 
-def _one_call(client, prompt, gcfg):
+def _stage_status(text, finish_reason):
+    if _is_blocked(text, finish_reason):
+        return "blocked"
+    if finish_reason == "MAX_TOKENS":
+        return "truncated"
+    return "ok"
+
+
+def _emit(reporter, event) -> None:
+    if reporter is not None:
+        reporter.emit(event)
+
+
+def _event(name, **kwargs):
+    try:
+        from ui import events
+    except Exception:
+        return None
+    cls = getattr(events, name, None)
+    return cls(**kwargs) if cls else None
+
+
+def _one_call(client, prompt, gcfg, reporter=None, method="", stage_name=""):
     """Один вызов клиента; возвращает кортеж полей из ответа + latency."""
     t0 = time.monotonic()
-    data = client.call(prompt, gcfg)
+    if hasattr(client, "call_stage"):
+        data = client.call_stage(
+            prompt,
+            gcfg,
+            method=method,
+            stage=stage_name,
+            reporter=reporter,
+        )
+    else:
+        data = client.call(prompt, gcfg)
     latency = time.monotonic() - t0
     resp = extract_response(data)
     usage = extract_usage(data)
@@ -82,8 +148,65 @@ def _one_call(client, prompt, gcfg):
     )
 
 
+def _call_stage(client, prompt, gcfg, stage_name, reporter=None, method=""):
+    ev = _event("StageStarted", method=method, stage=stage_name, prompt=prompt)
+    if ev:
+        _emit(reporter, ev)
+    text, finish_reason, ptok, otok, latency = _one_call(
+        client, prompt, gcfg, reporter=reporter, method=method, stage_name=stage_name
+    )
+    stage = StageResult(
+        name=stage_name,
+        status=_stage_status(text, finish_reason),
+        finish_reason=finish_reason,
+        prompt_tokens=ptok,
+        output_tokens=otok,
+        latency_s=round(latency, 3),
+    )
+    ev = _event("StageFinished", method=method, stage=stage)
+    if ev:
+        _emit(reporter, ev)
+    return text, stage
+
+
 def _is_blocked(text, finish_reason):
     return bool(finish_reason and "blockReason" in finish_reason)
+
+
+def _skipped_stage(name):
+    return StageResult(name=name, status="skipped")
+
+
+def _failed_result(
+    method,
+    task,
+    repeat,
+    model,
+    text,
+    stage,
+    stages,
+    calls,
+    ptok,
+    otok,
+    latency,
+    prompts,
+):
+    return MethodResult(
+        method=method,
+        task_id=task.id,
+        repeat=repeat,
+        status=stage.status,
+        answer_raw=text.strip(),
+        correct=False,
+        calls=calls,
+        prompt_tokens=ptok,
+        output_tokens=otok,
+        latency_s=round(latency, 3),
+        model=model,
+        prompts=prompts,
+        stages=stages,
+        failed_stage=stage.name,
+    )
 
 
 def _finish(
@@ -98,6 +221,7 @@ def _finish(
     otok,
     latency,
     prompts,
+    stages,
 ):
     """Собирает MethodResult по финальному ответу метода."""
     if _is_blocked(text, finish_reason):
@@ -118,6 +242,8 @@ def _finish(
         latency_s=round(latency, 3),
         model=model,
         prompts=prompts,
+        stages=stages,
+        failed_stage=None if status == "ok" else (stages[-1].name if stages else None),
     )
 
 
@@ -156,25 +282,86 @@ def is_contaminated(prompt: str, task) -> bool:
         start = idx + len(gold_n)
 
 
-def run_direct(task, client, gcfg, model="", repeat=0):
-    prompt = task.prompt + "\n\nРеши задачу." + _TAIL
-    text, fr, pt, ot, lat = _one_call(client, prompt, gcfg)
-    return _finish("direct", task, repeat, model, text, fr, 1, pt, ot, lat, [prompt])
+def run_direct(task, client, gcfg, model="", repeat=0, reporter=None):
+    prompt = task.prompt + _TAIL
+    text, stage = _call_stage(client, prompt, gcfg, "solve", reporter, "direct")
+    return _finish(
+        "direct",
+        task,
+        repeat,
+        model,
+        text,
+        stage.finish_reason,
+        1,
+        stage.prompt_tokens,
+        stage.output_tokens,
+        stage.latency_s,
+        [prompt],
+        [stage],
+    )
 
 
-def run_cot(task, client, gcfg, model="", repeat=0):
+def run_cot(task, client, gcfg, model="", repeat=0, reporter=None):
     prompt = task.prompt + _COT_INSTRUCTION + _TAIL
-    text, fr, pt, ot, lat = _one_call(client, prompt, gcfg)
-    return _finish("cot", task, repeat, model, text, fr, 1, pt, ot, lat, [prompt])
+    text, stage = _call_stage(client, prompt, gcfg, "reasoning", reporter, "cot")
+    return _finish(
+        "cot",
+        task,
+        repeat,
+        model,
+        text,
+        stage.finish_reason,
+        1,
+        stage.prompt_tokens,
+        stage.output_tokens,
+        stage.latency_s,
+        [prompt],
+        [stage],
+    )
 
 
-def run_self_prompt(task, client, gcfg, model="", repeat=0):
+def run_self_prompt(task, client, gcfg, model="", repeat=0, reporter=None):
     # Вызов 1: составить промпт, НЕ решать задачу.
     call1 = _SELF_PROMPT_INSTRUCTION.format(task=task)
-    text1, _fr, pt1, ot1, lat1 = _one_call(client, call1, gcfg)
+    text1, stage1 = _call_stage(
+        client, call1, gcfg, "generate_prompt", reporter, "self_prompt"
+    )
     prompts = [call1]
+    stages = [stage1]
+
+    if stage1.status != "ok":
+        stages.append(_skipped_stage("solve"))
+        return _failed_result(
+            "self_prompt",
+            task,
+            repeat,
+            model,
+            text1,
+            stage1,
+            stages,
+            1,
+            stage1.prompt_tokens,
+            stage1.output_tokens,
+            stage1.latency_s,
+            prompts,
+        )
 
     if is_contaminated(text1, task):
+        ev = _event("StageStarted", method="self_prompt", stage="leak_check")
+        if ev:
+            _emit(reporter, ev)
+        contaminated_stage = StageResult(
+            name="leak_check",
+            status="contaminated",
+            finish_reason=None,
+            prompt_tokens=0,
+            output_tokens=0,
+            latency_s=0.0,
+        )
+        ev = _event("StageFinished", method="self_prompt", stage=contaminated_stage)
+        if ev:
+            _emit(reporter, ev)
+        stages.extend([contaminated_stage, _skipped_stage("solve")])
         return MethodResult(
             method="self_prompt",
             task_id=task.id,
@@ -182,16 +369,26 @@ def run_self_prompt(task, client, gcfg, model="", repeat=0):
             status="contaminated",
             answer_raw=text1.strip(),
             calls=1,
-            prompt_tokens=pt1,
-            output_tokens=ot1,
-            latency_s=round(lat1, 3),
+            prompt_tokens=stage1.prompt_tokens,
+            output_tokens=stage1.output_tokens,
+            latency_s=stage1.latency_s,
             model=model,
             prompts=prompts,
+            stages=stages,
+            failed_stage="leak_check",
         )
+    ev = _event("StageStarted", method="self_prompt", stage="leak_check")
+    if ev:
+        _emit(reporter, ev)
+    clean_stage = StageResult(name="leak_check", status="ok")
+    stages.append(clean_stage)
+    ev = _event("StageFinished", method="self_prompt", stage=clean_stage)
+    if ev:
+        _emit(reporter, ev)
 
     # Вызов 2: решить по сгенерированному промпту + контракт.
     call2 = text1.strip() + "\n\nЗАДАЧА:\n" + task.prompt + _TAIL
-    text2, fr2, pt2, ot2, lat2 = _one_call(client, call2, gcfg)
+    text2, stage2 = _call_stage(client, call2, gcfg, "solve", reporter, "self_prompt")
     prompts.append(call2)
     return _finish(
         "self_prompt",
@@ -199,85 +396,38 @@ def run_self_prompt(task, client, gcfg, model="", repeat=0):
         repeat,
         model,
         text2,
-        fr2,
+        stage2.finish_reason,
         2,
-        pt1 + pt2,
-        ot1 + ot2,
-        lat1 + lat2,
+        stage1.prompt_tokens + stage2.prompt_tokens,
+        stage1.output_tokens + stage2.output_tokens,
+        stage1.latency_s + stage2.latency_s,
         prompts,
+        stages + [stage2],
     )
 
 
-def run_panel(task, client, gcfg, model="", repeat=0):
-    """Цепочка ролей: аналитик -> инженер -> критик -> арбитр.
+def run_panel(task, client, gcfg, model="", repeat=0, reporter=None):
+    """Группа экспертов в ОДНОМ промпте и одном вызове.
 
-    Хвост-контракт добавляется только арбитру (единственный вызов, который
-    производит финальный ответ). Инвариант «одинаковый контракт» при этом не
-    нарушается: сравнение идёт по финальным ответам."""
-    prompts = []
-
-    analyst = f"""Ты — аналитик. Разбери условие задачи: выпиши ограничения, варианты и величины. НЕ решай задачу и не называй итоговый ответ.
-
-ЗАДАЧА:
-{task.prompt}"""
-    text_a, _, pt_a, ot_a, lat_a = _one_call(client, analyst, gcfg)
-    prompts.append(analyst)
-
-    engineer = f"""Ты — инженер. Реши задачу на основе разбора аналитика.
-
-ЗАДАЧА:
-{task.prompt}
-
-РАЗБОР АНАЛИТИКА:
-{text_a.strip()}"""
-    text_e, _, pt_e, ot_e, lat_e = _one_call(client, engineer, gcfg)
-    prompts.append(engineer)
-
-    critic = f"""Ты — критик. Проверь решение инженера: найди ошибку или подтверди его. Укажи конкретно, что неверно, если ошибка есть. Итоговый ответ не называй.
-
-ЗАДАЧА:
-{task.prompt}
-
-РАЗБОР АНАЛИТИКА:
-{text_a.strip()}
-
-РЕШЕНИЕ ИНЖЕНЕРА:
-{text_e.strip()}"""
-    text_c, _, pt_c, ot_c, lat_c = _one_call(client, critic, gcfg)
-    prompts.append(critic)
-
-    arbiter = (
-        f"""Ты — арбитр. На основе разбора, решения и проверки вынеси итоговое значение.
-
-ЗАДАЧА:
-{task.prompt}
-
-РАЗБОР АНАЛИТИКА:
-{text_a.strip()}
-
-РЕШЕНИЕ ИНЖЕНЕРА:
-{text_e.strip()}
-
-ПРОВЕРКА КРИТИКА:
-{text_c.strip()}
-"""
-        + _TAIL
-    )
-    text_f, fr_f, pt_f, ot_f, lat_f = _one_call(client, arbiter, gcfg)
-    prompts.append(arbiter)
-
+    Задание требует «создать в промпте группу экспертов и получить решение от
+    каждого». Поэтому три роли (аналитик/инженер/критик) определяются внутри
+    одного prompt, а модель возвращает один ответ с секциями и общим итогом.
+    Хвост-контракт добавляется один раз — как у direct/cot."""
+    prompt = task.prompt + _PANEL_INSTRUCTION + _TAIL
+    text, stage = _call_stage(client, prompt, gcfg, "experts", reporter, "panel")
     return _finish(
         "panel",
         task,
         repeat,
         model,
-        text_f,
-        fr_f,
-        4,
-        pt_a + pt_e + pt_c + pt_f,
-        ot_a + ot_e + ot_c + ot_f,
-        lat_a + lat_e + lat_c + lat_f,
-        prompts,
+        text,
+        stage.finish_reason,
+        1,
+        stage.prompt_tokens,
+        stage.output_tokens,
+        stage.latency_s,
+        [prompt],
+        [stage],
     )
 
 
