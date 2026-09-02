@@ -1,32 +1,28 @@
 import argparse
 import json
-import os
 import sys
 import time
-import requests
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from tools.llm.gemini import (
+    GeminiCallError,
+    MODEL_CHAIN,
+    PRIMARY_MODEL,
+    calculate_stats,
+    call_gemini_with_retries,
+    extract_response,
+    has_gemini_api_key,
+)
+from tools.llm.ui import BOLD, BOX_WIDTH, RED, RESET, YELLOW, pass_fail, print_box, truncate, wait_for_enter
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
 except Exception:
     pass
-
-API_KEY = os.environ.get("GEMINI_API_KEY")
-# Цепочка fallback (по убыванию версий): если модель недоступна
-# (429/503 после ретраев) — ВЕСЬ эксперимент (оба запроса) переезжает
-# на следующую модель, чтобы baseline и controlled сравнивались
-# на одной и той же модели.
-MODEL_CHAIN = [
-    "gemini-3.7-flash",
-    "gemini-3.6-flash",
-    "gemini-3.5-flash",
-    "gemini-3.5-flash-lite",
-    "gemini-3-flash-preview",
-]
-PRIMARY_MODEL = MODEL_CHAIN[0]
-BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-TIMEOUT = 60
-MAX_RETRIES_PER_MODEL = 2
-RETRY_WAIT_S = 10
 
 BASE_PROMPT = (
     "Объясни, что такое RAG (Retrieval-Augmented Generation), как он работает, "
@@ -44,15 +40,6 @@ REQUIRED_SECTIONS = [
 DEFAULT_WORD_LIMIT = 100
 DEFAULT_STOP_SEQUENCE = "<END_RESPONSE>"
 DEFAULT_MAX_OUTPUT_TOKENS = 256
-
-BOX_WIDTH = 64
-
-CYAN = "\033[36m"
-GREEN = "\033[32m"
-RED = "\033[31m"
-YELLOW = "\033[33m"
-BOLD = "\033[1m"
-RESET = "\033[0m"
 
 
 def build_system_instruction(word_limit, stop_sequence):
@@ -88,89 +75,6 @@ def build_generation_configs(stop_sequence, max_output_tokens):
         "stopSequences": [stop_sequence],
     }
     return base_config, controlled_config
-
-
-class GeminiCallError(RuntimeError):
-    """Обработаемая ошибка вызова (модель недоступна, сеть и т.п.)."""
-
-    def __init__(self, message, status_code=None):
-        super().__init__(message)
-        self.status_code = status_code
-
-
-def call_gemini(model, prompt, generation_config, system_instruction=None):
-    if not API_KEY:
-        raise RuntimeError("GEMINI_API_KEY не найден — проверь переменную окружения")
-    headers = {
-        "Content-Type": "application/json",
-        "x-goog-api-key": API_KEY,
-    }
-    payload = {"contents": [{"parts": [{"text": prompt}]}]}
-    if generation_config:
-        payload["generationConfig"] = generation_config
-    if system_instruction:
-        payload["systemInstruction"] = {"parts": [{"text": system_instruction}]}
-    url = BASE_URL.format(model=model)
-    try:
-        resp = requests.post(url, json=payload, headers=headers, timeout=TIMEOUT)
-    except requests.exceptions.RequestException as e:
-        raise GeminiCallError(f"Ошибка сети: {e}") from None
-
-    code = resp.status_code
-    if code == 401 or code == 403:
-        # Плохой/чужой ключ — ретраить и менять модель бессмысленно.
-        raise RuntimeError(f"HTTP {code}: доступ запрещён (проверь GEMINI_API_KEY)")
-    if code != 200:
-        body = resp.text[:300]
-        retryable = code in (429, 503)
-        raise GeminiCallError(f"HTTP {code} ({'retryable' if retryable else 'fatal'}): {body}",
-                              status_code=code)
-    return resp.json()
-
-
-def call_gemini_with_retries(model, prompt, generation_config, system_instruction=None, quiet=False):
-    """До MAX_RETRIES_PER_MODEL попыток; 429/503 → пауза и повтор.
-    Ошибки ключа (401/403) пробрасываются сразу."""
-    last_error = None
-    for attempt in range(1, MAX_RETRIES_PER_MODEL + 1):
-        try:
-            return call_gemini(model, prompt, generation_config, system_instruction)
-        except GeminiCallError as e:
-            last_error = e
-            # 429/503 — ретраим; None (сеть/таймаут) — тоже, это транзиентно.
-            if e.status_code is not None and e.status_code not in (429, 503):
-                raise
-            wait = RETRY_WAIT_S * attempt
-            if not quiet:
-                print(f"{YELLOW}  [{model}] HTTP {e.status_code}, жду {wait} сек... (попытка {attempt}/{MAX_RETRIES_PER_MODEL}){RESET}")
-            time.sleep(wait)
-    raise last_error
-
-
-def extract_response(data):
-    candidates = data.get("candidates") or []
-    if not candidates:
-        block_reason = data.get("promptFeedback", {}).get("blockReason")
-        text = ""
-        finish_reason = f"NO_CANDIDATES (blockReason={block_reason})" if block_reason else "NO_CANDIDATES"
-    else:
-        candidate = candidates[0]
-        parts = candidate.get("content", {}).get("parts", [])
-        text = "".join(p.get("text", "") for p in parts)
-        finish_reason = candidate.get("finishReason")
-    usage = data.get("usageMetadata", {})
-    return {
-        "text": text,
-        "finish_reason": finish_reason,
-        "output_tokens": usage.get("candidatesTokenCount"),
-    }
-
-
-def calculate_stats(text):
-    return {
-        "words": len(text.split()),
-        "characters": len(text),
-    }
 
 
 def check_controlled(text, word_limit, stop_sequence):
@@ -240,26 +144,6 @@ def run_experiment(word_limit, stop_sequence, max_output_tokens, model_chain, qu
     raise err
 
 
-def truncate(text, max_len=90):
-    text = text.strip()
-    return text if len(text) <= max_len else text[:max_len].rstrip() + "..."
-
-
-def pass_fail(ok):
-    label = "PASS" if ok else "FAIL"
-    color = GREEN if ok else RED
-    return f"{color}[{label}]{RESET}"
-
-
-def print_box(lines):
-    top = "╔" + "═" * BOX_WIDTH + "╗"
-    bottom = "╚" + "═" * BOX_WIDTH + "╝"
-    print(top)
-    for line in lines:
-        print("║ " + line.ljust(BOX_WIDTH - 1) + "║")
-    print(bottom)
-
-
 def print_intro(word_limit, stop_sequence, max_output_tokens, model_chain):
     print()
     print(f"{BOLD}AI Advent Challenge — Day 02{RESET}")
@@ -306,13 +190,6 @@ def print_diff_controls(word_limit, stop_sequence, max_output_tokens):
     print(f"  + stopSequences = [\"{stop_sequence}\"]")
     print()
     print("Everything else stays the same.")
-
-
-def wait_for_enter(prompt="Press Enter to run..."):
-    try:
-        input(f"\n{prompt}")
-    except (EOFError, KeyboardInterrupt):
-        print()
 
 
 def print_result(label, title, subtitle, prompt, response, stats, system_instruction=None, latency=None):
@@ -409,7 +286,7 @@ def build_result_message(stats_a, stats_b, checks, resp_b, word_limit):
 
 
 def run_text_mode(word_limit, stop_sequence, max_output_tokens, interactive, model_chain):
-    if not API_KEY:
+    if not has_gemini_api_key():
         print(f"{RED}[ERROR]{RESET} GEMINI_API_KEY не найден в переменных окружения.")
         print("Задайте ключ перед запуском, например:")
         print("  export GEMINI_API_KEY=...       (bash)")
@@ -525,7 +402,7 @@ def build_json_document(word_limit, stop_sequence, max_output_tokens, model_chai
 def run_json_mode(word_limit, stop_sequence, max_output_tokens, model_chain):
     """Печатает единственный JSON-документ с фиксированной схемой —
     структура полей одинакова независимо от результатов и ошибок."""
-    if not API_KEY:
+    if not has_gemini_api_key():
         doc = build_json_document(word_limit, stop_sequence, max_output_tokens, model_chain, None,
                                   error="GEMINI_API_KEY not set")
         print(json.dumps(doc, ensure_ascii=False, indent=2))
