@@ -19,7 +19,7 @@ from scoring import STOP_SEQUENCE, answer_contract, normalize, parse_answer
 #: одинаковый ответ и self_consistency вырождается в 1.0 без смысла.
 DEFAULT_GENERATION_CONFIG = {
     "temperature": 0.7,
-    "maxOutputTokens": 1024,  # с запасом: panel не должен резаться
+    "maxOutputTokens": 2048,  # self_prompt режется на 1024 (живой прогон); лимит общий
     "stopSequences": [STOP_SEQUENCE],
 }
 
