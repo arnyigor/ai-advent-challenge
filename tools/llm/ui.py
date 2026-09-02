@@ -1,3 +1,5 @@
+import sys
+
 BOX_WIDTH = 64
 
 CYAN = "\033[36m"
@@ -39,3 +41,11 @@ def wait_for_enter(prompt="Press Enter to run..."):
         input(f"\n{prompt}")
     except (EOFError, KeyboardInterrupt):
         print()
+
+
+def scene(scene_id):
+    """Маркер сцены для рекордера: пишет ##SCENE:<id>## в stderr.
+
+    stdout остаётся чистым для --mode json; субтитры рекордер привязывает
+    к ID сцены, а не к тексту на экране (хрупкость, задокументированная в day2)."""
+    print(f"##SCENE:{scene_id}##", file=sys.stderr)

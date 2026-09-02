@@ -183,10 +183,19 @@ def extract_response(data):
         text = "".join(p.get("text", "") for p in parts)
         finish_reason = candidate.get("finishReason")
 
-    usage = data.get("usageMetadata", {})
+    usage = extract_usage(data)
     return {
         "text": text,
         "finish_reason": finish_reason,
+        "output_tokens": usage["output_tokens"],
+    }
+
+
+def extract_usage(data):
+    """Счётчики токенов из usageMetadata (None, если метаданных нет)."""
+    usage = data.get("usageMetadata", {})
+    return {
+        "prompt_tokens": usage.get("promptTokenCount"),
         "output_tokens": usage.get("candidatesTokenCount"),
     }
 
