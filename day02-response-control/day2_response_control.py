@@ -181,7 +181,7 @@ def print_diff_controls(word_limit, stop_sequence, max_output_tokens):
     print(f"{BOLD}What changes in request B?{RESET}")
     print()
     print("System instruction (systemInstruction):")
-    print(f"  + explicit structure")
+    print("  + explicit structure")
     print(f"  + <= {word_limit} words")
     print(f"  + end marker {stop_sequence}")
     print()
@@ -334,7 +334,6 @@ def build_json_document(word_limit, stop_sequence, max_output_tokens, model_chai
         base_config, controlled_config = build_generation_configs(stop_sequence, max_output_tokens)
         system_instruction = build_system_instruction(word_limit, stop_sequence)
         empty_resp = {"text": "", "finish_reason": None, "output_tokens": None}
-        empty_stats = {"words": 0, "characters": 0}
         empty_checks = check_controlled("", word_limit, stop_sequence)
         model_used = None
         attempts = attempts or []
@@ -342,7 +341,6 @@ def build_json_document(word_limit, stop_sequence, max_output_tokens, model_chai
         base_config = result["base_config"]
         controlled_config = result["controlled_config"]
         system_instruction = result["system_instruction"]
-        resp_a, resp_b = result["resp_a"], result["resp_b"]
         empty_resp = None
         model_used = result["model_used"]
         attempts = result["attempts"]
