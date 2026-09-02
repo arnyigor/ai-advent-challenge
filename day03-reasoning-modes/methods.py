@@ -121,20 +121,39 @@ def _finish(
     )
 
 
+#: Маркеры, указывающие что рядом с эталоном стоит УТВЕРЖДАЕМЫЙ ответ,
+#: а не перечисление вариантов условия.
+_ANSWER_HINTS = (
+    "ответ", "answer", "итог", "иском", "правильн", "значение", "результат",
+    "это и есть", "выбира", "побед", "подходит", "должна быть", "должен быть",
+)
+
+
 def is_contaminated(prompt: str, task) -> bool:
     """Детектор утечки эталона в self_prompt.
 
     Сгенерированный промпт «выигрывает» жульничеством, если содержит готовый
-    ответ. Проверяем normalize(gold) в normalize(промпта) и, для counting,
-    любое число, равное эталону."""
-    if normalize(task.gold) in normalize(prompt):
-        return True
+    ответ. Для counting эталон (число) в условии отсутствует — срабатывает
+    любое числовое совпадение. Для выбора из вариантов (logic/analytic) золото
+    есть в условии ПО ОПРЕДЕЛЕНИЮ: перечисление опций — не утечка. Помечаем
+    только если рядом с эталоном стоит ответный маркер («это и есть ответ»)."""
     if task.family == "counting" and task.gold.isdigit():
         gold_int = int(task.gold)
         for token in re.findall(r"\d+", prompt):
             if int(token) == gold_int:
                 return True
-    return False
+    # logic/analytic: окно вокруг эталона с ответным маркером
+    gold_n = normalize(task.gold)
+    pn = normalize(prompt)
+    start = 0
+    while True:
+        idx = pn.find(gold_n, start)
+        if idx == -1:
+            return False
+        window = pn[max(0, idx - 60): idx + len(gold_n) + 60]
+        if any(hint in window for hint in _ANSWER_HINTS):
+            return True
+        start = idx + len(gold_n)
 
 
 def run_direct(task, client, gcfg, model="", repeat=0):

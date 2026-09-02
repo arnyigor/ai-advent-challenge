@@ -111,6 +111,38 @@ def test_self_prompt_contaminated_stops_after_first(gcfg):
     assert res.correct is False
 
 
+def test_self_prompt_option_restatement_is_not_contaminated(gcfg):
+    """Перечисление опций условия (включая эталон) — НЕ утечка: детектор для
+    logic/analytic требует ответный маркер рядом с эталоном."""
+    gold_task = next(t for t in TASKS if t.id == "logic-01")
+    client = FakeClient(
+        [
+            (
+                "Перечисли варианты — Аня, Борис, Вера, Глеб, Дина — и определи "
+                "их порядок по ограничениям.",
+                "STOP",
+            ),
+            _answer_data("вера"),
+        ]
+    )
+    res = run_self_prompt(gold_task, client, gcfg, model="m")
+    assert res.status == "ok"
+    assert res.calls == 2
+
+
+def test_self_prompt_counting_numeric_leak_is_contaminated(gcfg, counting):
+    """Для counting любое числовое совпадение с эталоном — утечка."""
+    client = FakeClient(
+        [
+            ("В конце проверь, что получается 120.", "STOP"),
+            _answer_data("120"),
+        ]
+    )
+    res = run_self_prompt(counting, client, gcfg, model="m")
+    assert res.status == "contaminated"
+    assert res.calls == 1
+
+
 # --- 5/6: panel chain ----------------------------------------------------------
 
 
