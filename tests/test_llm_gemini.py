@@ -13,6 +13,7 @@ import tools.llm.gemini as gemini
 from tools.llm.gemini import (
     MAX_RETRIES_PER_MODEL,
     GeminiCallError,
+    GeminiFatalError,
     call_gemini_with_retries,
     extract_response,
     has_gemini_api_key,
@@ -171,11 +172,12 @@ def test_429_then_success(monkeypatch):
 
 
 def test_400_raises_immediately_no_retries(monkeypatch):
+    """400 INVALID_ARGUMENT — фатально: падает за один вызов, не перебирая цепочку."""
     calls = _patch_network(
         monkeypatch, lambda: FakeResponse(status_code=400, text="bad argument")
     )
 
-    with pytest.raises(GeminiCallError) as ei:
+    with pytest.raises(GeminiFatalError) as ei:
         call_gemini_with_retries("m", "p", quiet=True)
     assert ei.value.status_code == 400
     assert len(calls) == 1
@@ -202,13 +204,13 @@ def test_network_error_retries_then_exhausts(monkeypatch):
     assert len(calls) == MAX_RETRIES_PER_MODEL
 
 
-def test_401_raises_runtime_error_immediately(monkeypatch):
-    """401/403 — RuntimeError (не GeminiCallError): не ретраится и не двигает
+def test_401_raises_fatal_immediately(monkeypatch):
+    """401/403 — GeminiFatalError (не GeminiCallError): не ретраится и не двигает
     цепочку моделей, всплывает сразу к обработчику эксперимента."""
     calls = _patch_network(
         monkeypatch, lambda: FakeResponse(status_code=401, text="denied")
     )
 
-    with pytest.raises(RuntimeError, match="401"):
+    with pytest.raises(GeminiFatalError, match="401"):
         call_gemini_with_retries("m", "p", quiet=True)
     assert len(calls) == 1
