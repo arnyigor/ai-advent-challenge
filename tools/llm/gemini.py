@@ -3,7 +3,6 @@ import json
 import os
 import time
 
-import httpx
 import requests
 
 
@@ -222,6 +221,8 @@ async def _call_gemini_stream_once(
     on_state=None,
     cancel_event=None,
 ):
+    import httpx  # Ленивый импорт: нужен только для стриминга (Day 3), а не для Day 1/2
+
     headers = _headers()
     payload = _request_payload(prompt, generation_config, system_instruction)
     url = STREAM_BASE_URL.format(model=model)
@@ -285,7 +286,7 @@ async def _call_gemini_stream_once(
             "candidates": [
                 {
                     "content": {"parts": [{"text": text}]},
-                    "finishReason": finish_reason,
+                    "finishReason": finish_reason or "NO_CANDIDATES",
                 }
             ],
             "usageMetadata": {

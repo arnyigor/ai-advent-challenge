@@ -31,12 +31,14 @@ from day3_reasoning_modes import (  # noqa: E402
     estimate_calls,
     failure_counts,
     run_with_fallback,
+    split_model_spec,
     verdict,
     write_json_document,
 )
 from methods import make_generation_config  # noqa: E402
 from tasks import TASKS, verify_gold  # noqa: E402
 from tools.llm.gemini import MODEL_CHAIN, has_gemini_api_key  # noqa: E402
+from tools.llm.deepseek import has_deepseek_api_key  # noqa: E402
 #: Четыре способа фиксированы заданием — браузер не может их сузить.
 CHALLENGE_METHODS = ["direct", "cot", "self_prompt", "panel"]
 
@@ -45,30 +47,35 @@ RUNS: dict[str, "RunSession"] = {}
 MODEL_OPTIONS = [
     {
         "provider": "Gemini",
+        "id": "gemini:gemini-3.5-flash-lite",
         "model": "gemini-3.5-flash-lite",
         "availableForDay3": True,
         "source": "day01 llm-demo fallback chain",
     },
     {
         "provider": "Gemini",
+        "id": "gemini:gemini-3.5-flash",
         "model": "gemini-3.5-flash",
         "availableForDay3": True,
         "source": "day01 llm-demo fallback chain",
     },
     {
         "provider": "Gemini",
+        "id": "gemini:gemini-3.6-flash",
         "model": "gemini-3.6-flash",
         "availableForDay3": True,
         "source": "day01 llm-demo fallback chain",
     },
     {
         "provider": "Gemini",
+        "id": "gemini:gemini-3.7-flash",
         "model": "gemini-3.7-flash",
         "availableForDay3": True,
         "source": "day03 current fallback chain",
     },
     {
         "provider": "Gemini",
+        "id": "gemini:gemini-2.5-flash",
         "model": "gemini-2.5-flash",
         "availableForDay3": True,
         "source": "day01/day1_llm.py",
@@ -87,9 +94,11 @@ MODEL_OPTIONS = [
     },
     {
         "provider": "DeepSeek",
-        "model": "deepseek-chat",
-        "availableForDay3": False,
-        "source": "day01 llm-demo backend",
+        "id": "deepseek:deepseek-v4-flash",
+        "model": "deepseek-v4-flash",
+        "availableForDay3": True,
+        "source": "DeepSeek OpenAI-compatible chat/completions",
+        "requiresKey": "DEEPSEEK_API_KEY",
     },
     {
         "provider": "OpenAI",
@@ -133,6 +142,16 @@ class RunSession:
         self.cancelled = False
 
 
+def _cleanup_old_runs(max_history: int = 50) -> None:
+    """Ограничивает размер кэша: удаляет самые старые завершённые сессии."""
+    if len(RUNS) <= max_history:
+        return
+    sorted_keys = sorted(RUNS.keys(), key=lambda k: RUNS[k].started_at)
+    for k in sorted_keys[: len(RUNS) - max_history]:
+        if RUNS[k].finished:
+            del RUNS[k]
+
+
 def _json_response(handler: SimpleHTTPRequestHandler, payload, status=HTTPStatus.OK):
     body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
     handler.send_response(status)
@@ -164,6 +183,20 @@ def _task_payload(task) -> dict:
 def _selected_task(payload: dict):
     task_id = str(payload.get("task_id") or "").strip()
     return next((t for t in TASKS if t.id == task_id), None)
+
+
+def _has_key_for_model(model_spec: str | None) -> bool:
+    provider, _model = split_model_spec(model_spec)
+    if provider == "deepseek":
+        return has_deepseek_api_key()
+    return has_gemini_api_key()
+
+
+def _missing_key_message(model_spec: str | None) -> str:
+    provider, _model = split_model_spec(model_spec)
+    if provider == "deepseek":
+        return "DEEPSEEK_API_KEY is not set"
+    return "GEMINI_API_KEY is not set"
 
 
 def _list_result_files() -> list[dict]:
@@ -215,8 +248,6 @@ def _run_experiment(run_id: str, payload: dict) -> None:
     reporter = QueueReporter(session.events)
     try:
         verify_gold()
-        if not has_gemini_api_key():
-            raise RuntimeError("GEMINI_API_KEY is not set")
 
         # Одна выбранная задача, один прогон, четыре фиксированных способа.
         task_id = str(payload.get("task_id") or "").strip()
@@ -232,6 +263,8 @@ def _run_experiment(run_id: str, payload: dict) -> None:
         # pacer создавал искусственные паузы между запросами.
         rpm = 0.0
         model = payload.get("model") or None
+        if not _has_key_for_model(model):
+            raise RuntimeError(_missing_key_message(model))
         model_chain = [model] if model else MODEL_CHAIN
         gcfg = make_generation_config(thinking)
 
@@ -366,6 +399,7 @@ class ReasoningLabHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        _cleanup_old_runs()
         run_id = uuid.uuid4().hex
         session = RunSession()
         RUNS[run_id] = session

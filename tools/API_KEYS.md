@@ -11,6 +11,7 @@
 | Google Gemini | `GEMINI_API_KEY` | https://aistudio.google.com/apikey | `AIza...` |
 | OpenAI | `OPENAI_API_KEY` | https://platform.openai.com/api-keys | `sk-...` |
 | DeepSeek | `DEEPSEEK_API_KEY` | https://platform.deepseek.com/api_keys | `sk-...` |
+| RouterAI | `ROUTERAI_API_KEY` | https://routerai.ru | `sk-...` / токен |
 | llama.cpp | `LLAMACPP_URL` (не ключ, адрес) | локальный сервер OpenAI-совместимый API | `http://127.0.0.1:8080` |
 | Ollama | `OLLAMA_URL` (не ключ, адрес) | `ollama serve` | `http://127.0.0.1:11434` |
 

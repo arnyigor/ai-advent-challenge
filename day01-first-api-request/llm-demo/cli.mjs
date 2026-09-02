@@ -53,7 +53,7 @@ const BACKENDS = {
   },
   gemini: {
     url: 'https://generativelanguage.googleapis.com/v1beta',
-    defaultModel: 'gemini-2.0-flash',
+    defaultModel: 'gemini-3.5-flash-lite',
     available: () => !!key('GEMINI_API_KEY'),
   },
   mock: { available: () => true },
@@ -96,9 +96,7 @@ async function ask(id, text) {
     const apiKey = key(b.keyName);
     if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
     const url = b.url + b.chatPath;
-    const body = id === 'ollama'
-      ? { model: m, messages: [{ role: 'user', content: text }] }
-      : { model: m, messages: [{ role: 'user', content: text }] };
+    const body = { model: m, messages: [{ role: 'user', content: text }] };
     const r = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
     if (!r.ok) throw new Error(`${id} HTTP ${r.status}: ${(await r.text()).slice(0, 300)}`);
     const j = await r.json();

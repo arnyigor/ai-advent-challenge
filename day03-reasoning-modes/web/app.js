@@ -272,7 +272,7 @@ function renderMethodCards() {
       ["truncated", "contaminated", "blocked", "unparseable", "error"].includes(item.status);
     const resultStatus = item.correct === true ? "correct" : item.status;
     const answer = item.answer || "-";
-    const response = item.answerRaw || liveOutputText(item);
+    const response = liveOutputText(item) || item.answerRaw;
     const prompts = item.prompts || [];
     const requestState = state.activeStage
       ? item.requestStates[state.activeStage]
@@ -804,7 +804,7 @@ async function loadModels() {
   select.innerHTML = `<option value="">Gemini fallback chain</option>`;
   for (const item of models) {
     const option = document.createElement("option");
-    option.value = item.availableForDay3 ? item.model : "";
+    option.value = item.availableForDay3 ? (item.id || item.model) : "";
     option.disabled = !item.availableForDay3;
     option.textContent = item.availableForDay3
       ? `${item.provider} · ${item.model}`
@@ -894,8 +894,8 @@ function makeRun(method, taskId, correct, answer, calls, tokens, stages, status 
 function bootElapsedTimer() {
   clearInterval(state.elapsedTimer);
   state.elapsedTimer = setInterval(() => {
-    // Общий таймер запуска.
-    if (state.startedAt) {
+    // Общий таймер запуска: тикает, только пока идёт прогон.
+    if (state.running && state.startedAt) {
       const elapsed = Math.floor((Date.now() - state.startedAt) / 1000);
       const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
       const ss = String(elapsed % 60).padStart(2, "0");

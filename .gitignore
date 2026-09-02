@@ -7,8 +7,11 @@ __pycache__/
 *.mov
 *.mkv
 .serena/
+.pytest_cache/
+.ruff_cache/
 day2_live.*
 day3_*.json
 day3_*.err
 day03-reasoning-modes/results/
 day03-reasoning-modes/*.log
+day03-reasoning-modes/video-frames/

@@ -9,6 +9,9 @@ $root = Split-Path -Parent $PSScriptRoot
 $folder = Join-Path $root "day$d-$Slug"
 New-Item -ItemType Directory -Path $folder -Force | Out-Null
 
+$slugUnderscore = $Slug -replace '-', '_'
+$entryFile = "day$d`_$slugUnderscore.py"
+
 $readme = @"
 # Day ${Day}: $Title
 
@@ -33,7 +36,7 @@ pip install -r requirements.txt
 ## Запуск
 
 ``````bash
-python day$Day.py
+python $entryFile
 ``````
 
 ## Демо
@@ -44,7 +47,7 @@ python day$Day.py
 
 ``````
 day$d-$Slug/
-├── day$Day.py         # основной скрипт
+├── $entryFile         # основной скрипт
 ├── requirements.txt   # зависимости
 └── README.md
 ``````
@@ -52,8 +55,8 @@ day$d-$Slug/
 
 Set-Content -Path "$folder\README.md" -Value $readme -Encoding UTF8
 
-@{ day = $Day; title = $Title; entrypoint = "day$Day.py" } | ConvertTo-Json | Set-Content "$folder\challenge.json"
-New-Item -ItemType File -Path "$folder\day$Day.py" -Force | Out-Null
+@{ day = $Day; title = $Title; entrypoint = $entryFile } | ConvertTo-Json | Set-Content "$folder\challenge.json"
+New-Item -ItemType File -Path "$folder\$entryFile" -Force | Out-Null
 New-Item -ItemType File -Path "$folder\requirements.txt" -Force | Out-Null
 
 Write-Host "Создано: $folder" -ForegroundColor Green

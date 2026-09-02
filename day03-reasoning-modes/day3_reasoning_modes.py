@@ -34,6 +34,15 @@ from tools.llm.gemini import (
     call_gemini_with_retries,
     has_gemini_api_key,
 )
+from tools.llm.deepseek import (
+    DEFAULT_MODEL as DEEPSEEK_DEFAULT_MODEL,
+    DeepSeekCancelledError,
+    DeepSeekModelUnavailableError,
+    DeepSeekRetryableError,
+    call_deepseek_stream_with_retries,
+    call_deepseek_with_retries,
+    has_deepseek_api_key,
+)
 from tools.llm.ui import (
     BOLD,
     RED,
@@ -66,6 +75,32 @@ def _retry_logger(message):
     print(f"{YELLOW}  {message}{RESET}")
 
 
+def split_model_spec(model_spec):
+    if isinstance(model_spec, str) and ":" in model_spec:
+        provider, model = model_spec.split(":", 1)
+        return provider.strip().lower(), model.strip()
+    return "gemini", model_spec
+
+
+def model_label(model_spec):
+    provider, model = split_model_spec(model_spec)
+    return model if provider == "gemini" else f"{provider}:{model}"
+
+
+def _has_key_for_model(model_spec):
+    provider, _model = split_model_spec(model_spec)
+    if provider == "deepseek":
+        return has_deepseek_api_key()
+    return has_gemini_api_key()
+
+
+def _missing_key_message(model_spec):
+    provider, _model = split_model_spec(model_spec)
+    if provider == "deepseek":
+        return "DEEPSEEK_API_KEY is not set"
+    return "GEMINI_API_KEY is not set"
+
+
 class Pacer:
     """Минимальный пейсер: gap между вызовами по rpm."""
 
@@ -91,7 +126,11 @@ class Client:
     """Привязывает одну модель к вызовам; применяет пейсер и ретраи."""
 
     def __init__(self, model, pacer, quiet, cancel_event=None, stream=False):
-        self.model = model
+        self.provider, parsed_model = split_model_spec(model)
+        self.model = parsed_model or (
+            DEEPSEEK_DEFAULT_MODEL if self.provider == "deepseek" else model
+        )
+        self.model_spec = model_label(f"{self.provider}:{self.model}")
         self.pacer = pacer
         self.quiet = quiet
         self.cancel_event = cancel_event
@@ -103,16 +142,28 @@ class Client:
         if self.pacer:
             self.pacer.wait()
         try:
-            return call_gemini_with_retries(
-                self.model,
-                prompt,
-                gcfg,
-                system_instruction=system_instruction,
-                quiet=self.quiet,
-                retry_logger=None if self.quiet else _retry_logger,
-                cancel_event=self.cancel_event,
-            )
-        except GeminiCancelledError:
+            if self.provider == "deepseek":
+                return call_deepseek_with_retries(
+                    self.model,
+                    prompt,
+                    gcfg,
+                    system_instruction=system_instruction,
+                    quiet=self.quiet,
+                    retry_logger=None if self.quiet else _retry_logger,
+                    cancel_event=self.cancel_event,
+                )
+            if self.provider == "gemini":
+                return call_gemini_with_retries(
+                    self.model,
+                    prompt,
+                    gcfg,
+                    system_instruction=system_instruction,
+                    quiet=self.quiet,
+                    retry_logger=None if self.quiet else _retry_logger,
+                    cancel_event=self.cancel_event,
+                )
+            raise RuntimeError(f"Unknown LLM provider: {self.provider}")
+        except (GeminiCancelledError, DeepSeekCancelledError):
             raise RunCancelled() from None
 
     def call_stage(
@@ -136,21 +187,14 @@ class Client:
                 reporter.emit(event)
 
         try:
-            return call_gemini_stream_with_retries(
-                self.model,
-                prompt,
-                gcfg,
-                system_instruction=system_instruction,
-                quiet=self.quiet,
-                retry_logger=None if self.quiet else _retry_logger,
-                cancel_event=self.cancel_event,
-                on_state=lambda state: emit(
+            callbacks = {
+                "on_state": lambda state: emit(
                     RequestStateChanged(method=method, stage=stage, state=state)
                 ),
-                on_text=lambda text: emit(
+                "on_text": lambda text: emit(
                     StageOutputDelta(method=method, stage=stage, text=text)
                 ),
-                on_retry=lambda attempt, wait_s, reason: emit(
+                "on_retry": lambda attempt, wait_s, reason: emit(
                     RequestRetrying(
                         method=method,
                         stage=stage,
@@ -159,8 +203,31 @@ class Client:
                         reason=reason[:200],
                     )
                 ),
-            )
-        except GeminiCancelledError:
+            }
+            if self.provider == "deepseek":
+                return call_deepseek_stream_with_retries(
+                    self.model,
+                    prompt,
+                    gcfg,
+                    system_instruction=system_instruction,
+                    quiet=self.quiet,
+                    retry_logger=None if self.quiet else _retry_logger,
+                    cancel_event=self.cancel_event,
+                    **callbacks,
+                )
+            if self.provider == "gemini":
+                return call_gemini_stream_with_retries(
+                    self.model,
+                    prompt,
+                    gcfg,
+                    system_instruction=system_instruction,
+                    quiet=self.quiet,
+                    retry_logger=None if self.quiet else _retry_logger,
+                    cancel_event=self.cancel_event,
+                    **callbacks,
+                )
+            raise RuntimeError(f"Unknown LLM provider: {self.provider}")
+        except (GeminiCancelledError, DeepSeekCancelledError):
             raise RunCancelled() from None
 
 
@@ -277,8 +344,13 @@ def run_with_fallback(
                 cancel_event=cancel_event,
                 stream=stream,
             )
-            return results, model, attempts
-        except (ModelUnavailableError, GeminiRetryableError) as e:
+            return results, model_label(model), attempts
+        except (
+            ModelUnavailableError,
+            GeminiRetryableError,
+            DeepSeekModelUnavailableError,
+            DeepSeekRetryableError,
+        ) as e:
             attempts.append({"model": model, "status": "failed", "error": str(e)[:200]})
             next_model = (
                 model_chain[index + 1] if index + 1 < len(model_chain) else None
@@ -563,7 +635,8 @@ def run_json_mode(
     repeats, thinking, rpm, methods, tasks, model_chain, quiet=True, out_path=None
 ):
     verify_gold()
-    if not has_gemini_api_key():
+    primary_model = model_chain[0] if model_chain else None
+    if not _has_key_for_model(primary_model):
         doc = build_json_document(
             repeats,
             thinking,
@@ -574,7 +647,7 @@ def run_json_mode(
             aggregate([], methods, tasks),
             failure_counts([]),
             None,
-            error="GEMINI_API_KEY not set",
+            error=_missing_key_message(primary_model),
         )
         if out_path:
             write_json_document(out_path, doc)
@@ -665,8 +738,9 @@ def run_text_mode(
     video_mode=False,
     video_columns=None,
 ):
-    if not has_gemini_api_key():
-        print(f"{RED}[ERROR]{RESET} GEMINI_API_KEY не найден в переменных окружения.")
+    primary_model = model_chain[0] if model_chain else None
+    if not _has_key_for_model(primary_model):
+        print(f"{RED}[ERROR]{RESET} {_missing_key_message(primary_model)} в переменных окружения.")
         sys.exit(1)
 
     verify_gold()

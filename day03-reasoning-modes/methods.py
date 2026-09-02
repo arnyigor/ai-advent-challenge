@@ -19,7 +19,8 @@ from scoring import STOP_SEQUENCE, answer_contract, normalize, parse_answer
 #: одинаковый ответ и self_consistency вырождается в 1.0 без смысла.
 DEFAULT_GENERATION_CONFIG = {
     "temperature": 0.7,
-    "maxOutputTokens": 2048,  # self_prompt режется на 1024 (живой прогон); лимит общий
+    # maxOutputTokens намеренно НЕ задан: лимит 4096 всё равно резал длинные
+    # ответы self_prompt (Call 2/2), пусть модель отдаёт полный ответ до stop-последовательности.
     "stopSequences": [STOP_SEQUENCE],
 }
 
@@ -28,10 +29,11 @@ _TAIL = answer_contract()
 METHOD_ORDER = ["direct", "cot", "self_prompt", "panel"]
 
 # Тексты промптов (заполняются ниже через функции-сборщики)
-_SELF_PROMPT_INSTRUCTION = """Ниже — задача. НЕ решай её. Составь подробный промпт,
-который поможет языковой модели решить её максимально надёжно.
-Опиши, на что обратить внимание и в каком порядке рассуждать.
-Не приводи ответ и не выполняй вычисления.
+_SELF_PROMPT_INSTRUCTION = """Ниже — задача. Твоя цель — ТОЛЬКО составить подробный промпт-методику для другой языковой модели, которая будет её решать.
+СТРОГИЕ ПРАВИЛА:
+1. НЕ РЕШАЙ задачу сам.
+2. Не выполняй никаких вычислений. В промпте ЗАПРЕЩЕНО писать ЛЮБЫЕ числа-значения: ни промежуточные, ни итоговый ответ, ни оценочные значения вида «около N», «примерно N», «~N», «≈N», ни проверки правдоподобности с конкретными цифрами. Ссылайся на величины словами (например, «вычисли количество делением диапазона на шаг»), но НЕ подставляй вычисленные цифры.
+3. Опиши только алгоритм, шаги и то, на что обратить внимание при рассуждении.
 
 ЗАДАЧА:
 {task.prompt}"""
@@ -265,9 +267,19 @@ def is_contaminated(prompt: str, task) -> bool:
     только если рядом с эталоном стоит ответный маркер («это и есть ответ»)."""
     if task.family == "counting" and task.gold.isdigit():
         gold_int = int(task.gold)
-        for token in re.findall(r"\d+", prompt):
-            if int(token) == gold_int:
-                return True
+        # Маркеры оценочного контекста: число рядом с ними — это граница
+        # правдоподобности («около 120»), а не готовый ответ, поэтому утечкой
+        # не считается.
+        _approx = ("около", "примерно", "приблизительно", "~", "≈", "±",
+                   "не более", "менее")
+        for m in re.finditer(r"\d+", prompt):
+            if int(m.group()) != gold_int:
+                continue
+            window = prompt[max(0, m.start() - 25): m.start()]
+            if any(a in window for a in _approx):
+                continue
+            return True
+        return False
     # logic/analytic: окно вокруг эталона с ответным маркером
     gold_n = normalize(task.gold)
     pn = normalize(prompt)
@@ -387,7 +399,13 @@ def run_self_prompt(task, client, gcfg, model="", repeat=0, reporter=None):
         _emit(reporter, ev)
 
     # Вызов 2: решить по сгенерированному промпту + контракт.
-    call2 = text1.strip() + "\n\nЗАДАЧА:\n" + task.prompt + _TAIL
+    call2 = (
+        "Инструкция и методика решения задачи:\n"
+        f"{text1.strip()}\n\n"
+        "ЗАДАЧА ДЛЯ РЕШЕНИЯ:\n"
+        f"{task.prompt}"
+        f"{_TAIL}"
+    )
     text2, stage2 = _call_stage(client, call2, gcfg, "solve", reporter, "self_prompt")
     prompts.append(call2)
     return _finish(
