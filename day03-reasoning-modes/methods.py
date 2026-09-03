@@ -288,6 +288,17 @@ def is_contaminated(prompt: str, task) -> bool:
         idx = pn.find(gold_n, start)
         if idx == -1:
             return False
+        # Эталон, слитый с соседней буквой/цифрой без пробела (например,
+        # «гамма» внутри «баллГамма») — это имя переменной-плейсхолдера в
+        # сгенерированной методике, а не упоминание кандидата. Пропускаем
+        # без проверки окна — иначе слово вроде «результатов» рядом с таким
+        # плейсхолдером ложно засчитывается как утечка.
+        before = pn[idx - 1] if idx > 0 else " "
+        after_idx = idx + len(gold_n)
+        after = pn[after_idx] if after_idx < len(pn) else " "
+        if before.isalnum() or after.isalnum():
+            start = after_idx
+            continue
         window = pn[max(0, idx - 60): idx + len(gold_n) + 60]
         if any(hint in window for hint in _ANSWER_HINTS):
             return True

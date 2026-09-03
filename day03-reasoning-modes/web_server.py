@@ -31,14 +31,16 @@ from day3_reasoning_modes import (  # noqa: E402
     estimate_calls,
     failure_counts,
     run_with_fallback,
-    split_model_spec,
     verdict,
     write_json_document,
 )
 from methods import make_generation_config  # noqa: E402
 from tasks import TASKS, verify_gold  # noqa: E402
-from tools.llm.gemini import MODEL_CHAIN, has_gemini_api_key  # noqa: E402
-from tools.llm.deepseek import has_deepseek_api_key  # noqa: E402
+from tools.llm.gemini import MODEL_CHAIN  # noqa: E402
+from tools.llm.registry import (  # noqa: E402
+    has_key_for as _has_key_for_model,
+    missing_key_message as _missing_key_message,
+)
 #: Четыре способа фиксированы заданием — браузер не может их сузить.
 CHALLENGE_METHODS = ["direct", "cot", "self_prompt", "panel"]
 
@@ -183,20 +185,6 @@ def _task_payload(task) -> dict:
 def _selected_task(payload: dict):
     task_id = str(payload.get("task_id") or "").strip()
     return next((t for t in TASKS if t.id == task_id), None)
-
-
-def _has_key_for_model(model_spec: str | None) -> bool:
-    provider, _model = split_model_spec(model_spec)
-    if provider == "deepseek":
-        return has_deepseek_api_key()
-    return has_gemini_api_key()
-
-
-def _missing_key_message(model_spec: str | None) -> str:
-    provider, _model = split_model_spec(model_spec)
-    if provider == "deepseek":
-        return "DEEPSEEK_API_KEY is not set"
-    return "GEMINI_API_KEY is not set"
 
 
 def _list_result_files() -> list[dict]:

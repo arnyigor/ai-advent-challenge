@@ -175,6 +175,27 @@ def test_self_prompt_counting_numeric_leak_is_contaminated(gcfg, counting):
     assert res.calls == 1
 
 
+def test_self_prompt_variable_placeholder_is_not_contaminated(gcfg):
+    """Эталон, слитый с соседним словом без пробела (имя переменной вида
+    «баллГамма»), не должен считаться утечкой, даже если через несколько
+    слов встречается маркер-подсказка («результатов») — регрессия для
+    false-positive, найденного на живом прогоне DeepSeek."""
+    analytic_task = next(t for t in TASKS if t.id == "analytic-01")
+    client = FakeClient(
+        [
+            (
+                "Сложи три произведения. Запиши сумму как «баллГамма». "
+                "Шаг 5. Сравнение результатов — сравни три полученных значения.",
+                "STOP",
+            ),
+            _answer_data("гамма"),
+        ]
+    )
+    res = run_self_prompt(analytic_task, client, gcfg, model="m")
+    assert res.status == "ok"
+    assert res.calls == 2
+
+
 # --- 5/6: panel (группа экспертов в одном вызове) -----------------------------
 
 

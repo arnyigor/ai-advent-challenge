@@ -13,7 +13,6 @@ import argparse
 from contextlib import nullcontext
 import json
 import sys
-import time
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -25,24 +24,17 @@ try:
 except Exception:
     pass
 
-from tools.llm.gemini import (
-    MODEL_CHAIN,
-    GeminiCancelledError,
-    GeminiRetryableError,
-    ModelUnavailableError,
-    call_gemini_stream_with_retries,
-    call_gemini_with_retries,
-    has_gemini_api_key,
+from tools.llm._transport import LLMModelUnavailableError, LLMRetryableError
+from tools.llm.client import Client as BaseClient
+from tools.llm.gemini import MODEL_CHAIN
+from tools.llm.pacer import Pacer as BasePacer
+from tools.llm.registry import (
+    has_key_for as _has_key_for_model,
+    missing_key_message as _missing_key_message,
+    model_label,
+    split_model_spec,
 )
-from tools.llm.deepseek import (
-    DEFAULT_MODEL as DEEPSEEK_DEFAULT_MODEL,
-    DeepSeekCancelledError,
-    DeepSeekModelUnavailableError,
-    DeepSeekRetryableError,
-    call_deepseek_stream_with_retries,
-    call_deepseek_with_retries,
-    has_deepseek_api_key,
-)
+from tools.llm.runner import run_with_model_fallback
 from tools.llm.ui import (
     BOLD,
     RED,
@@ -75,96 +67,29 @@ def _retry_logger(message):
     print(f"{YELLOW}  {message}{RESET}")
 
 
-def split_model_spec(model_spec):
-    if isinstance(model_spec, str) and ":" in model_spec:
-        provider, model = model_spec.split(":", 1)
-        return provider.strip().lower(), model.strip()
-    return "gemini", model_spec
-
-
-def model_label(model_spec):
-    provider, model = split_model_spec(model_spec)
-    return model if provider == "gemini" else f"{provider}:{model}"
-
-
-def _has_key_for_model(model_spec):
-    provider, _model = split_model_spec(model_spec)
-    if provider == "deepseek":
-        return has_deepseek_api_key()
-    return has_gemini_api_key()
-
-
-def _missing_key_message(model_spec):
-    provider, _model = split_model_spec(model_spec)
-    if provider == "deepseek":
-        return "DEEPSEEK_API_KEY is not set"
-    return "GEMINI_API_KEY is not set"
-
-
-class Pacer:
-    """Минимальный пейсер: gap между вызовами по rpm."""
+class Pacer(BasePacer):
+    """Пейсер дня 3: по умолчанию отмена поднимает RunCancelled (см. Client ниже)."""
 
     def __init__(self, rpm, cancel_event=None):
-        self.gap = 60.0 / rpm if rpm and rpm > 0 else 0.0
-        self._last = None
-        self.cancel_event = cancel_event
-
-    def wait(self):
-        now = time.monotonic()
-        if self._last is not None and self.gap:
-            d = self.gap - (now - self._last)
-            if d > 0:
-                if self.cancel_event is not None:
-                    if self.cancel_event.wait(d):
-                        raise RunCancelled()
-                else:
-                    time.sleep(d)
-        self._last = time.monotonic()
+        super().__init__(rpm, cancel_event=cancel_event, cancelled_exc=RunCancelled)
 
 
-class Client:
-    """Привязывает одну модель к вызовам; применяет пейсер и ретраи."""
+class Client(BaseClient):
+    """Client дня 3: поверх общего tools/llm/client.Client добавляет только
+    call_stage() — перевод стриминговых колбэков в события репортера
+    (ui.events), специфичные для дашборда/plain-режима этого дня. Диспетчеризация
+    по провайдеру, пейсер и ретраи — целиком в базовом классе."""
 
     def __init__(self, model, pacer, quiet, cancel_event=None, stream=False):
-        self.provider, parsed_model = split_model_spec(model)
-        self.model = parsed_model or (
-            DEEPSEEK_DEFAULT_MODEL if self.provider == "deepseek" else model
+        super().__init__(
+            model,
+            pacer=pacer,
+            quiet=quiet,
+            cancel_event=cancel_event,
+            stream=stream,
+            retry_logger=_retry_logger,
+            cancelled_exc=RunCancelled,
         )
-        self.model_spec = model_label(f"{self.provider}:{self.model}")
-        self.pacer = pacer
-        self.quiet = quiet
-        self.cancel_event = cancel_event
-        self.stream = stream
-
-    def call(self, prompt, gcfg=None, system_instruction=None):
-        if self.cancel_event is not None and self.cancel_event.is_set():
-            raise RunCancelled()
-        if self.pacer:
-            self.pacer.wait()
-        try:
-            if self.provider == "deepseek":
-                return call_deepseek_with_retries(
-                    self.model,
-                    prompt,
-                    gcfg,
-                    system_instruction=system_instruction,
-                    quiet=self.quiet,
-                    retry_logger=None if self.quiet else _retry_logger,
-                    cancel_event=self.cancel_event,
-                )
-            if self.provider == "gemini":
-                return call_gemini_with_retries(
-                    self.model,
-                    prompt,
-                    gcfg,
-                    system_instruction=system_instruction,
-                    quiet=self.quiet,
-                    retry_logger=None if self.quiet else _retry_logger,
-                    cancel_event=self.cancel_event,
-                )
-            raise RuntimeError(f"Unknown LLM provider: {self.provider}")
-        except (GeminiCancelledError, DeepSeekCancelledError):
-            raise RunCancelled() from None
 
     def call_stage(
         self,
@@ -175,60 +100,30 @@ class Client:
         reporter=None,
         system_instruction=None,
     ):
-        if not self.stream:
-            return self.call(prompt, gcfg, system_instruction=system_instruction)
-        if self.cancel_event is not None and self.cancel_event.is_set():
-            raise RunCancelled()
-        if self.pacer:
-            self.pacer.wait()
-
         def emit(event):
             if reporter is not None:
                 reporter.emit(event)
 
-        try:
-            callbacks = {
-                "on_state": lambda state: emit(
-                    RequestStateChanged(method=method, stage=stage, state=state)
-                ),
-                "on_text": lambda text: emit(
-                    StageOutputDelta(method=method, stage=stage, text=text)
-                ),
-                "on_retry": lambda attempt, wait_s, reason: emit(
-                    RequestRetrying(
-                        method=method,
-                        stage=stage,
-                        attempt=attempt,
-                        wait_s=wait_s,
-                        reason=reason[:200],
-                    )
-                ),
-            }
-            if self.provider == "deepseek":
-                return call_deepseek_stream_with_retries(
-                    self.model,
-                    prompt,
-                    gcfg,
-                    system_instruction=system_instruction,
-                    quiet=self.quiet,
-                    retry_logger=None if self.quiet else _retry_logger,
-                    cancel_event=self.cancel_event,
-                    **callbacks,
+        return self.call_stream(
+            prompt,
+            gcfg,
+            system_instruction=system_instruction,
+            on_state=lambda state: emit(
+                RequestStateChanged(method=method, stage=stage, state=state)
+            ),
+            on_text=lambda text: emit(
+                StageOutputDelta(method=method, stage=stage, text=text)
+            ),
+            on_retry=lambda attempt, wait_s, reason: emit(
+                RequestRetrying(
+                    method=method,
+                    stage=stage,
+                    attempt=attempt,
+                    wait_s=wait_s,
+                    reason=reason[:200],
                 )
-            if self.provider == "gemini":
-                return call_gemini_stream_with_retries(
-                    self.model,
-                    prompt,
-                    gcfg,
-                    system_instruction=system_instruction,
-                    quiet=self.quiet,
-                    retry_logger=None if self.quiet else _retry_logger,
-                    cancel_event=self.cancel_event,
-                    **callbacks,
-                )
-            raise RuntimeError(f"Unknown LLM provider: {self.provider}")
-        except (GeminiCancelledError, DeepSeekCancelledError):
-            raise RunCancelled() from None
+            ),
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -328,45 +223,36 @@ def run_with_fallback(
     stream=False,
 ):
     reporter = reporter or NullReporter()
-    attempts = []
     pacer = Pacer(rpm, cancel_event=cancel_event)
-    for index, model in enumerate(model_chain):
-        try:
-            results = run_matrix(
-                repeats,
-                methods,
-                tasks,
-                model,
-                gcfg,
-                pacer,
-                quiet,
-                reporter=reporter,
-                cancel_event=cancel_event,
-                stream=stream,
-            )
-            return results, model_label(model), attempts
-        except (
-            ModelUnavailableError,
-            GeminiRetryableError,
-            DeepSeekModelUnavailableError,
-            DeepSeekRetryableError,
-        ) as e:
-            attempts.append({"model": model, "status": "failed", "error": str(e)[:200]})
-            next_model = (
-                model_chain[index + 1] if index + 1 < len(model_chain) else None
-            )
-            reporter.emit(
-                FallbackTriggered(
-                    old_model=model,
-                    new_model=next_model,
-                    reason=str(e)[:200],
-                )
-            )
-            if not quiet:
-                print(f"{YELLOW}  [{model}] недоступна: {e}{RESET}")
-    raise RuntimeError(
-        f"Все модели в цепочке недоступны: {json.dumps(attempts, ensure_ascii=False)}"
+
+    def _run_on_model(model):
+        return run_matrix(
+            repeats,
+            methods,
+            tasks,
+            model,
+            gcfg,
+            pacer,
+            quiet,
+            reporter=reporter,
+            cancel_event=cancel_event,
+            stream=stream,
+        )
+
+    def _on_fallback(model, next_model, e):
+        reporter.emit(
+            FallbackTriggered(old_model=model, new_model=next_model, reason=str(e)[:200])
+        )
+        if not quiet:
+            print(f"{YELLOW}  [{model}] недоступна: {e}{RESET}")
+
+    results, model_used, attempts = run_with_model_fallback(
+        model_chain,
+        _run_on_model,
+        fallback_exc=(LLMModelUnavailableError, LLMRetryableError),
+        on_fallback=_on_fallback,
     )
+    return results, model_label(model_used), attempts
 
 
 # ---------------------------------------------------------------------------
@@ -777,7 +663,8 @@ def run_text_mode(
         print(f"\n{RED}[ERROR]{RESET} Запрос не выполнен: {e}")
         sys.exit(1)
 
-    if attempts and ui == "plain":
+    failed = [a for a in attempts if a["status"] == "failed"]
+    if failed and ui == "plain":
         print()
         print(f"{YELLOW}[FALLBACK]{RESET} Использована модель: {model_used}")
 

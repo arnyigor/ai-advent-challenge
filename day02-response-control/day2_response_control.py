@@ -17,6 +17,7 @@ from tools.llm.gemini import (
     extract_response,
     has_gemini_api_key,
 )
+from tools.llm.runner import run_with_model_fallback
 from tools.llm.ui import BOLD, BOX_WIDTH, RED, RESET, YELLOW, pass_fail, print_box, truncate, wait_for_enter
 
 try:
@@ -110,50 +111,52 @@ def run_experiment(word_limit, stop_sequence, max_output_tokens, model_chain, qu
     system_instruction = build_system_instruction(word_limit, stop_sequence)
     base_config, controlled_config = build_generation_configs(stop_sequence, max_output_tokens)
 
-    attempts = []
-    for model in model_chain:
-        try:
-            t_a = time.monotonic()
-            data_a = call_gemini_with_retries(model, BASE_PROMPT, base_config,
-                                              quiet=quiet, retry_logger=_retry_banner)
-            latency_a = time.monotonic() - t_a
-            resp_a = extract_response(data_a)
-            stats_a = calculate_stats(resp_a["text"])
+    def _run_on_model(model):
+        t_a = time.monotonic()
+        data_a = call_gemini_with_retries(model, BASE_PROMPT, base_config,
+                                          quiet=quiet, retry_logger=_retry_banner)
+        latency_a = time.monotonic() - t_a
+        resp_a = extract_response(data_a)
+        stats_a = calculate_stats(resp_a["text"])
 
-            t_b = time.monotonic()
-            data_b = call_gemini_with_retries(
-                model, BASE_PROMPT, controlled_config,
-                system_instruction=system_instruction, quiet=quiet,
-                retry_logger=_retry_banner,
-            )
-            latency_b = time.monotonic() - t_b
-            resp_b = extract_response(data_b)
-            stats_b = calculate_stats(resp_b["text"])
-            checks_b = check_controlled(resp_b["text"], word_limit, stop_sequence)
+        t_b = time.monotonic()
+        data_b = call_gemini_with_retries(
+            model, BASE_PROMPT, controlled_config,
+            system_instruction=system_instruction, quiet=quiet,
+            retry_logger=_retry_banner,
+        )
+        latency_b = time.monotonic() - t_b
+        resp_b = extract_response(data_b)
+        stats_b = calculate_stats(resp_b["text"])
+        checks_b = check_controlled(resp_b["text"], word_limit, stop_sequence)
 
-            return {
-                "model_used": model,
-                "attempts": attempts + [{"model": model, "status": "ok"}],
-                "system_instruction": system_instruction,
-                "base_config": base_config,
-                "controlled_config": controlled_config,
-                "resp_a": resp_a,
-                "stats_a": stats_a,
-                "latency_a": latency_a,
-                "resp_b": resp_b,
-                "stats_b": stats_b,
-                "latency_b": latency_b,
-                "checks_b": checks_b,
-            }
-        except GeminiCallError as e:
-            attempts.append({"model": model, "status": "failed", "error": str(e)[:200]})
-            if not quiet:
-                print(f"{YELLOW}  [{model}] недоступна: {e}{RESET}")
-    err = GeminiCallError(
-        f"Все модели в цепочке недоступны: {json.dumps(attempts, ensure_ascii=False)}"
+        return {
+            "system_instruction": system_instruction,
+            "base_config": base_config,
+            "controlled_config": controlled_config,
+            "resp_a": resp_a,
+            "stats_a": stats_a,
+            "latency_a": latency_a,
+            "resp_b": resp_b,
+            "stats_b": stats_b,
+            "latency_b": latency_b,
+            "checks_b": checks_b,
+        }
+
+    def _on_fallback(model, _next_model, e):
+        if not quiet:
+            print(f"{YELLOW}  [{model}] недоступна: {e}{RESET}")
+
+    result, model_used, attempts = run_with_model_fallback(
+        model_chain,
+        _run_on_model,
+        fallback_exc=GeminiCallError,
+        on_fallback=_on_fallback,
+        error_cls=GeminiCallError,
     )
-    err.attempts = attempts
-    raise err
+    result["model_used"] = model_used
+    result["attempts"] = attempts
+    return result
 
 
 def print_intro(word_limit, stop_sequence, max_output_tokens, model_chain):

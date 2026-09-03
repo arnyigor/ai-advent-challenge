@@ -5,6 +5,18 @@ import time
 
 import requests
 
+from tools.llm._transport import (
+    LLMCallError,
+    LLMCancelledError,
+    LLMError,
+    LLMFatalError,
+    LLMModelUnavailableError,
+    LLMRetryableError,
+    call_with_retries,
+    call_with_retries_async,
+    stream_sse,
+)
+
 
 # Fallback chain, newest/strongest first. If a model is temporarily unavailable,
 # callers should restart the whole comparable experiment on the next model.
@@ -28,32 +40,28 @@ MAX_RETRIES_PER_MODEL = 2
 RETRY_WAIT_S = 10
 
 
-class GeminiError(RuntimeError):
+class GeminiError(LLMError):
     """Базовый класс ошибок Gemini-вызова. Не ретраить вслепую — смотри подкласс."""
 
-    def __init__(self, message, status_code=None):
-        super().__init__(message)
-        self.status_code = status_code
 
-
-class GeminiFatalError(GeminiError):
+class GeminiFatalError(GeminiError, LLMFatalError):
     """Ошибка, при которой ретраи и перебор моделей бессмысленны
     (битый ключ, невалидный аргумент, нет прав)."""
 
 
-class GeminiCallError(GeminiError):
+class GeminiCallError(GeminiError, LLMCallError):
     """Обрабатываемая ошибка вызова: модель недоступна или перегружена."""
 
 
-class GeminiRetryableError(GeminiCallError):
+class GeminiRetryableError(GeminiCallError, LLMRetryableError):
     """Временная ошибка — повторить на той же модели (429/503/500/сеть)."""
 
 
-class GeminiCancelledError(GeminiError):
+class GeminiCancelledError(GeminiError, LLMCancelledError):
     """Запрос отменён извне (cooperative cancellation)."""
 
 
-class ModelUnavailableError(GeminiCallError):
+class ModelUnavailableError(GeminiCallError, LLMModelUnavailableError):
     """Модель не существует / нет доступа — перейти к следующей модели без пауз."""
 
 
@@ -163,52 +171,43 @@ def call_gemini_with_retries(
     retry_logger=None,
     cancel_event=None,
 ):
-    last_error = None
-    for attempt in range(1, MAX_RETRIES_PER_MODEL + 1):
-        if cancel_event is not None and cancel_event.is_set():
-            raise GeminiCancelledError("Запрос отменён")
-        try:
-            return call_gemini(model, prompt, generation_config, system_instruction)
-        except GeminiRetryableError as e:
-            last_error = e
-            wait = RETRY_WAIT_S * attempt
-            if not quiet:
-                message = (
-                    f"  [{model}] HTTP {e.status_code}, жду {wait} сек... "
-                    f"(попытка {attempt}/{MAX_RETRIES_PER_MODEL})"
-                )
-                if retry_logger:
-                    retry_logger(message)
-                else:
-                    print(message)
-            if cancel_event is not None:
-                if cancel_event.wait(wait):
-                    raise GeminiCancelledError("Запрос отменён")
-            else:
-                time.sleep(wait)
-    assert (
-        last_error is not None
-    )  # цикл выполняется хотя бы раз (MAX_RETRIES_PER_MODEL >= 1)
-    raise last_error
+    return call_with_retries(
+        lambda: call_gemini(model, prompt, generation_config, system_instruction),
+        max_retries=MAX_RETRIES_PER_MODEL,
+        wait_s=RETRY_WAIT_S,
+        quiet=quiet,
+        retry_logger=retry_logger,
+        cancel_event=cancel_event,
+        retryable_exc=GeminiRetryableError,
+        cancelled_exc=GeminiCancelledError,
+        log_label=f"[{model}] ",
+    )
 
 
-async def _sleep_or_cancel(wait_s, cancel_event):
-    deadline = time.monotonic() + wait_s
-    while True:
-        if cancel_event is not None and cancel_event.is_set():
-            raise GeminiCancelledError("Запрос отменён")
-        remaining = deadline - time.monotonic()
-        if remaining <= 0:
-            return
-        await asyncio.sleep(min(0.1, remaining))
+def _parse_stream_chunk(chunk):
+    resp = extract_response(chunk)
+    usage = extract_usage(chunk)
+    return {
+        "text": resp["text"],
+        "finish_reason": resp["finish_reason"],
+        "prompt_tokens": usage["prompt_tokens"],
+        "output_tokens": usage["output_tokens"],
+    }
 
 
-async def _cancel_current_task_on_event(cancel_event, task):
-    if cancel_event is None:
-        return
-    while not cancel_event.is_set():
-        await asyncio.sleep(0.1)
-    task.cancel()
+def _build_stream_result(text, finish_reason, prompt_tokens, output_tokens):
+    return {
+        "candidates": [
+            {
+                "content": {"parts": [{"text": text}]},
+                "finishReason": finish_reason or "NO_CANDIDATES",
+            }
+        ],
+        "usageMetadata": {
+            "promptTokenCount": prompt_tokens,
+            "candidatesTokenCount": output_tokens,
+        },
+    }
 
 
 async def _call_gemini_stream_once(
@@ -221,85 +220,23 @@ async def _call_gemini_stream_once(
     on_state=None,
     cancel_event=None,
 ):
-    import httpx  # Ленивый импорт: нужен только для стриминга (Day 3), а не для Day 1/2
-
     headers = _headers()
     payload = _request_payload(prompt, generation_config, system_instruction)
     url = STREAM_BASE_URL.format(model=model)
-    timeout_cfg = httpx.Timeout(timeout, connect=10.0)
-    current_task = asyncio.current_task()
-    cancel_watcher = asyncio.create_task(
-        _cancel_current_task_on_event(cancel_event, current_task)
+    return await stream_sse(
+        url,
+        payload,
+        headers,
+        timeout=timeout,
+        parse_chunk=_parse_stream_chunk,
+        build_result=_build_stream_result,
+        raise_for_status=_raise_for_gemini_response,
+        retryable_exc=GeminiRetryableError,
+        cancelled_exc=GeminiCancelledError,
+        on_text=on_text,
+        on_state=on_state,
+        cancel_event=cancel_event,
     )
-    text_parts = []
-    finish_reason = None
-    prompt_tokens = 0
-    output_tokens = 0
-    saw_first_chunk = False
-
-    try:
-        if on_state:
-            on_state("connecting")
-        async with httpx.AsyncClient(timeout=timeout_cfg) as client:
-            async with client.stream(
-                "POST", url, json=payload, headers=headers
-            ) as response:
-                if response.status_code != 200:
-                    body = (await response.aread()).decode("utf-8", errors="replace")
-                    _raise_for_gemini_response(response.status_code, body)
-
-                if on_state:
-                    on_state("waiting_first_token")
-
-                async for line in response.aiter_lines():
-                    if cancel_event is not None and cancel_event.is_set():
-                        raise GeminiCancelledError("Запрос отменён")
-                    if not line.startswith("data:"):
-                        continue
-                    raw = line.removeprefix("data:").strip()
-                    if not raw or raw == "[DONE]":
-                        continue
-                    try:
-                        chunk = json.loads(raw)
-                    except ValueError:
-                        continue
-                    resp = extract_response(chunk)
-                    usage = extract_usage(chunk)
-                    prompt_tokens = usage["prompt_tokens"] or prompt_tokens
-                    output_tokens = usage["output_tokens"] or output_tokens
-                    finish_reason = resp["finish_reason"] or finish_reason
-                    delta = resp["text"] or ""
-                    if delta:
-                        if not saw_first_chunk and on_state:
-                            on_state("streaming")
-                        saw_first_chunk = True
-                        text_parts.append(delta)
-                        if on_text:
-                            on_text(delta)
-
-        if on_state:
-            on_state("finalizing")
-        text = "".join(text_parts)
-        if on_state:
-            on_state("complete")
-        return {
-            "candidates": [
-                {
-                    "content": {"parts": [{"text": text}]},
-                    "finishReason": finish_reason or "NO_CANDIDATES",
-                }
-            ],
-            "usageMetadata": {
-                "promptTokenCount": prompt_tokens,
-                "candidatesTokenCount": output_tokens,
-            },
-        }
-    except asyncio.CancelledError:
-        raise GeminiCancelledError("Запрос отменён") from None
-    except httpx.HTTPError as e:
-        raise GeminiRetryableError(f"Ошибка сети: {e}") from None
-    finally:
-        cancel_watcher.cancel()
 
 
 async def _call_gemini_stream_with_retries_async(
@@ -314,37 +251,26 @@ async def _call_gemini_stream_with_retries_async(
     on_state=None,
     on_retry=None,
 ):
-    last_error = None
-    for attempt in range(1, MAX_RETRIES_PER_MODEL + 1):
-        if cancel_event is not None and cancel_event.is_set():
-            raise GeminiCancelledError("Запрос отменён")
-        try:
-            return await _call_gemini_stream_once(
-                model,
-                prompt,
-                generation_config=generation_config,
-                system_instruction=system_instruction,
-                on_text=on_text,
-                on_state=on_state,
-                cancel_event=cancel_event,
-            )
-        except GeminiRetryableError as e:
-            last_error = e
-            wait = RETRY_WAIT_S * attempt
-            if on_retry:
-                on_retry(attempt, wait, str(e))
-            if not quiet:
-                message = (
-                    f"  [{model}] HTTP {e.status_code}, жду {wait} сек... "
-                    f"(попытка {attempt}/{MAX_RETRIES_PER_MODEL})"
-                )
-                if retry_logger:
-                    retry_logger(message)
-                else:
-                    print(message)
-            await _sleep_or_cancel(wait, cancel_event)
-    assert last_error is not None
-    raise last_error
+    return await call_with_retries_async(
+        lambda: _call_gemini_stream_once(
+            model,
+            prompt,
+            generation_config=generation_config,
+            system_instruction=system_instruction,
+            on_text=on_text,
+            on_state=on_state,
+            cancel_event=cancel_event,
+        ),
+        max_retries=MAX_RETRIES_PER_MODEL,
+        wait_s=RETRY_WAIT_S,
+        quiet=quiet,
+        retry_logger=retry_logger,
+        cancel_event=cancel_event,
+        retryable_exc=GeminiRetryableError,
+        cancelled_exc=GeminiCancelledError,
+        on_retry=on_retry,
+        log_label=f"[{model}] ",
+    )
 
 
 def call_gemini_stream_with_retries(

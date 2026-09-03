@@ -3,11 +3,21 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import os
-import time
 
 import requests
+
+from tools.llm._transport import (
+    LLMCallError,
+    LLMCancelledError,
+    LLMError,
+    LLMFatalError,
+    LLMModelUnavailableError,
+    LLMRetryableError,
+    call_with_retries,
+    call_with_retries_async,
+    stream_sse,
+)
 
 
 BASE_URL = "https://api.deepseek.com"
@@ -18,25 +28,23 @@ MAX_RETRIES_PER_MODEL = 2
 RETRY_WAIT_S = 10
 
 
-class DeepSeekError(RuntimeError):
-    def __init__(self, message, status_code=None):
-        super().__init__(message)
-        self.status_code = status_code
+class DeepSeekError(LLMError):
+    pass
 
 
-class DeepSeekFatalError(DeepSeekError):
+class DeepSeekFatalError(DeepSeekError, LLMFatalError):
     """Bad key, bad request, or another error retries cannot fix."""
 
 
-class DeepSeekRetryableError(DeepSeekError):
+class DeepSeekRetryableError(DeepSeekError, LLMRetryableError):
     """Temporary provider/network error."""
 
 
-class DeepSeekCancelledError(DeepSeekError):
+class DeepSeekCancelledError(DeepSeekError, LLMCancelledError):
     """Request was cancelled by the caller."""
 
 
-class DeepSeekModelUnavailableError(DeepSeekError):
+class DeepSeekModelUnavailableError(DeepSeekError, LLMModelUnavailableError):
     """Selected model is unavailable."""
 
 
@@ -169,50 +177,36 @@ def call_deepseek_with_retries(
     retry_logger=None,
     cancel_event=None,
 ):
-    last_error = None
-    for attempt in range(1, MAX_RETRIES_PER_MODEL + 1):
-        if cancel_event is not None and cancel_event.is_set():
-            raise DeepSeekCancelledError("Запрос отменен")
-        try:
-            return call_deepseek(model, prompt, generation_config, system_instruction)
-        except DeepSeekRetryableError as e:
-            last_error = e
-            wait = RETRY_WAIT_S * attempt
-            if not quiet:
-                message = (
-                    f"  [deepseek:{model}] HTTP {e.status_code}, жду {wait} сек... "
-                    f"(попытка {attempt}/{MAX_RETRIES_PER_MODEL})"
-                )
-                if retry_logger:
-                    retry_logger(message)
-                else:
-                    print(message)
-            if cancel_event is not None:
-                if cancel_event.wait(wait):
-                    raise DeepSeekCancelledError("Запрос отменен")
-            else:
-                time.sleep(wait)
-    assert last_error is not None
-    raise last_error
+    return call_with_retries(
+        lambda: call_deepseek(model, prompt, generation_config, system_instruction),
+        max_retries=MAX_RETRIES_PER_MODEL,
+        wait_s=RETRY_WAIT_S,
+        quiet=quiet,
+        retry_logger=retry_logger,
+        cancel_event=cancel_event,
+        retryable_exc=DeepSeekRetryableError,
+        cancelled_exc=DeepSeekCancelledError,
+        log_label=f"[deepseek:{model}] ",
+    )
 
 
-async def _sleep_or_cancel(wait_s, cancel_event):
-    deadline = time.monotonic() + wait_s
-    while True:
-        if cancel_event is not None and cancel_event.is_set():
-            raise DeepSeekCancelledError("Запрос отменен")
-        remaining = deadline - time.monotonic()
-        if remaining <= 0:
-            return
-        await asyncio.sleep(min(0.1, remaining))
+def _parse_stream_chunk(chunk):
+    usage = chunk.get("usage") or {}
+    choice = (chunk.get("choices") or [{}])[0]
+    return {
+        "text": (choice.get("delta") or {}).get("content") or "",
+        "finish_reason": choice.get("finish_reason"),
+        "prompt_tokens": usage.get("prompt_tokens"),
+        "output_tokens": usage.get("completion_tokens"),
+    }
 
 
-async def _cancel_current_task_on_event(cancel_event, task):
-    if cancel_event is None:
-        return
-    while not cancel_event.is_set():
-        await asyncio.sleep(0.1)
-    task.cancel()
+def _build_stream_result(text, finish_reason, prompt_tokens, output_tokens):
+    return _compatible_response(
+        text,
+        finish_reason,
+        {"prompt_tokens": prompt_tokens, "completion_tokens": output_tokens},
+    )
 
 
 async def _call_deepseek_stream_once(
@@ -225,75 +219,23 @@ async def _call_deepseek_stream_once(
     on_state=None,
     cancel_event=None,
 ):
-    import httpx  # Ленивый импорт: нужен только для стриминга (Day 3), а не для Day 1/2
-
     payload = _request_payload(model, prompt, generation_config, system_instruction)
     payload["stream"] = True
     payload["stream_options"] = {"include_usage": True}
-    timeout_cfg = httpx.Timeout(timeout, connect=10.0)
-    current_task = asyncio.current_task()
-    cancel_watcher = asyncio.create_task(
-        _cancel_current_task_on_event(cancel_event, current_task)
+    return await stream_sse(
+        CHAT_URL,
+        payload,
+        _headers(),
+        timeout=timeout,
+        parse_chunk=_parse_stream_chunk,
+        build_result=_build_stream_result,
+        raise_for_status=_raise_for_response,
+        retryable_exc=DeepSeekRetryableError,
+        cancelled_exc=DeepSeekCancelledError,
+        on_text=on_text,
+        on_state=on_state,
+        cancel_event=cancel_event,
     )
-    text_parts = []
-    finish_reason = None
-    usage = {}
-    saw_first_delta = False
-
-    try:
-        if on_state:
-            on_state("connecting")
-        async with httpx.AsyncClient(timeout=timeout_cfg) as client:
-            async with client.stream(
-                "POST", CHAT_URL, json=payload, headers=_headers()
-            ) as response:
-                if response.status_code != 200:
-                    body = (await response.aread()).decode("utf-8", errors="replace")
-                    _raise_for_response(response.status_code, body)
-
-                if on_state:
-                    on_state("waiting_first_token")
-
-                async for line in response.aiter_lines():
-                    if cancel_event is not None and cancel_event.is_set():
-                        raise DeepSeekCancelledError("Запрос отменен")
-                    if not line.startswith("data:"):
-                        continue
-                    raw = line.removeprefix("data:").strip()
-                    if not raw:
-                        continue
-                    if raw == "[DONE]":
-                        break
-                    try:
-                        chunk = json.loads(raw)
-                    except ValueError:
-                        continue
-                    if chunk.get("usage"):
-                        usage = chunk["usage"]
-                    choice = (chunk.get("choices") or [{}])[0]
-                    finish_reason = choice.get("finish_reason") or finish_reason
-                    delta = (choice.get("delta") or {}).get("content") or ""
-                    if not delta:
-                        continue
-                    if not saw_first_delta and on_state:
-                        on_state("streaming")
-                    saw_first_delta = True
-                    text_parts.append(delta)
-                    if on_text:
-                        on_text(delta)
-
-        if on_state:
-            on_state("finalizing")
-        result = _compatible_response("".join(text_parts), finish_reason, usage)
-        if on_state:
-            on_state("complete")
-        return result
-    except asyncio.CancelledError:
-        raise DeepSeekCancelledError("Запрос отменен") from None
-    except httpx.HTTPError as e:
-        raise DeepSeekRetryableError(f"Ошибка сети DeepSeek: {e}") from None
-    finally:
-        cancel_watcher.cancel()
 
 
 async def _call_deepseek_stream_with_retries_async(
@@ -308,37 +250,26 @@ async def _call_deepseek_stream_with_retries_async(
     on_state=None,
     on_retry=None,
 ):
-    last_error = None
-    for attempt in range(1, MAX_RETRIES_PER_MODEL + 1):
-        if cancel_event is not None and cancel_event.is_set():
-            raise DeepSeekCancelledError("Запрос отменен")
-        try:
-            return await _call_deepseek_stream_once(
-                model,
-                prompt,
-                generation_config=generation_config,
-                system_instruction=system_instruction,
-                on_text=on_text,
-                on_state=on_state,
-                cancel_event=cancel_event,
-            )
-        except DeepSeekRetryableError as e:
-            last_error = e
-            wait = RETRY_WAIT_S * attempt
-            if on_retry:
-                on_retry(attempt, wait, str(e))
-            if not quiet:
-                message = (
-                    f"  [deepseek:{model}] HTTP {e.status_code}, жду {wait} сек... "
-                    f"(попытка {attempt}/{MAX_RETRIES_PER_MODEL})"
-                )
-                if retry_logger:
-                    retry_logger(message)
-                else:
-                    print(message)
-            await _sleep_or_cancel(wait, cancel_event)
-    assert last_error is not None
-    raise last_error
+    return await call_with_retries_async(
+        lambda: _call_deepseek_stream_once(
+            model,
+            prompt,
+            generation_config=generation_config,
+            system_instruction=system_instruction,
+            on_text=on_text,
+            on_state=on_state,
+            cancel_event=cancel_event,
+        ),
+        max_retries=MAX_RETRIES_PER_MODEL,
+        wait_s=RETRY_WAIT_S,
+        quiet=quiet,
+        retry_logger=retry_logger,
+        cancel_event=cancel_event,
+        retryable_exc=DeepSeekRetryableError,
+        cancelled_exc=DeepSeekCancelledError,
+        on_retry=on_retry,
+        log_label=f"[deepseek:{model}] ",
+    )
 
 
 def call_deepseek_stream_with_retries(
