@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 04 — Температура</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-scene="intro">
+<header>
+    <h1>AI ADVENT · DAY 04 <span class="subtitle">Температура</span></h1>
+    <div class="status" id="statusLabel">READY</div>
+</header>
+
+<div class="locked-banner">
+    <div class="locked-item">🔒 ЗАФИКСИРОВАНО: <span id="lockedModel">deepseek:deepseek-v4-flash</span></div>
+    <div class="locked-item">prompt sha256: <span id="lockedSha">a1b2c3d4</span></div>
+    <div class="locked-item">maxTokens: 2048 · thinking: low · topP/topK/seed: не заданы</div>
+    <div class="locked-item unlocked">🔓 ВАРЬИРУЕТСЯ: temperature ∈ {0.0, 0.7, 1.2}</div>
+</div>
+
+<div class="controls">
+    <button id="runButton" class="btn primary">▶ Запуск</button>
+    <button id="stopButton" class="btn danger" disabled>■ Стоп</button>
+    <select id="replaySelect" class="btn secondary">
+        <option value="">-- Загрузить Replay --</option>
+    </select>
+</div>
+
+<div class="tabs">
+    <button class="tab active" data-tab="live">[Live]</button>
+    <button class="tab" data-tab="analogies">[Аналогии]</button>
+    <button class="tab" data-tab="metrics">[Метрики]</button>
+    <button class="tab" data-tab="raw">[Raw]</button>
+</div>
+
+<main>
+    <section id="tab-live" class="tab-content active">
+        <div class="columns">
+            <div class="column" data-temp="0.0">
+                <h3>T = 0.0</h3>
+                <div class="runs" id="runs-0.0"></div>
+                <div class="metric-box">
+                    <div>Сходство: <span class="val" id="sim-0.0">—</span></div>
+                    <div class="bar"><div class="fill" id="bar-0.0" style="width: 0%"></div></div>
+                </div>
+            </div>
+            <div class="column" data-temp="0.7">
+                <h3>T = 0.7</h3>
+                <div class="runs" id="runs-0.7"></div>
+                <div class="metric-box">
+                    <div>Сходство: <span class="val" id="sim-0.7">—</span></div>
+                    <div class="bar"><div class="fill" id="bar-0.7" style="width: 0%"></div></div>
+                </div>
+            </div>
+            <div class="column" data-temp="1.2">
+                <h3>T = 1.2</h3>
+                <div class="runs" id="runs-1.2"></div>
+                <div class="metric-box">
+                    <div>Сходство: <span class="val" id="sim-1.2">—</span></div>
+                    <div class="bar"><div class="fill" id="bar-1.2" style="width: 0%"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tab-analogies" class="tab-content">
+        <div class="analogies-grid" id="analogiesGrid"></div>
+    </section>
+
+    <section id="tab-metrics" class="tab-content">
+        <table class="metrics-table">
+            <thead>
+            <tr>
+                <th>Temp</th>
+                <th>Self Similarity</th>
+                <th>TTR</th>
+                <th>Len CV</th>
+                <th>Checklist (из 5)</th>
+                <th>Degradations</th>
+                <th>Latency (мс)</th>
+            </tr>
+            </thead>
+            <tbody id="metricsBody"></tbody>
+        </table>
+        <p class="note">* Проверка присутствия концепта, а не проверка истинности. Latency информационная.</p>
+    </section>
+
+    <section id="tab-raw" class="tab-content">
+        <pre id="rawOutput"></pre>
+    </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

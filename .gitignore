@@ -15,3 +15,6 @@ day3_*.err
 day03-reasoning-modes/results/
 day03-reasoning-modes/*.log
 day03-reasoning-modes/video-frames/
+
+day04-temperature/*.log
+day04-temperature/video-frames/

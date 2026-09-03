@@ -15,3 +15,7 @@ if str(ROOT) not in sys.path:
 DAY03 = ROOT / "day03-reasoning-modes"
 if str(DAY03) not in sys.path:
     sys.path.insert(0, str(DAY03))
+
+DAY04 = ROOT / "day04-temperature"
+if str(DAY04) not in sys.path:
+    sys.path.insert(0, str(DAY04))

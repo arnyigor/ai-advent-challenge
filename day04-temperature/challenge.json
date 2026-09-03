@@ -1,0 +1,5 @@
+{
+    "title": "Температура",
+    "entrypoint": "day04_temperature.py",
+    "day": 4
+}
