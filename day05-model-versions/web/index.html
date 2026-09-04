@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Day 05 — Версии моделей</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-scene="intro">
+<header>
+  <div><span class="eyebrow">AI ADVENT · DAY 05</span><h1>Версии моделей</h1></div>
+  <div class="status" id="statusLabel">READY</div>
+</header>
+
+<section class="locked">
+  <span>🔒 один prompt · T=0.1 · max=1200</span>
+  <span>☁ HF provider: nscale</span>
+  <span>🧪 10 тестов качества</span>
+  <span id="localBadge">LOCAL: проверка…</span>
+  <span id="localSmallBadge">OLLAMA: проверка…</span>
+  <span id="localCpuBadge">CPU 1.7B: проверка…</span>
+  <span id="apiBadge">API: проверка…</span>
+</section>
+
+<div class="controls">
+  <button id="runButton" class="primary">▶ Запуск сравнения</button>
+  <button id="stopButton" disabled>■ Стоп</button>
+  <select id="replaySelect"><option value="">Replay…</option></select>
+</div>
+
+<nav>
+  <button class="tab active" data-tab="live">Live</button>
+  <button class="tab" data-tab="score">Scoreboard</button>
+  <button class="tab" data-tab="prompt">Prompt</button>
+  <button class="tab" data-tab="raw">Raw JSON</button>
+</nav>
+
+<main>
+  <section id="tab-live" class="tab-panel active">
+    <div class="model-grid" id="modelGrid">
+      <article class="model-card" data-model="weak"><div class="tier">СЛАБАЯ</div><h2>HF · 3B</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+      <article class="model-card" data-model="medium"><div class="tier">СРЕДНЯЯ</div><h2>HF · 7B</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+      <article class="model-card" data-model="strong"><div class="tier">СИЛЬНАЯ</div><h2>HF · 32B</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+      <article class="model-card api" data-model="gemini-35"><div class="tier">API-КОНТРОЛЬ</div><h2>Gemini 3.5</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+      <article class="model-card api" data-model="gemini-36"><div class="tier">API-КОНТРОЛЬ</div><h2>Gemini 3.6</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+      <article class="model-card api" data-model="deepseek"><div class="tier">API-КОНТРОЛЬ</div><h2>DeepSeek V4</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+      <article class="model-card local-cpu" data-model="local-cpu"><div class="tier">ЛОКАЛЬНАЯ · CPU</div><h2>LOCAL · 1.7B</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+      <article class="model-card local-small" data-model="local-small"><div class="tier">ЛОКАЛЬНАЯ · МАЛАЯ</div><h2>LOCAL · 4B</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+      <article class="model-card local" data-model="local"><div class="tier">ЛОКАЛЬНАЯ</div><h2>LOCAL · 27B</h2><div class="progress">ожидает</div><pre class="answer"></pre><div class="mini"></div></article>
+    </div>
+  </section>
+
+  <section id="tab-score" class="tab-panel">
+    <table><thead><tr><th>Модель</th><th>Тесты</th><th>Время</th><th>TTFT</th><th>Ток/с</th><th>Токены</th><th>Стоимость</th><th>Ресурс</th></tr></thead><tbody id="scoreBody"></tbody></table>
+    <div class="verdict" id="verdict">Результат появится после запуска.</div>
+    <p class="note">Для local-GPU показан общий пик занятой VRAM во время прогона, для CPU-local — RAM и CPU процесса. Облачные API не раскрывают серверную память.</p>
+  </section>
+
+  <section id="tab-prompt" class="tab-panel"><div class="prompt" id="promptText">Загрузка prompt…</div><div class="tests"><h3>Как оценивается качество</h3><p>Синтаксис + 10 тестов: валидация, слияние, вычитание, касание границ, отсутствие мутаций.</p></div></section>
+  <section id="tab-raw" class="tab-panel"><pre id="rawOutput"></pre></section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

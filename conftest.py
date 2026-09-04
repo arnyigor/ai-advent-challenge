@@ -19,3 +19,10 @@ if str(DAY03) not in sys.path:
 DAY04 = ROOT / "day04-temperature"
 if str(DAY04) not in sys.path:
     sys.path.insert(0, str(DAY04))
+
+DAY05 = ROOT / "day05-model-versions"
+if str(DAY05) not in sys.path:
+    # В Day 4 и Day 5 есть модуль experiment.py. Day 4 исторически импортирует
+    # его как top-level `experiment`, поэтому Day 5 добавляем в конец и в его
+    # тестах загружаем experiment по уникальному имени.
+    sys.path.append(str(DAY05))

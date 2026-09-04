@@ -23,3 +23,5 @@ day04-temperature/verify-video-frames/
 video-frames/
 verify-video-frames/
 day04-temperature/results/run-*.json
+day05-model-versions/results/
+day05-model-versions/video-frames/

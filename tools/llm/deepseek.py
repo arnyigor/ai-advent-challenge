@@ -127,6 +127,14 @@ def _finish_reason(reason):
 
 def _compatible_response(text, finish_reason, usage):
     usage = usage or {}
+    usage_metadata = {
+        "promptTokenCount": usage.get("prompt_tokens"),
+        "candidatesTokenCount": usage.get("completion_tokens"),
+    }
+    if "prompt_cache_hit_tokens" in usage:
+        usage_metadata["promptCacheHitTokenCount"] = usage.get("prompt_cache_hit_tokens")
+    if "prompt_cache_miss_tokens" in usage:
+        usage_metadata["promptCacheMissTokenCount"] = usage.get("prompt_cache_miss_tokens")
     return {
         "candidates": [
             {
@@ -134,10 +142,7 @@ def _compatible_response(text, finish_reason, usage):
                 "finishReason": _finish_reason(finish_reason),
             }
         ],
-        "usageMetadata": {
-            "promptTokenCount": usage.get("prompt_tokens"),
-            "candidatesTokenCount": usage.get("completion_tokens"),
-        },
+        "usageMetadata": usage_metadata,
     }
 
 

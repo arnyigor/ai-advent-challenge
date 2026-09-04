@@ -13,7 +13,7 @@
 from dataclasses import dataclass
 from typing import Callable
 
-from tools.llm import deepseek, gemini
+from tools.llm import deepseek, gemini, huggingface
 
 DEFAULT_PROVIDER = "gemini"
 
@@ -44,6 +44,14 @@ PROVIDERS = {
         missing_key_message="DEEPSEEK_API_KEY is not set",
         call_with_retries=deepseek.call_deepseek_with_retries,
         call_stream_with_retries=deepseek.call_deepseek_stream_with_retries,
+    ),
+    "hf": Provider(
+        name="hf",
+        default_model=huggingface.DEFAULT_MODEL,
+        has_key=huggingface.has_hf_token,
+        missing_key_message="HF_TOKEN is not set",
+        call_with_retries=huggingface.call_huggingface_with_retries,
+        call_stream_with_retries=huggingface.call_huggingface_stream_with_retries,
     ),
 }
 

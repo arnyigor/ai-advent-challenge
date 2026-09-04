@@ -1,0 +1,4 @@
+requests
+httpx
+huggingface_hub
+psutil

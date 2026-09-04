@@ -1,0 +1,2054 @@
+{
+  "schema": "day5-model-versions-v1",
+  "created_at": "2026-09-04T12:47:34.758980+00:00",
+  "locked": {
+    "prompt": "Реализуй на Python 3.11 функцию:\n\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n\nИнтервалы полуоткрытые: [start, end). Требования:\n1. Проверь каждый интервал в обоих списках: границы должны быть int (bool не считается int), start < end. Иначе ValueError.\n2. Не изменяй входные списки.\n3. Сначала объедини пересекающиеся и соседние ranges.\n4. Аналогично нормализуй exclusions, затем вычти их из ranges. Исключение, которое только касается границы, ничего не удаляет.\n5. Верни отсортированные непересекающиеся интервалы-кортежи.\n6. Нельзя разворачивать интервалы в отдельные точки. Целевая сложность O((n + m) log(n + m)).\n\nОтвет: один блок Python-кода с функцией и затем не более двух предложений о сложности.",
+    "prompt_sha256": "f6c3a7c7",
+    "temperature": 0.1,
+    "max_output_tokens": 1200,
+    "repeats": 3,
+    "hf_provider": "nscale"
+  },
+  "models": [
+    {
+      "id": "weak",
+      "label": "HF · 3B",
+      "repo": "Qwen/Qwen2.5-Coder-3B-Instruct",
+      "parameters_b": 3.0
+    },
+    {
+      "id": "medium",
+      "label": "HF · 7B",
+      "repo": "Qwen/Qwen2.5-Coder-7B-Instruct",
+      "parameters_b": 7.0
+    },
+    {
+      "id": "strong",
+      "label": "HF · 32B",
+      "repo": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "parameters_b": 32.0
+    },
+    {
+      "id": "gemini-35",
+      "label": "API · Gemini 3.5 Flash",
+      "spec": "gemini:gemini-3.5-flash",
+      "repo": "gemini-3.5-flash",
+      "provider": "gemini",
+      "parameters_b": null,
+      "price": {
+        "input_usd_per_million": 1.5,
+        "output_usd_per_million": 9.0
+      }
+    },
+    {
+      "id": "gemini-36",
+      "label": "API · Gemini 3.6 Flash",
+      "spec": "gemini:gemini-3.6-flash",
+      "repo": "gemini-3.6-flash",
+      "provider": "gemini",
+      "parameters_b": null,
+      "price": {
+        "input_usd_per_million": 0.75,
+        "output_usd_per_million": 3.75
+      }
+    },
+    {
+      "id": "deepseek",
+      "label": "API · DeepSeek V4 Flash",
+      "spec": "deepseek:deepseek-v4-flash",
+      "repo": "deepseek-v4-flash",
+      "provider": "deepseek",
+      "parameters_b": null
+    },
+    {
+      "id": "local-cpu",
+      "label": "LOCAL CPU · Qwen3 1.7B Q4_K_M",
+      "parameters_b": 1.72,
+      "repo": "qwen-supervisor",
+      "details": {
+        "alias": "qwen-supervisor",
+        "parameters": 1720574976,
+        "parameters_b": 1.72,
+        "weights_bytes": 1101457408,
+        "quantization": "Q4_K - Medium",
+        "context": 40960
+      }
+    },
+    {
+      "id": "local-small",
+      "label": "LOCAL · Qwen3.5 4B Q4_K_M",
+      "repo": "qwen3.5:4b",
+      "parameters_b": 4.66,
+      "details": {
+        "alias": "qwen3.5:4b",
+        "parameters_b": 4.66,
+        "parameter_size": "4.7B",
+        "quantization": "Q4_K_M",
+        "family": "qwen35"
+      }
+    },
+    {
+      "id": "local",
+      "label": "LOCAL · 27B IQ4_XS",
+      "repo": "qwen-27bQ4",
+      "parameters_b": 27.32,
+      "details": {
+        "alias": "qwen-27bQ4",
+        "parameters": 27320697856,
+        "parameters_b": 27.32,
+        "weights_bytes": 14241849344,
+        "quantization": "IQ4_XS - 4.25 bpw",
+        "context": 65536
+      }
+    }
+  ],
+  "price_snapshot": {
+    "weak": {
+      "provider": "nscale",
+      "input_usd_per_million": 0.01,
+      "output_usd_per_million": 0.03,
+      "catalog_ttft_ms": 864.6,
+      "catalog_tokens_per_second": 137.42013141739588,
+      "captured_at": "2026-09-04T12:40:21.811337+00:00"
+    },
+    "medium": {
+      "provider": "nscale",
+      "input_usd_per_million": 0.01,
+      "output_usd_per_million": 0.03,
+      "catalog_ttft_ms": 671,
+      "catalog_tokens_per_second": 144.60494820353938,
+      "captured_at": "2026-09-04T12:40:21.811337+00:00"
+    },
+    "strong": {
+      "provider": "nscale",
+      "input_usd_per_million": 0.06,
+      "output_usd_per_million": 0.2,
+      "catalog_ttft_ms": 790.2,
+      "catalog_tokens_per_second": 37.37339806914982,
+      "captured_at": "2026-09-04T12:40:21.811337+00:00"
+    },
+    "gemini-35": {
+      "provider": "gemini",
+      "input_usd_per_million": 1.5,
+      "output_usd_per_million": 9.0,
+      "tier": "standard paid (free tier may charge $0)",
+      "captured_at": "2026-09-04T12:40:21.811337+00:00"
+    },
+    "gemini-36": {
+      "provider": "gemini",
+      "input_usd_per_million": 0.75,
+      "output_usd_per_million": 3.75,
+      "tier": "standard paid (free tier may charge $0)",
+      "captured_at": "2026-09-04T12:40:21.811337+00:00"
+    },
+    "deepseek": {
+      "provider": "deepseek",
+      "tier": "off-peak",
+      "input_cache_hit_usd_per_million": 0.007,
+      "input_usd_per_million": 0.22,
+      "output_usd_per_million": 0.66,
+      "captured_at": "2026-09-04T12:40:21.811337+00:00"
+    }
+  },
+  "samples": [
+    {
+      "model_id": "weak",
+      "repeat": 1,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-3B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import *\nfrom collections import *\n\ndef reconcile_ranges(ranges: list[tuple[int, int]], exclusions: list[tuple[int, int]]) -> list[tuple[int, int]]:\n    # Проверка входных данных\n    for r in ranges:\n        if not isinstance(r, tuple) or len(r) != 2 or not all(isinstance(x, int) for x in r):\n            raise ValueError(\"Все элементы ranges должны быть кортежами из двух целых чисел.\")\n        if r[0] >= r[1]:\n            raise ValueError(\"Границы каждого интервала должны быть start < end.\")\n    \n    for e in exclusions:\n        if not isinstance(e, tuple) or len(e) != 2 or not all(isinstance(x, int) for x in e):\n            raise ValueError(\"Все элементы exclusions должны быть кортежами из двух целых чисел.\")\n        if e[0] >= e[1]:\n            raise ValueError(\"Границы каждого исключения должны быть start < end.\")\n    \n    # Объединение пересекающихся и соседних ranges\n    merged_ranges = []\n    i = 0\n    while i < len(ranges):\n        start, end = ranges[i]\n        j = i + 1\n        while j < len(ranges) and ranges[j][0] <= end:\n            end = max(end, ranges[j][1])\n            j += 1\n        merged_ranges.append((start, end))\n        i = j\n    \n    # Нормализация exclusions\n    normalized_exclusions = []\n    for start, end in exclusions:\n        if start > end:\n            continue\n        normalized_exclusions.append((max(start, merged_ranges[-1][0]), min(end, merged_ranges[-1][1])))\n    \n    # Вычитание exclusions из ranges\n    result = []\n    i = 0\n    for start, end in merged_ranges:\n        if i < len(normalized_exclusions) and normalized_exclusions[i][0] <= start:\n            start = max(start, normalized_exclusions[i][1])\n            i += 1\n        if start < end:\n            result.append((start, end))\n    \n    # Сортировка результатов\n    result.sort()\n    \n    return result\n\n# Сложность: O((n + m) log(n + m)), где n - количество интервалов в ranges, m - количество интервалов в exclusions.\n```\n\nЭта функция выполняет все указанные требования и имеет сложность O((n + m) log(n + m)), что обеспечивает эффективное решение задачи.",
+      "finish_reason": "STOP",
+      "latency_ms": 3141,
+      "ttft_ms": 1219,
+      "prompt_tokens": 286,
+      "output_tokens": 558,
+      "tokens_per_second": 177.6504297996541,
+      "cost_usd": 1.96e-05,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 5,
+        "total": 10,
+        "score": 0.5,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": false,
+            "error": "AssertionError: [(10, 12)] != [(1, 9), (10, 12)]"
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(1, 10)] != [(1, 3), (5, 7)]"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": false,
+            "error": "AssertionError: [(5, 9)] != [(1, 2), (5, 9)]"
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(2, 4)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "weak",
+      "repeat": 2,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-3B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import *\nfrom collections import *\n\ndef reconcile_ranges(ranges: list[tuple[int, int]], exclusions: list[tuple[int, int]]) -> list[tuple[int, int]]:\n    # Проверка входных данных\n    for r in ranges:\n        if not isinstance(r, tuple) or len(r) != 2 or not all(isinstance(x, int) for x in r):\n            raise ValueError(\"Все элементы ranges должны быть кортежами из двух целых чисел.\")\n        if r[0] >= r[1]:\n            raise ValueError(\"Границы интервала должны быть start < end.\")\n    \n    for e in exclusions:\n        if not isinstance(e, tuple) or len(e) != 2 or not all(isinstance(x, int) for x in e):\n            raise ValueError(\"Все элементы exclusions должны быть кортежами из двух целых чисел.\")\n        if e[0] >= e[1]:\n            raise ValueError(\"Границы интервала должны быть start < end.\")\n    \n    # Объединение пересекающихся и соседних ranges\n    merged_ranges = []\n    i = 0\n    while i < len(ranges):\n        start, end = ranges[i]\n        j = i + 1\n        while j < len(ranges) and ranges[j][0] <= end:\n            end = max(end, ranges[j][1])\n            j += 1\n        merged_ranges.append((start, end))\n        i = j\n    \n    # Нормализация exclusions\n    normalized_exclusions = []\n    for start, end in exclusions:\n        if start > end:\n            continue\n        if start == end:\n            normalized_exclusions.append((start, start))\n        else:\n            normalized_exclusions.append((start, end))\n    \n    # Вычитание exclusions из ranges\n    result = []\n    i = 0\n    j = 0\n    while i < len(merged_ranges) and j < len(normalized_exclusions):\n        start_range, end_range = merged_ranges[i]\n        start_exclude, end_exclude = normalized_exclusions[j]\n        \n        if end_range < start_exclude:\n            result.append((start_range, end_range))\n            i += 1\n        elif start_range > end_exclude:\n            j += 1\n        else:\n            if start_range < start_exclude:\n                result.append((start_range, start_exclude))\n            if end_range > end_exclude:\n                result.append((end_exclude, end_range))\n            i += 1\n            j += 1\n    \n    while i < len(merged_ranges):\n        result.append((merged_ranges[i][0], merged_ranges[i][1]))\n        i += 1\n    \n    return sorted(result)\n\n# Сложность: O((n + m) log(n + m)), где n - количество интервалов в ranges, m - количество интервалов в exclusions.\n```\n\nЭта функция выполняет следующие шаги:\n1. Проверяет корректность входных данных.\n2. Объединяет пересекающиеся и соседние интервалы в ranges.\n3. Нормализует exclusions, удаляя интервалы, которые полностью содержатся в других.\n4. Вычитает exclusions из ranges, сохраняя только те интервалы, которые не пересекаются с exclusions.\n5. Возвращает отсортированные непересекающиеся интервалы.",
+      "finish_reason": "STOP",
+      "latency_ms": 3750,
+      "ttft_ms": 1188,
+      "prompt_tokens": 286,
+      "output_tokens": 735,
+      "tokens_per_second": 196.0,
+      "cost_usd": 2.491e-05,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 5,
+        "total": 10,
+        "score": 0.5,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": false,
+            "error": "AssertionError: [(10, 12)] != [(1, 9), (10, 12)]"
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(1, 3), (5, 10)] != [(1, 3), (5, 7)]"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": false,
+            "error": "AssertionError: [(5, 9)] != [(1, 2), (5, 9)]"
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(8, 12)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "weak",
+      "repeat": 3,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-3B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import *\nfrom collections import *\n\ndef reconcile_ranges(ranges: list[tuple[int, int]], exclusions: list[tuple[int, int]]) -> list[tuple[int, int]]:\n    # Проверка входных данных\n    for r in ranges:\n        if not isinstance(r, tuple) or len(r) != 2 or not all(isinstance(i, int) for i in r) or r[0] >= r[1]:\n            raise ValueError(\"Invalid range\")\n    for e in exclusions:\n        if not isinstance(e, tuple) or len(e) != 2 or not all(isinstance(i, int) for i in e) or e[0] >= e[1]:\n            raise ValueError(\"Invalid exclusion\")\n\n    # Объединение пересекающихся и соседних ranges\n    merged_ranges = []\n    for r in sorted(ranges):\n        if merged_ranges and merged_ranges[-1][1] >= r[0]:\n            merged_ranges[-1] = (merged_ranges[-1][0], max(merged_ranges[-1][1], r[1]))\n        else:\n            merged_ranges.append(r)\n\n    # Нормализация exclusions\n    normalized_exclusions = []\n    for e in sorted(exclusions):\n        if normalized_exclusions and normalized_exclusions[-1][1] >= e[0]:\n            normalized_exclusions[-1] = (normalized_exclusions[-1][0], max(normalized_exclusions[-1][1], e[1]))\n        else:\n            normalized_exclusions.append(e)\n\n    # Вычитание exclusions из ranges\n    result = []\n    i, j = 0, 0\n    while i < len(merged_ranges) and j < len(normalized_exclusions):\n        if merged_ranges[i][1] <= normalized_exclusions[j][0]:\n            result.append(merged_ranges[i])\n            i += 1\n        elif merged_ranges[i][0] >= normalized_exclusions[j][1]:\n            j += 1\n        else:\n            if merged_ranges[i][0] < normalized_exclusions[j][0]:\n                result.append((merged_ranges[i][0], normalized_exclusions[j][0]))\n            if merged_ranges[i][1] > normalized_exclusions[j][1]:\n                result.append((normalized_exclusions[j][1], merged_ranges[i][1]))\n            i += 1\n            j += 1\n\n    # Добавление оставшихся ranges\n    while i < len(merged_ranges):\n        result.append(merged_ranges[i])\n        i += 1\n\n    return result\n\n# Сложность: O((n + m) log(n + m)), где n - количество интервалов в ranges, m - количество интервалов в exclusions.\n```\n\nЭта функция выполняет следующие шаги:\n1. Проверяет корректность входных данных.\n2. Объединяет пересекающиеся и соседние интервалы в ranges.\n3. Нормализует интервалы в exclusions.\n4. Вычитает exclusions из ranges.\n5. Возвращает отсортированные непересекающиеся интервалы.",
+      "finish_reason": "STOP",
+      "latency_ms": 3421,
+      "ttft_ms": 1140,
+      "prompt_tokens": 286,
+      "output_tokens": 662,
+      "tokens_per_second": 193.51066939479523,
+      "cost_usd": 2.272e-05,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 7,
+        "total": 10,
+        "score": 0.7,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(1, 3), (5, 10)] != [(1, 3), (5, 7)]"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(8, 12)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "medium",
+      "repeat": 1,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(ranges: List[Tuple[int, int]], exclusions: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    # Проверка корректности входных данных\n    for r in ranges + exclusions:\n        if not isinstance(r[0], int) or not isinstance(r[1], int):\n            raise ValueError(\"Границы интервала должны быть целыми числами\")\n        if r[0] >= r[1]:\n            raise ValueError(\"Начало интервала должно быть меньше конца\")\n\n    # Объединение пересекающихся и соседних интервалов\n    merged_ranges = []\n    for start, end in sorted(ranges):\n        if merged_ranges and merged_ranges[-1][1] >= start:\n            merged_ranges[-1] = (merged_ranges[-1][0], max(merged_ranges[-1][1], end))\n        else:\n            merged_ranges.append((start, end))\n\n    # Вычитание исключений\n    result = []\n    for start, end in merged_ranges:\n        exclude_start, exclude_end = exclusions[0]\n        while exclude_start <= end:\n            if start < exclude_start:\n                result.append((start, min(end, exclude_start)))\n            if end > exclude_end:\n                start = max(start, exclude_end)\n            else:\n                break\n            if exclusions:\n                exclusions.pop(0)\n                if exclusions:\n                    exclude_start, exclude_end = exclusions[0]\n\n    return sorted(result)\n\n# Сложность O((n + m) log(n + m)), где n - количество интервалов в ranges, m - количество интервалов в exclusions.\n```\n\nЭта реализация имеет временную сложность O((n + m) log(n + m)), так как она сортирует общий список интервалов (ranges + exclusions) и выполняет последовательное прохождение по нему для объединения и вычитания интервалов.",
+      "finish_reason": "STOP",
+      "latency_ms": 3032,
+      "ttft_ms": 860,
+      "prompt_tokens": 286,
+      "output_tokens": 433,
+      "tokens_per_second": 142.8100263852599,
+      "cost_usd": 1.585e-05,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 0,
+        "total": 10,
+        "score": 0.0,
+        "error": "Таймаут тестов",
+        "tests": []
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "medium",
+      "repeat": 2,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(ranges: List[Tuple[int, int]], exclusions: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    # Проверка корректности входных данных\n    for r in ranges + exclusions:\n        if not isinstance(r[0], int) or not isinstance(r[1], int):\n            raise ValueError(\"Границы интервала должны быть целыми числами\")\n        if r[0] >= r[1]:\n            raise ValueError(\"Начало интервала должно быть меньше конца\")\n\n    # Объединение пересекающихся и соседних интервалов\n    merged_ranges = []\n    for start, end in sorted(ranges):\n        if merged_ranges and merged_ranges[-1][1] >= start:\n            merged_ranges[-1] = (merged_ranges[-1][0], max(merged_ranges[-1][1], end))\n        else:\n            merged_ranges.append((start, end))\n\n    # Вычитание исключений\n    result = []\n    for start, end in merged_ranges:\n        exclude_start, exclude_end = None, None\n        for ex_start, ex_end in sorted(exclusions):\n            if ex_start <= start < ex_end:\n                start = ex_end\n            elif start < ex_start < end:\n                end = ex_start\n            elif start <= ex_start and end >= ex_end:\n                start, end = ex_end, ex_start\n            elif ex_start < start and ex_end > end:\n                continue\n            elif start == ex_start or end == ex_end:\n                continue\n            else:\n                break\n        if start < end:\n            result.append((start, end))\n\n    return result\n\n# Сложность: O((n + m) log(n + m)), где n - количество интервалов в ranges, m - количество интервалов в exclusions.\n```\n\nЭта реализация функции `reconcile_ranges` выполняет все указанные требования. Она сначала объединяет пересекающиеся и соседние интервалы в списке `ranges`, а затем вычитает интервалы из этого списка, исключая те, которые только касаются границ. Функция работает в отсортированном порядке и использует сортировку для оптимизации процесса объединения и вычитания интервалов. Временная сложность составляет O((n + m) log(n + m)), что соответствует требуемому уровню.",
+      "finish_reason": "STOP",
+      "latency_ms": 3578,
+      "ttft_ms": 875,
+      "prompt_tokens": 286,
+      "output_tokens": 537,
+      "tokens_per_second": 150.08384572381192,
+      "cost_usd": 1.897e-05,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 7,
+        "total": 10,
+        "score": 0.7,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(1, 3)] != [(1, 3), (5, 7)]"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": false,
+            "error": "AssertionError: [(1, 2)] != [(1, 2), (5, 9)]"
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "medium",
+      "repeat": 3,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(ranges: List[Tuple[int, int]], exclusions: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    # Проверка корректности входных данных\n    for r in ranges + exclusions:\n        if not isinstance(r[0], int) or not isinstance(r[1], int):\n            raise ValueError(\"Границы интервала должны быть целыми числами\")\n        if r[0] >= r[1]:\n            raise ValueError(\"Начало интервала должно быть меньше конца\")\n\n    # Объединение пересекающихся и соседних интервалов\n    merged = []\n    for start, end in sorted(ranges):\n        if merged and merged[-1][1] >= start:\n            merged[-1] = (merged[-1][0], max(merged[-1][1], end))\n        else:\n            merged.append((start, end))\n\n    # Вычитание исключений\n    result = []\n    for start, end in merged:\n        exclude_start, exclude_end = exclusions\n        if exclude_start <= start < end <= exclude_end:\n            continue\n        elif exclude_start <= start < exclude_end <= end:\n            result.append((exclude_end, end))\n        elif start < exclude_start < end <= exclude_end:\n            result.append((start, exclude_start))\n        elif start < exclude_start < exclude_end < end:\n            result.extend([(start, exclude_start), (exclude_end, end)])\n        else:\n            result.append((start, end))\n\n    return sorted(result)\n\n# Сложность: O((n + m) log(n + m)), где n - количество интервалов в ranges, m - количество интервалов в exclusions.\n```\n\nЭта реализация функции `reconcile_ranges` выполняет все указанные требования. Она сначала объединяет пересекающиеся и соседние интервалы из списка `ranges`, а затем вычитает интервалы из списка `exclusions`. Функция работает в O((n + m) log(n + m)) времени из-за использования сортировки и операций слияния.",
+      "finish_reason": "STOP",
+      "latency_ms": 3218,
+      "ttft_ms": 875,
+      "prompt_tokens": 286,
+      "output_tokens": 466,
+      "tokens_per_second": 144.8104412678342,
+      "cost_usd": 1.684e-05,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 4,
+        "total": 10,
+        "score": 0.4,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": false,
+            "error": "ValueError: not enough values to unpack (expected 2, got 0)"
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "TypeError: '<=' not supported between instances of 'tuple' and 'int'"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": false,
+            "error": "ValueError: too many values to unpack (expected 2)"
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": false,
+            "error": "TypeError: '<=' not supported between instances of 'tuple' and 'int'"
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "ValueError: not enough values to unpack (expected 2, got 1)"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": false,
+            "error": "ValueError: not enough values to unpack (expected 2, got 1)"
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "strong",
+      "repeat": 1,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(ranges: List[Tuple[int, int]], exclusions: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    def normalize(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n        if not all(isinstance(start, int) and isinstance(end, int) and start < end for start, end in intervals):\n            raise ValueError(\"Intervals must have integer boundaries with start < end.\")\n        intervals.sort()\n        merged = []\n        for current in intervals:\n            if not merged or merged[-1][1] < current[0]:\n                merged.append(current)\n            else:\n                merged[-1] = (merged[-1][0], max(merged[-1][1], current[1]))\n        return merged\n\n    def subtract_intervals(main: List[Tuple[int, int]], sub: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n        result = []\n        i, j = 0, 0\n        while i < len(main) and j < len(sub):\n            main_start, main_end = main[i]\n            sub_start, sub_end = sub[j]\n            if main_end <= sub_start:\n                result.append(main[i])\n                i += 1\n            elif main_start >= sub_end:\n                j += 1\n            else:\n                if main_start < sub_start:\n                    result.append((main_start, sub_start))\n                if main_end > sub_end:\n                    main[i] = (sub_end, main_end)\n                else:\n                    i += 1\n                    j += 1\n        result.extend(main[i:])\n        return result\n\n    normalized_ranges = normalize(ranges)\n    normalized_exclusions = normalize(exclusions)\n    return subtract_intervals(normalized_ranges, normalized_exclusions)\n\n# Сложность объединения и нормализации интервалов O(n log n) и O(m log m) соответственно,\n# где n и m - длины списков ranges и exclusions. Вычитание интервалов работает за O(n + m).\n```\n\nФункция `reconcile_ranges` сначала нормализует оба списка интервалов, объединяя пересекающиеся и соседние интервалы, а затем вычитает интервалы из `exclusions` из нормализованных `ranges`. Общая сложность алгоритма составляет O((n + m) log(n + m)), что соответствует требованиям.",
+      "finish_reason": "STOP",
+      "latency_ms": 13218,
+      "ttft_ms": 1109,
+      "prompt_tokens": 286,
+      "output_tokens": 526,
+      "tokens_per_second": 39.794220003023895,
+      "cost_usd": 0.00012236,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 7,
+        "total": 10,
+        "score": 0.7,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(8, 12)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": false,
+            "error": "AssertionError: ([(1, 5), (9, 12)], [(3, 4)]) != ([(9, 12), (1, 5)], [(3, 4)])"
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "strong",
+      "repeat": 2,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(ranges: List[Tuple[int, int]], exclusions: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    def normalize(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n        if not all(isinstance(start, int) and isinstance(end, int) and start < end for start, end in intervals):\n            raise ValueError(\"Intervals must have integer boundaries with start < end.\")\n        intervals.sort()\n        merged = []\n        for current in intervals:\n            if not merged or merged[-1][1] < current[0]:\n                merged.append(current)\n            else:\n                merged[-1] = (merged[-1][0], max(merged[-1][1], current[1]))\n        return merged\n\n    def subtract_intervals(main: List[Tuple[int, int]], sub: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n        result = []\n        i, j = 0, 0\n        while i < len(main) and j < len(sub):\n            main_start, main_end = main[i]\n            sub_start, sub_end = sub[j]\n            if main_end <= sub_start:\n                result.append(main[i])\n                i += 1\n            elif main_start >= sub_end:\n                j += 1\n            else:\n                if main_start < sub_start:\n                    result.append((main_start, sub_start))\n                if main_end > sub_end:\n                    main[i] = (sub_end, main_end)\n                else:\n                    i += 1\n                    j += 1\n        result.extend(main[i:])\n        return result\n\n    normalized_ranges = normalize(ranges)\n    normalized_exclusions = normalize(exclusions)\n    return subtract_intervals(normalized_ranges, normalized_exclusions)\n\n# Сложность объединения и нормализации интервалов O(n log n) и O(m log m) соответственно,\n# где n и m - длины списков ranges и exclusions. Вычитание интервалов работает за O(n + m).\n```\n\nФункция `reconcile_ranges` сначала нормализует оба списка интервалов, объединяя пересекающиеся и соседние интервалы, а затем вычитает интервалы из `exclusions` из нормализованных интервалов `ranges`. Общая сложность алгоритма составляет O((n + m) log(n + m)), что соответствует требованиям.",
+      "finish_reason": "STOP",
+      "latency_ms": 13391,
+      "ttft_ms": 1235,
+      "prompt_tokens": 286,
+      "output_tokens": 529,
+      "tokens_per_second": 39.504144574704746,
+      "cost_usd": 0.00012296,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 7,
+        "total": 10,
+        "score": 0.7,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(8, 12)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": false,
+            "error": "AssertionError: ([(1, 5), (9, 12)], [(3, 4)]) != ([(9, 12), (1, 5)], [(3, 4)])"
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "strong",
+      "repeat": 3,
+      "backend": "huggingface",
+      "model": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "provider": "nscale",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(\n    ranges: List[Tuple[int, int]],\n    exclusions: List[Tuple[int, int]],\n) -> List[Tuple[int, int]]:\n    \n    def normalize(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n        for start, end in intervals:\n            if not isinstance(start, int) or not isinstance(end, int) or start >= end:\n                raise ValueError(\"Invalid interval\")\n        \n        intervals.sort()\n        merged = []\n        for start, end in intervals:\n            if merged and merged[-1][1] >= start:\n                merged[-1] = (merged[-1][0], max(merged[-1][1], end))\n            else:\n                merged.append((start, end))\n        return merged\n    \n    def subtract_intervals(main: List[Tuple[int, int]], sub: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n        result = []\n        i, j = 0, 0\n        while i < len(main) and j < len(sub):\n            main_start, main_end = main[i]\n            sub_start, sub_end = sub[j]\n            \n            if main_end <= sub_start:\n                result.append(main[i])\n                i += 1\n            elif main_start >= sub_end:\n                j += 1\n            else:\n                if main_start < sub_start:\n                    result.append((main_start, sub_start))\n                if main_end > sub_end:\n                    main[i] = (sub_end, main_end)\n                else:\n                    i += 1\n                    j += 1\n        \n        result.extend(main[i:])\n        return result\n    \n    normalized_ranges = normalize(ranges)\n    normalized_exclusions = normalize(exclusions)\n    \n    return subtract_intervals(normalized_ranges, normalized_exclusions)\n\n# Сложность объединения и нормализации интервалов O(n log n), где n - количество интервалов в ranges или exclusions.\n# Сложность вычитания интервалов O(n + m), где n - количество интервалов в ranges, а m - в exclusions.\n```\n\nОбщая сложность функции `reconcile_ranges` составляет O((n + m) log(n + m)), так как основное время тратится на сортировку интервалов.",
+      "finish_reason": "STOP",
+      "latency_ms": 13000,
+      "ttft_ms": 1156,
+      "prompt_tokens": 286,
+      "output_tokens": 488,
+      "tokens_per_second": 37.53846153846154,
+      "cost_usd": 0.00011476,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 7,
+        "total": 10,
+        "score": 0.7,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(8, 12)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": false,
+            "error": "AssertionError: ([(1, 5), (9, 12)], [(3, 4)]) != ([(9, 12), (1, 5)], [(3, 4)])"
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": null
+    },
+    {
+      "model_id": "gemini-35",
+      "repeat": 1,
+      "backend": "api",
+      "model": "gemini-3.5-flash",
+      "provider": "gemini",
+      "text": "Вот реализация функции на Python 3.11, соответствующая всем требованиям:\n\n```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    # 1. Валидация входных данных\n    def validate_and_copy(lst: list[tuple[int, int]]) -> list[tuple[int, int]]:\n        if not isinstance(lst, list):\n            raise ValueError(\"Входной параметр должен быть списком.\")\n        copied = []\n        for item in lst:\n            if not isinstance(item, tuple) or len(item) != 2:\n                raise ValueError(\"Интервал должен быть кортежем из двух элементов.\")\n            start, end = item\n            # Исключаем bool, так как isinstance(True, int) возвращает True\n            if (\n                type(start) is not int\n                or type(end) is not int\n                or isinstance(start, bool)\n                or isinstance(end, bool)\n            ):\n                raise ValueError(\"Границы интервала должны быть целыми числами (тип int).\")\n            if start >= end:\n                raise ValueError(f\"Некорректный интервал [{start}, {end}): start должен быть строго меньше end.\")\n            copied.append((start, end))\n        return copied\n\n    # Копируем и валидируем, чтобы не изменять исходные списки\n    valid_ranges = validate_and_copy(ranges)\n    valid_exclusions = validate_and_copy(exclusions)\n\n    # Функция для объединения пересекающихся и соседних интервалов\n    def merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:\n        if not intervals:\n            return []\n        # Сортируем по началу интервала\n        sorted_intervals = sorted(intervals, key=lambda x: x[0])\n        merged = [sorted_intervals[0]]\n        for current_start, current_end in sorted_intervals[1:]:\n            last_start, last_end = merged[-5] if len(merged) > 5 else merged[-1] # Оптимизация обращения к последнему\n            last_start, last_end = merged[-1]\n            # Если интервалы пересекаются или соприкасаются (last_end >= current_start)\n            if current_start <= last_end:\n                merged[-1] = (last_start, max(last_end, current_end))\n            else:\n                merged.append((current_start, current_end))\n        return merged\n\n    # 3. Нормализуем ranges и exclusions\n    merged_ranges = merge_intervals(valid_ranges)\n    merged_exclusions = merge_intervals(valid_exclusions)\n\n    # 4. Вычитание exclusions из ranges (метод двух указателей)\n    result = []\n    r_idx, e_idx = 0, 0\n    n, m = len(merged_ranges), len(merged_exclusions)\n\n    while r_idx < n:\n        r_start, r_end = merged_ranges[r_idx]\n\n        # Если исключения закончились или текущее исключение находится строго правее (не касается изнутри)\n        if e_idx >= m or merged_exclusions[e_idx][0] >= r_end:\n            result.append((r_start, r_end))\n            r_idx += 1\n            continue\n\n        e_start, e_end = merged_exclusions[e_idx]\n\n        # Если текущее исключение находится строго левее (не касается изнутри)\n        if e_end <= r_start:\n            e_idx += 1\n            continue\n\n        # Вычитание пересекающейся части\n        if e_start > r_start:\n            result.append((r_start, e_start))\n\n        if e_end < r_end:\n            # Оставшуюся часть интервала возвращаем на обработку (она может пересечься со следующим exclusion)\n            merged_ranges[r_idx] = (e_end, r_end)\n            e_idx += 1\n        else:\n            r_idx += 1\n\n    return result\n```\n\nСложность алгоритма составляет $O((n \\log n) + (m \\log m))$ за счет сортировки списков интервалов перед их объединением, где $n$ и $m$ — длины списков `ranges` и `exclusions` соответственно. Последующее слияние и вычитание выполняются методом двух указателей за линейное время $O(n + m)$, что полностью удовлетворяет целевой сложности $O((n + m) \\log (n + m))$.",
+      "finish_reason": "STOP",
+      "latency_ms": 15969,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 1082,
+      "visible_output_tokens": 1082,
+      "thought_tokens": 0,
+      "tokens_per_second": 67.75627778822603,
+      "cost_usd": 0.010104,
+      "cache_hit_tokens": null,
+      "cache_miss_tokens": null,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "gemini-35",
+      "repeat": 2,
+      "backend": "api",
+      "model": "gemini-3.5-flash",
+      "provider": "gemini",
+      "text": "",
+      "finish_reason": "MAX_TOKENS",
+      "latency_ms": 29328,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 0,
+      "visible_output_tokens": null,
+      "thought_tokens": 0,
+      "tokens_per_second": null,
+      "cost_usd": 0.000366,
+      "cache_hit_tokens": null,
+      "cache_miss_tokens": null,
+      "evaluation": {
+        "code_found": false,
+        "safe": false,
+        "passed": 0,
+        "total": 10,
+        "score": 0.0,
+        "error": "Функция reconcile_ranges не найдена",
+        "tests": []
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "gemini-35",
+      "repeat": 3,
+      "backend": "api",
+      "model": "gemini-3.5-flash",
+      "provider": "gemini",
+      "text": "Вот реализация функции на Python 3.11, соответствующая всем требованиям:\n\n```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    # 1. Валидация входных данных\n    def validate_and_copy(lst: list[tuple[int, int]]) -> list[tuple[int, int]]:\n        if not isinstance(lst, list):\n            raise ValueError(\"Входной параметр должен быть списком.\")\n        \n        copied = []\n        for item in lst:\n            if not isinstance(item, tuple) or len(item) != 2:\n                raise ValueError(\"Каждый интервал должен быть кортежем из двух элементов.\")\n            \n            start, end = item\n            # В Python bool является подклассом int, поэтому нужна строгая проверка типа\n            if type(start) is not int or type(end) is not int:\n                raise ValueError(\"Границы интервала должны быть строго типа int.\")\n            if start >= end:\n                raise ValueError(f\"Некорректный интервал [{start}, {end}): start должен быть меньше end.\")\n            \n            copied.append((start, end))\n        return copied\n\n    # Копируем и валидируем, чтобы не изменять исходные списки\n    valid_ranges = validate_and_copy(ranges)\n    valid_exclusions = validate_and_copy(exclusions)\n\n    # Вспомогательная функция для объединения пересекающихся и соседних интервалов\n    def merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:\n        if not intervals:\n            return []\n        # Сортируем по началу интервала\n        sorted_intervals = sorted(intervals, key=lambda x: x[0])\n        merged = [sorted_intervals[0]]\n        for current_start, current_end in sorted_intervals[1:]:\n            last_start, last_end = merged[-1]\n            # Если интервалы пересекаются или соприкасаются (last_end >= current_start)\n            if current_start <= last_end:\n                merged[-1] = (last_start, max(last_end, current_end))\n            else:\n                merged.append((current_start, current_end))\n        return merged\n\n    # 3. Нормализуем ranges и exclusions\n    merged_ranges = merge_intervals(valid_ranges)\n    merged_exclusions = merge_intervals(valid_exclusions)\n\n    # 4. Вычитаем exclusions из ranges с помощью метода двух указателей\n    result = []\n    r_idx, e_idx = 0, 0\n    n_r, n_e = len(merged_ranges), len(merged_exclusions)\n\n    while r_idx < n_r:\n        r_start, r_end = merged_ranges[r_idx]\n\n        # Если исключения закончились или текущее исключение находится строго после текущего интервала\n        if e_idx >= n_e or merged_exclusions[e_idx][0] >= r_end:\n            result.append((r_start, r_end))\n            r_idx += 1\n            continue\n\n        e_start, e_end = merged_exclusions[e_idx]\n\n        # Если текущее исключение находится строго до текущего интервала (соприкосновение не удаляет)\n        if e_end <= r_start:\n            e_idx += 1\n            continue\n\n        # Происходит пересечение. Вычитаем exclusion из текущего интервала\n        if e_start > r_start:\n            result.append((r_start, e_start))\n\n        if e_end < r_end:\n            # Исключение полностью внутри или делит интервал; остаток интервала может пересечься со следующими exclusions\n            merged_ranges[r_idx] = (e_end, r_end)\n            e_idx += 1\n        else:\n            # Исключение покрывает конец интервала\n            r_idx += 1\n\n    return result\n```\n\nСложность алгоритма составляет $O((n \\log n) + (m \\log m))$ за счет сортировки списков интервалов (где $n$ и $m$ — длины списков `ranges` и `exclusions` соответственно). Последующее слияние и вычитание выполняются за линейное время $O(n + m)$ с помощью метода двух указателей, что полностью удовлетворяет целевой сложности $O((n + m) \\log (n + m))$.",
+      "finish_reason": "STOP",
+      "latency_ms": 15313,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 1055,
+      "visible_output_tokens": 1055,
+      "thought_tokens": 0,
+      "tokens_per_second": 68.89570952784351,
+      "cost_usd": 0.009861,
+      "cache_hit_tokens": null,
+      "cache_miss_tokens": null,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "gemini-36",
+      "repeat": 1,
+      "backend": "api",
+      "model": "gemini-3.6-flash",
+      "provider": "gemini",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def validate_and_normalize(\n        intervals: list[tuple[int, int]],\n    ) -> list[tuple[int, int]]:\n        for item in intervals:\n            if not isinstance(item, tuple) or len(item) != 2:\n                raise ValueError(\"Каждый интервал должен быть кортежем из 2 элементов.\")\n            start, end = item\n            if type(start) is not int or type(end) is not int:\n                raise ValueError(\"Границы должны быть типа int (bool недопустим).\")\n            if start >= end:\n                raise ValueError(f\"start должен быть строго меньше end: [{start}, {end}).\")\n\n        sorted_intervals = sorted(intervals)\n        merged: list[tuple[int, int]] = []\n        for start, end in sorted_intervals:\n            if not merged or merged[-1][1] < start:\n                merged.append((start, end))\n            else:\n                merged[-1] = (merged[-1][0], max(merged[-1][1], end))\n        return merged\n\n    merged_ranges = validate_and_normalize(ranges)\n    merged_exclusions = validate_and_normalize(exclusions)\n\n    result: list[tuple[int, int]] = []\n    ex_idx = 0\n    num_ex = len(merged_exclusions)\n\n    for r_start, r_end in merged_ranges:\n        curr_start = r_start\n        while ex_idx < num_ex and merged_exclusions[ex_idx][1] <= curr_start:\n            ex_idx += 1\n\n        while ex_idx < num_ex and merged_exclusions[ex_idx][0] < r_end:\n            ex_start, ex_end = merged_exclusions[ex_idx]\n            if ex_start > curr_start:\n                result.append((curr_start, ex_start))\n            curr_start = max(curr_start, ex_end)\n            if curr_start >= r_end:\n                break\n            if ex_end < r_end:\n                ex_idx += 1\n\n        if curr_start < r_end:\n            result.append((curr_start, r_end))\n\n    return result\n```\n\nВременная сложность алгоритма определяется сортировкой исходных списков и составляет $O((N + M) \\log(N + M))$, где $N$ и $M$ — количество интервалов в `ranges` и `exclusions` соответственно. Последующее слияние и вычитание выполняются за один линейный проход $O(N + M)$ с помощью метода два указателя.",
+      "finish_reason": "STOP",
+      "latency_ms": 31188,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 640,
+      "visible_output_tokens": 640,
+      "thought_tokens": 0,
+      "tokens_per_second": 20.520713094783567,
+      "cost_usd": 0.002583,
+      "cache_hit_tokens": null,
+      "cache_miss_tokens": null,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "gemini-36",
+      "repeat": 2,
+      "backend": "api",
+      "model": "gemini-3.6-flash",
+      "provider": "gemini",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def _validate_and_normalize(\n        raw_list: list[tuple[int, int]]\n    ) -> list[tuple[int, int]]:\n        validated = []\n        for item in raw_list:\n            if not isinstance(item, tuple) or len(item) != 2:\n                raise ValueError(\"Каждый интервал должен быть кортежем из 2 элементов.\")\n            start, end = item\n            # bool является подклассом int в Python, проверяем строго\n            if (\n                type(start) is not int\n                or type(end) is not int\n                or start >= end\n            ):\n                raise ValueError(\"Границы должны быть int, и start < end.\")\n            validated.append((start, end))\n\n        if not validated:\n            return []\n\n        validated.sort()\n        merged = [validated[0]]\n        for cur_start, cur_end in validated[1:]:\n            last_start, last_end = merged[-1]\n            if cur_start <= last_end:  # Пересекающиеся или соседние\n                merged[-1] = (last_start, max(last_end, cur_end))\n            else:\n                merged.append((cur_start, cur_end))\n        return merged\n\n    norm_ranges = _validate_and_normalize(ranges)\n    norm_exclusions = _validate_and_normalize(exclusions)\n\n    if not norm_ranges or not norm_exclusions:\n        return norm_ranges\n\n    result = []\n    i, j = 0, 0\n    cur_start, cur_end = norm_ranges[0]\n\n    while i < len(norm_ranges):\n        if j >= len(norm_exclusions):\n            result.append((cur_start, cur_end))\n            i += 1\n            if i < len(norm_ranges):\n                cur_start, cur_end = norm_ranges[i]\n            continue\n\n        ex_start, ex_end = norm_exclusions[j]\n\n        # Исключение правее (касание ex_start == cur_end не уменьшает интервал)\n        if ex_start >= cur_end:\n            result.append((cur_start, cur_end))\n            i += 1\n            if i < len(norm_ranges):\n                cur_start, cur_end = norm_ranges[i]\n        # Исключение левее (касание ex_end == cur_start не уменьшает интервал)\n        elif ex_end <= cur_start:\n            j += 1\n        # Исключение пересекает текущий интервал\n        else:\n            if ex_start > cur_start:\n                result.append((cur_start, ex_start))\n\n            if ex_end < cur_end:\n                cur_start = ex_end\n                j += 1\n            else:\n                i += 1\n                if i < len(norm_ranges):\n                    cur_start, cur_end = norm_ranges[i]\n\n    return result\n```\n\nВременная сложность функции составляет $O((N + M) \\log(N + M))$ из-за сортировки исходных списков интервалов длины $N$ и $M$. Последующее объединение и вычитание выполняются методом двух указателей за один линейный проход со сложностью $O(N + M)$.",
+      "finish_reason": "STOP",
+      "latency_ms": 31688,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 810,
+      "visible_output_tokens": 810,
+      "thought_tokens": 0,
+      "tokens_per_second": 25.56172683665586,
+      "cost_usd": 0.0032205,
+      "cache_hit_tokens": null,
+      "cache_miss_tokens": null,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "gemini-36",
+      "repeat": 3,
+      "backend": "api",
+      "model": "gemini-3.6-flash",
+      "provider": "gemini",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def validate_and_normalize(raw_list: list[tuple[int, int]]) -> list[tuple[int, int]]:\n        for item in raw_list:\n            if (\n                not isinstance(item, tuple)\n                or len(item) != 2\n                or type(item[0]) is not int\n                or type(item[1]) is not int\n                or item[0] >= item[1]\n            ):\n                raise ValueError(\"Invalid interval element: must be tuple of 2 ints with start < end.\")\n        \n        sorted_list = sorted(raw_list, key=lambda x: x[0])\n        merged: list[tuple[int, int]] = []\n        for start, end in sorted_list:\n            if not merged:\n                merged.append((start, end))\n            else:\n                prev_start, prev_end = merged[-1]\n                if start <= prev_end:\n                    merged[-1] = (prev_start, max(prev_end, end))\n                else:\n                    merged.append((start, end))\n        return merged\n\n    merged_ranges = validate_and_normalize(ranges)\n    merged_exclusions = validate_and_normalize(exclusions)\n\n    result: list[tuple[int, int]] = []\n    i, j = 0, 0\n    curr_ranges = merged_ranges.copy()\n\n    while i < len(curr_ranges) and j < len(merged_exclusions):\n        r_start, r_end = curr_ranges[i]\n        e_start, e_end = merged_exclusions[j]\n\n        if e_end <= r_start:\n            j += 1\n        elif e_start >= r_end:\n            result.append((r_start, r_end))\n            i += 1\n        else:\n            if r_start < e_start:\n                result.append((r_start, e_start))\n            if e_end < r_end:\n                curr_ranges[i] = (e_end, r_end)\n            else:\n                i += 1\n\n    while i < len(curr_ranges):\n        result.append(curr_ranges[i])\n        i += 1\n\n    return result\n```\n\nВременная сложность алгоритма составляет $O((n + m) \\log(n + m))$ из-за этапа сортировки входных интервалов длины $n$ и $m$. Последующее объединение и вычитание выполняются за один линейный проход методом двух указателей за $O(n + m)$.",
+      "finish_reason": "STOP",
+      "latency_ms": 26281,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 635,
+      "visible_output_tokens": 635,
+      "thought_tokens": 0,
+      "tokens_per_second": 24.161942087437133,
+      "cost_usd": 0.00256425,
+      "cache_hit_tokens": null,
+      "cache_miss_tokens": null,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 1,
+      "backend": "api",
+      "model": "deepseek-v4-flash",
+      "provider": "deepseek",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def validate_and_normalize(items):\n        if not all(\n            isinstance(s, int) and isinstance(e, int) and not isinstance(s, bool) and not isinstance(e, bool) and s < e\n            for s, e in items\n        ):\n            raise ValueError(\"Invalid interval\")\n        return sorted(items)\n\n    ranges = validate_and_normalize(ranges)\n    exclusions = validate_and_normalize(exclusions)\n\n    def merge(intervals):\n        merged = []\n        for s, e in intervals:\n            if not merged or s > merged[-1][1]:\n                merged.append([s, e])\n            else:\n                merged[-1][1] = max(merged[-1][1], e)\n        return merged\n\n    ranges = merge(ranges)\n    exclusions = merge(exclusions)\n\n    result = []\n    i = j = 0\n    while i < len(ranges):\n        rs, re = ranges[i]\n        while j < len(exclusions) and exclusions[j][1] <= rs:\n            j += 1\n        cur_start = rs\n        k = j\n        while k < len(exclusions) and exclusions[k][0] < re:\n            es, ee = exclusions[k]\n            if es > cur_start:\n                result.append((cur_start, min(es, re)))\n            cur_start = max(cur_start, ee)\n            if cur_start >= re:\n                break\n            k += 1\n        if cur_start < re:\n            result.append((cur_start, re))\n        i += 1\n\n    return result\n```\n\nСложность: O((n + m) log(n + m)) из-за сортировки, линейная обработка после неё. Память — O(n + m).",
+      "finish_reason": "STOP",
+      "latency_ms": 2734,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 408,
+      "visible_output_tokens": 408,
+      "thought_tokens": 0,
+      "tokens_per_second": 149.23189465961983,
+      "cost_usd": 0.000295696,
+      "cache_hit_tokens": 128,
+      "cache_miss_tokens": 116,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 2,
+      "backend": "api",
+      "model": "deepseek-v4-flash",
+      "provider": "deepseek",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def validate_and_sort(items):\n        validated = []\n        for start, end in items:\n            if type(start) is not int or type(end) is not int:\n                raise ValueError(\"Bounds must be int\")\n            if start >= end:\n                raise ValueError(\"start must be < end\")\n            validated.append((start, end))\n        return sorted(validated)\n\n    def merge(intervals):\n        if not intervals:\n            return []\n        merged = []\n        cur_start, cur_end = intervals[0]\n        for start, end in intervals[1:]:\n            if start <= cur_end:  # overlap or adjacent\n                cur_end = max(cur_end, end)\n            else:\n                merged.append((cur_start, cur_end))\n                cur_start, cur_end = start, end\n        merged.append((cur_start, cur_end))\n        return merged\n\n    ranges_sorted = merge(validate_and_sort(ranges))\n    exclusions_sorted = merge(validate_and_sort(exclusions))\n\n    result = []\n    exc_idx = 0\n    for r_start, r_end in ranges_sorted:\n        cur_start = r_start\n        while exc_idx < len(exclusions_sorted) and exclusions_sorted[exc_idx][1] <= cur_start:\n            exc_idx += 1\n        temp_exc_idx = exc_idx\n        while temp_exc_idx < len(exclusions_sorted) and exclusions_sorted[temp_exc_idx][0] < r_end:\n            e_start, e_end = exclusions_sorted[temp_exc_idx]\n            if e_end <= cur_start:\n                temp_exc_idx += 1\n                continue\n            if e_start > cur_start:\n                result.append((cur_start, min(e_start, r_end)))\n            if e_end >= r_end:\n                cur_start = r_end\n                break\n            cur_start = max(cur_start, e_end)\n            temp_exc_idx += 1\n        if cur_start < r_end:\n            result.append((cur_start, r_end))\n\n    return result\n```\n\nСложность: O((n + m) log(n + m)) из-за сортировки, линейное сканирование после неё. Память O(n + m).",
+      "finish_reason": "STOP",
+      "latency_ms": 3234,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 504,
+      "visible_output_tokens": 504,
+      "thought_tokens": 0,
+      "tokens_per_second": 155.84415584431292,
+      "cost_usd": 0.00035905600000000007,
+      "cache_hit_tokens": 128,
+      "cache_miss_tokens": 116,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "deepseek",
+      "repeat": 3,
+      "backend": "api",
+      "model": "deepseek-v4-flash",
+      "provider": "deepseek",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def validate_and_sort(items):\n        validated = []\n        for start, end in items:\n            if type(start) is not int or type(end) is not int:\n                raise ValueError(\"Bounds must be int\")\n            if start >= end:\n                raise ValueError(\"start must be < end\")\n            validated.append((start, end))\n        return sorted(validated)\n\n    def merge(intervals):\n        if not intervals:\n            return []\n        merged = []\n        cur_start, cur_end = intervals[0]\n        for start, end in intervals[1:]:\n            if start <= cur_end:  # overlap or adjacent\n                cur_end = max(cur_end, end)\n            else:\n                merged.append((cur_start, cur_end))\n                cur_start, cur_end = start, end\n        merged.append((cur_start, cur_end))\n        return merged\n\n    ranges_sorted = validate_and_sort(ranges)\n    exclusions_sorted = validate_and_sort(exclusions)\n\n    merged_ranges = merge(ranges_sorted)\n    merged_exclusions = merge(exclusions_sorted)\n\n    result = []\n    exc_idx = 0\n    for r_start, r_end in merged_ranges:\n        cur_start = r_start\n        while exc_idx < len(merged_exclusions) and merged_exclusions[exc_idx][1] <= cur_start:\n            exc_idx += 1\n        temp_exc = exc_idx\n        while temp_exc < len(merged_exclusions) and merged_exclusions[temp_exc][0] < r_end:\n            e_start, e_end = merged_exclusions[temp_exc]\n            if e_start > cur_start:\n                result.append((cur_start, min(e_start, r_end)))\n            cur_start = max(cur_start, e_end)\n            if cur_start >= r_end:\n                break\n            temp_exc += 1\n        if cur_start < r_end:\n            result.append((cur_start, r_end))\n\n    return result\n```\n\nСложность: O((n + m) log(n + m)) из-за сортировки, линейное сканирование после слияния. Память O(n + m).",
+      "finish_reason": "STOP",
+      "latency_ms": 3266,
+      "ttft_ms": null,
+      "prompt_tokens": 244,
+      "output_tokens": 488,
+      "visible_output_tokens": 488,
+      "thought_tokens": 0,
+      "tokens_per_second": 149.41824862235154,
+      "cost_usd": 0.00034849600000000006,
+      "cache_hit_tokens": 128,
+      "cache_miss_tokens": 116,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": null
+    },
+    {
+      "model_id": "local-cpu",
+      "repeat": 1,
+      "backend": "local",
+      "model": "qwen-supervisor",
+      "provider": "llama.cpp",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    # ÐÑÐ¾Ð²ÐµÑÐºÐ° Ð³ÑÐ°Ð½Ð¸Ñ\n    for r in ranges:\n        if not (isinstance(r[0], int) and isinstance(r[1], int) and r[0] < r[1]):\n            raise ValueError(\"Invalid range: start >= end\")\n    for r in exclusions:\n        if not (isinstance(r[0], int) and isinstance(r[1], int) and r[0] < r[1]):\n            raise ValueError(\"Invalid exclusion: start >= end\")\n\n    # ÐÐ±ÑÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ðµ ranges\n    merged_ranges = []\n    for r in ranges:\n        if not merged_ranges:\n            merged_ranges.append(r)\n        else:\n            last = merged_ranges[-1]\n            if r[0] <= last[1] + 1:\n                # ÐÐµÑÐµÑÐµÐºÐ°ÑÑÐ¸ÐµÑÑ Ð¸Ð»Ð¸ ÑÐ¾ÑÐµÐ´Ð½Ð¸Ðµ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ñ\n                new_start = last[0]\n                new_end = max(last[1], r[1])\n                merged_ranges[-1] = (new_start, new_end)\n            else:\n                merged_ranges.append(r)\n\n    # ÐÐ¾ÑÐ¼Ð°Ð»Ð¸Ð·Ð°ÑÐ¸Ñ exclusions\n    normalized_exclusions = []\n    for r in exclusions:\n        if not (isinstance(r[0], int) and isinstance(r[1], int) and r[0] < r[1]):\n            raise ValueError(\"Invalid exclusion: start >= end\")\n        normalized_exclusions.append(r)\n\n    # ÐÑÑÐ¸ÑÐ°Ð½Ð¸Ðµ exclusions Ð¸Ð· merged_ranges\n    result = []\n    i = 0\n    while i < len(merged_ranges):\n        start, end = merged_ranges[i]\n        # ÐÑÐ¾Ð²ÐµÑÑÐµÐ¼, Ð½Ðµ ÑÐ²Ð»ÑÐµÑÑÑ Ð»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ ÐºÐ°ÑÐ°ÑÑÐµÐ¹ÑÑ Ð³ÑÐ°Ð½Ð¸ÑÑ\n        is_boundary = (start == normalized_exclusions[0][0] or end == normalized_exclusions[0][1])\n        if is_boundary:\n            i += 1\n            continue\n        # ÐÑÐµÐ¼ Ð¿ÐµÑÐ²Ð¾Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ, ÐºÐ¾ÑÐ¾ÑÐ¾Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ ÑÐµÐºÑÑÐ¸Ð¹ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»\n        j = 0\n        while j < len(normalized_exclusions) and normalized_exclusions[j][0] < end:\n            j += 1\n        # ÐÑÐ»Ð¸ j == len(normalized_exclusions), ÑÐ¾ Ð½ÐµÑ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ð¹, ÐºÐ¾ÑÐ¾ÑÑÐµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÑÑ\n        if j < len(normalized_exclusions):\n            # ÐÐ°Ð¹ÑÐ¸ Ð¿ÐµÑÐ²Ð¾Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ, ÐºÐ¾ÑÐ¾ÑÐ¾Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ\n            exclude_start, exclude_end = normalized_exclusions[j]\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑÑÑ Ð² Ð² Ð¸Ð½ÑÐµÑÐ²Ð°Ð», ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼\n            if exclude_start >= start and exclude_end <= end:\n                i += 1\n                continue\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð», ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼ ÑÐ°ÑÑÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð°\n            # ÐÐ°Ð¹ÑÐ¸ ÑÐ¾ÑÐºÑ, Ð³Ð´Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑÑÑ\n            exclude_start = max(start, exclude_start)\n            exclude_end = min(end, exclude_end)\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑÑÑ Ð², ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼\n            if exclude_start <= exclude_end:\n                i += 1\n                continue\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ, ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼ ÑÐ°ÑÑÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð°\n            # ÐÐ°Ð¹ÑÐ¸ ÑÐ¾ÑÐºÑ, Ð³Ð´Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑÑÑ\n            exclude_start = max(start, exclude_start)\n            exclude_end = min(end, exclude_end)\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑÑÑ Ð², ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼\n            if exclude_start <= exclude_end:\n                i += 1\n                continue\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ, ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼ ÑÐ°ÑÑÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð°\n            # ÐÐ°Ð¹ÑÐ¸ ÑÐ¾ÑÐºÑ, Ð³Ð´Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑÑÑ\n            exclude_start = max(start, exclude_start)\n            exclude_end = min(end, exclude_end)\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑÑÑ Ð², ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼\n            if exclude_start <= exclude_end:\n                i += 1\n                continue\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ, ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼ ÑÐ°ÑÑÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð°\n            # ÐÐ°Ð¹ÑÐ¸ ÑÐ¾ÑÐºÑ, Ð³Ð´Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑÑÑ\n            exclude_start = max(start, exclude_start)\n            exclude_end = min(end, exclude_end)\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑÑÑ Ð², ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼\n            if exclude_start <= exclude_end:\n                i += 1\n                continue\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ, ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼ ÑÐ°ÑÑÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð°\n            # ÐÐ°Ð¹ÑÐ¸ ÑÐ¾ÑÐºÑ, Ð³Ð´Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑÑÑ\n            exclude_start = max(start, exclude_start)\n            exclude_end = min(end, exclude_end)\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑÑÑ Ð², ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼\n            if exclude_start <= exclude_end:\n                i += 1\n                continue\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ, ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼ ÑÐ°ÑÑÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð°\n            # ÐÐ°Ð¹ÑÐ¸ ÑÐ¾ÑÐºÑ, Ð³Ð´Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑÑÑ\n            exclude_start = max(start, exclude_start)\n            exclude_end = min(end, exclude_end)\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑÑÑ Ð², ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼\n            if exclude_start <= exclude_end:\n                i += 1\n                continue\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ, ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼ ÑÐ°ÑÑÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð°\n            # ÐÐ°Ð¹ÑÐ¸ ÑÐ¾ÑÐºÑ, Ð³Ð´Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑÑÑ\n            exclude_start = max(start, exclude_start)\n            exclude_end = min(end, exclude_end)\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑÑÑ Ð², ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼\n            if exclude_start <= exclude_end:\n                i += 1\n                continue\n            # ÐÑÐ»Ð¸ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ°ÐµÑ, ÑÐ¾ ÑÐ´Ð°Ð»ÑÐµÐ¼ ÑÐ°ÑÑÑ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð°\n            # ÐÐ°Ð¹ÑÐ¸ ÑÐ¾ÑÐºÑ, Ð³Ð´Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ðµ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑÑÑ\n            exclude",
+      "finish_reason": "LENGTH",
+      "latency_ms": 70016,
+      "ttft_ms": 125,
+      "prompt_tokens": 269,
+      "output_tokens": 1200,
+      "tokens_per_second": 17.13893967093156,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 0,
+        "total": 10,
+        "score": 0.0,
+        "error": "Таймаут тестов",
+        "tests": []
+      },
+      "gpu": null,
+      "cpu": {
+        "ram_mb_peak": 6583.296875,
+        "cpu_percent_peak": 50.271875
+      }
+    },
+    {
+      "model_id": "local-cpu",
+      "repeat": 2,
+      "backend": "local",
+      "model": "qwen-supervisor",
+      "provider": "llama.cpp",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    # ÐÑÐ¾Ð²ÐµÑÐºÐ° Ð³ÑÐ°Ð½Ð¸Ñ\n    for r in ranges:\n        if not (isinstance(r[0], int) and isinstance(r[1], int) and r[0] < r[1]):\n            raise ValueError(\"Invalid range: start >= end\")\n    for r in exclusions:\n        if not (isinstance(r[0], int) and isinstance(r[1], int) and r[0] < r[1]):\n            raise ValueError(\"Invalid exclusion: start >= end\")\n\n    # ÐÐ±ÑÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ðµ ranges\n    merged_ranges = []\n    for r in ranges:\n        if not merged_ranges:\n            merged_ranges.append(r)\n        else:\n            last = merged_ranges[-1]\n            if r[0] <= last[1] + 1:\n                # ÐÐµÑÐµÑÐµÐºÐ°ÑÑÐ¸ÐµÑÑ Ð¸Ð»Ð¸ ÑÐ¾ÑÐµÐ´Ð½Ð¸Ðµ\n                new_start = last[0]\n                new_end = max(last[1], r[1])\n                merged_ranges[-1] = (new_start, new_end)\n            else:\n                merged_ranges.append(r)\n\n    # ÐÐ¾ÑÐ¼Ð°Ð»Ð¸Ð·Ð°ÑÐ¸Ñ exclusions\n    normalized_exclusions = []\n    for r in exclusions:\n        if not (isinstance(r[0], int) and isinstance(r[1], int) and r[0] < r[1]):\n            raise ValueError(\"Invalid exclusion: start >= end\")\n        normalized_exclusions.append(r)\n\n    # Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ exclusions Ð¸Ð· merged_ranges\n    result = []\n    for r in merged_ranges:\n        if not any(r[0] == e[0] and r[1] == e[1] for e in normalized_exclusions):\n            result.append(r)\n\n    # Ð¡Ð¾ÑÑÐ¸ÑÐ¾Ð²ÐºÐ°\n    result.sort()\n\n    return result\n```\n\n**Ð¡Ð»Ð¾Ð¶Ð½Ð¾ÑÑÑ:**\n- `O(n + m)` Ð´Ð»Ñ Ð¾Ð±ÑÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ñ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð¾Ð²,\n- `O((n + m) log(n + m))` Ð´Ð»Ñ ÑÐ¾ÑÑÐ¸ÑÐ¾Ð²ÐºÐ¸.\n\nÐ¢Ð°ÐºÐ¸Ð¼ Ð¾Ð±ÑÐ°Ð·Ð¾Ð¼, Ð¾Ð±ÑÐ°Ñ ÑÐ»Ð¾Ð¶Ð½Ð¾ÑÑÑ: `O((n + m) log(n + m))`.",
+      "finish_reason": "STOP",
+      "latency_ms": 26391,
+      "ttft_ms": 125,
+      "prompt_tokens": 269,
+      "output_tokens": 462,
+      "tokens_per_second": 17.505967943619808,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 5,
+        "total": 10,
+        "score": 0.5,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": false,
+            "error": "AssertionError: [(10, 12)] != [(1, 9), (10, 12)]"
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(1, 10)] != [(1, 3), (5, 7)]"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": false,
+            "error": "AssertionError: [(5, 9)] != [(1, 2), (5, 9)]"
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(2, 4), (8, 12)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": {
+        "ram_mb_peak": 6744.03125,
+        "cpu_percent_peak": 50.5125
+      }
+    },
+    {
+      "model_id": "local-cpu",
+      "repeat": 3,
+      "backend": "local",
+      "model": "qwen-supervisor",
+      "provider": "llama.cpp",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(\n    ranges: List[Tuple[int, int]],\n    exclusions: List[Tuple[int, int]],\n) -> List[Tuple[int, int]]:\n    # ÐÑÐ¾Ð²ÐµÑÐºÐ° Ð³ÑÐ°Ð½Ð¸Ñ\n    for r in ranges:\n        if not (isinstance(r[0], int) and isinstance(r[1], int)):\n            raise ValueError(\"ÐÑÐ°Ð½Ð¸ÑÑ Ð´Ð¾Ð»Ð¶Ð½Ñ Ð±ÑÑÑ int\")\n        if r[0] >= r[1]:\n            raise ValueError(\"ÐÐ½ÑÐµÑÐ²Ð°Ð»Ñ Ð´Ð¾Ð»Ð¶Ð½Ñ Ð±ÑÑÑ Ð¿ÐµÑÐµÑÐµÐºÐ°ÑÑÐ¸Ð¼Ð¸ÑÑ\")\n    \n    for r in exclusions:\n        if not (isinstance(r[0], int) and isinstance(r[1], int)):\n            raise ValueError(\"ÐÑÐ°Ð½Ð¸ÑÑ Ð´Ð¾Ð»Ð¶Ð½Ñ Ð±ÑÑÑ int\")\n        if r[0] >= r[1]:\n            raise ValueError(\"ÐÐ½ÑÐµÑÐ²Ð°Ð»Ñ Ð´Ð¾Ð»Ð¶Ð½Ñ Ð±ÑÑÑ Ð¿ÐµÑÐµÑÐµÐºÐ°ÑÑÐ¸Ð¼Ð¸ÑÑ\")\n    \n    # ÐÐ±ÑÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ðµ Ð¿ÐµÑÐµÑÐµÐºÐ° Ð¸ ÑÐ¾ÑÐµÐ´ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð¾Ð²\n    merged = []\n    for r in ranges:\n        if not merged:\n            merged.append(r)\n        else:\n            last = merged[-1]\n            if r[0] <= last[1]:\n                # ÐÐ±ÑÐµÐ´Ð¸Ð½ÑÐµÐ¼\n                new_start = last[0]\n                new_end = max(last[1], r[1])\n                merged[-1] = (new_start, new_end)\n            else:\n                merged.append(r)\n    \n    # ÐÐ¾ÑÐ¼Ð°Ð»Ð¸Ð·Ð°ÑÐ¸Ñ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ð¹\n    normalized_exclusions = []\n    for e in exclusions:\n        if e[0] == e[1]:\n            normalized_exclusions.append((e[0], e[1]))\n        else:\n            normalized_exclusions.append((e[0], e[1]))\n    \n    # ÐÑÑÐ¸ÑÐ°Ð½Ð¸Ðµ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ð¹ Ð¸Ð· merged\n    result = []\n    i = 0\n    while i < len(merged):\n        current = merged[i]\n        # ÐÑÐ¾Ð²ÐµÑÑÐµÐ¼, Ð½Ðµ ÑÐ²Ð»ÑÐµÑÑÑ Ð»Ð¸ ÑÐµÐºÑÑÐ¸Ð¹ Ð¸Ð½ÑÐµÑÐ²Ð°Ð» Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸ÐµÐ¼\n        if not (current[0] == normalized_exclusions[0][0] and current[1] == normalized_exclusions[0][1]):\n            result.append(current)\n        i += 1\n    \n    # ÐÐ¾Ð²ÑÐ¾ÑÐ½ÑÐ¹ Ð¿ÑÐ¾ Ð´Ð»Ñ ÑÐ´Ð°Ð»ÐµÐ½Ð¸Ñ Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸Ð¹\n    i = 0\n    while i < len(merged):\n        current = merged[i]\n        # ÐÑÐ¾Ð²ÐµÑÑÐµÐ¼, Ð½Ðµ ÑÐ²Ð»ÑÐµÑÑÑ Ð»Ð¸ ÑÐµÐºÑÑÐ¸Ð¹ Ð¸Ð½ÑÐµÑÐ²Ð°Ð» Ð¸ÑÐºÐ»ÑÑÐµÐ½Ð¸ÐµÐ¼\n        found = False\n        for e in normalized_exclusions:\n            if current[0] == e[0] and current[1] == e[1]:\n                found = True\n                break\n        if not found:\n            result.append(current)\n        i += 1\n    \n    # Ð¡Ð¾ÑÑÐ¸ÑÐ¾Ð²ÐºÐ° ÑÐµÐ·ÑÐ»ÑÑÐ°ÑÐ¾Ð²\n    result.sort()\n    return result\n```\n\n**Ð¡Ð»Ð¾Ð¶Ð½Ð¾ÑÑÑ:**\n- ÐÑÐµÐ¼ÐµÐ½Ð½Ð°Ñ ÑÐ»Ð¾Ð¶Ð½Ð¾ÑÑÑ: $O((n + m) \\log(n + m))$, Ð³Ð´Ðµ $n$ â ÐºÐ¾Ð»Ð¸ÑÐµÑÑÐ²Ð¾ Ð¸Ð½ÑÐµÑÐ²Ð°Ð»Ð¾Ð² Ð² `ranges`, $m$ â Ð² `exclusions`.\n- ÐÑÐ¾ÑÑÑÐ°Ð½ÑÑÐ²ÐµÐ½Ð½Ð°Ñ ÑÐ»Ð¾Ð¶Ð½Ð¾ÑÑÑ: $O(n + m)$, ÑÐ°Ðº ÐºÐ°Ðº Ð¼ÑÑÐµÐ¼ Ð¸ÑÐ½ÑÐµ ÑÐ¿Ð¸ÑÐºÐ¸ Ð¸ ÑÐ¾Ð·Ð´Ð°ÐµÐ¼ Ð½Ð¾Ð²ÑÐµ.",
+      "finish_reason": "STOP",
+      "latency_ms": 38078,
+      "ttft_ms": 94,
+      "prompt_tokens": 269,
+      "output_tokens": 667,
+      "tokens_per_second": 17.516676296023334,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 4,
+        "total": 10,
+        "score": 0.4,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": false,
+            "error": "IndexError: list index out of range"
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(1, 10), (1, 10)] != [(1, 3), (5, 7)]"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": false,
+            "error": "AssertionError: [(5, 9), (5, 9)] != [(1, 2), (5, 9)]"
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(10, 20), (10, 20)] != [(10, 20)]"
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(2, 4), (2, 4), (8, 12), (8, 12)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "IndexError: list index out of range"
+          }
+        ]
+      },
+      "gpu": null,
+      "cpu": {
+        "ram_mb_peak": 6824.0546875,
+        "cpu_percent_peak": 50.271875
+      }
+    },
+    {
+      "model_id": "local-small",
+      "repeat": 1,
+      "backend": "local",
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(\n    ranges: list[Tuple[int, int]],\n    exclusions: list[Tuple[int, int]],\n) -> list[Tuple[int, int]]:\n    def validate_intervals(intervals: list[Tuple[int, int]]) -> None:\n        for i in intervals:\n            if not isinstance(i[0], int) or not isinstance(i[1], int):\n                raise ValueError(\"Границы интервалов должны быть целыми числами.\")\n            if i[0] >= i[1]:\n                raise ValueError(\"Начало интервала должно быть меньше конца.\")\n\n    validate_intervals(ranges)\n    validate_intervals(exclusions)\n\n    # Копирование и сортировка, чтобы не менять исходные данные\n    sorted_ranges = sorted(ranges)\n    sorted_exclusions = sorted(exclusions)\n\n    def merge_and_normalize(intervals: list[Tuple[int, int]]) -> list[Tuple[int, int]]:\n        if not intervals:\n            return []\n        \n        merged = [intervals[0]]\n        for current in intervals[1:]:\n            prev = merged[-1]\n            # Объединяем, если пересечение или соседство (для полуоткрытых интервалов [a, b) и [b, c) -> [a, c))\n            if current[0] <= prev[1]:\n                merged[-1] = (prev[0], max(prev[1], current[1]))\n            else:\n                merged.append(current)\n        return merged\n\n    # Нормализация диапазонов и исключений\n    normalized_ranges = merge_and_normalize(sorted_ranges)\n    normalized_exclusions = merge_and_normalize(sorted_exclusions)\n\n    def subtract_intervals(main: list[Tuple[int, int]], exclude: list[Tuple[int, int]]) -> list[Tuple[int, int]]:\n        result = []\n        main_idx = 0\n        exclude_idx = 0\n        \n        while main_idx < len(main) or exclude_idx < len(exclude):\n            if main_idx >= len(main):\n                result.append(exclude[exclude_idx])\n                exclude_idx += 1\n                continue\n            \n            if exclude_idx >= len(exclude):\n                result.append(main[main_idx])\n                main_idx += 1\n                continue\n            \n            m_start, m_end = main[main_idx]\n            e_start, e_end = exclude[exclude_idx]\n\n            # Если исключение полностью внутри текущего диапазона или касается его границы\n            if e_start >= m_start and e_end <= m_end:\n                result.append((m_start, m_end))\n                main_idx += 1\n                continue\n            \n            # Если текущий диапазон полностью внутри исключения (невозможно для полуоткрытых интервалов без точек)\n            elif m_start >= e_start and m_end <= e_end:\n                # Исключение больше или равно диапазону, пропускаем этот диапазон\n                main_idx += 1\n                continue\n            \n            # Частичное пересечение\n            if m_start < e_start:\n                result.append((m_start, e_start))\n            \n            if m_end > e_end:\n                result.append((e_end, m_end))\n            \n            main_idx += 1\n            exclude_idx += 1\n        \n        return result\n\n    final_ranges = subtract_intervals(normalized_ranges, normalized_exclusions)\n    \n    # Удаление дубликатов и сортировка (хотя логика выше должна гарантировать порядок, но на всякий случай)\n    unique_ranges = []\n    seen = set()\n    for r in final_ranges:\n        if r not in seen:\n            seen.add(r)\n            unique_ranges.append(r)\n    \n    return sorted(unique_ranges)\n\n# Сложность алгоритма определяется доминированием шагов сортировки и линейного обхода объединенных списков, что дает общую временную сложность O((n + m) log(n + m)).",
+      "finish_reason": "STOP",
+      "latency_ms": 11484,
+      "ttft_ms": 6203,
+      "prompt_tokens": 243,
+      "output_tokens": 859,
+      "tokens_per_second": 162.8462259581434,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 0,
+        "total": 10,
+        "score": 0.0,
+        "error": "Traceback (most recent call last):\n  File \"<string>\", line 2, in <module>\nNameError: name 'Tuple' is not defined. Did you mean: 'tuple'?\n",
+        "tests": []
+      },
+      "gpu": {
+        "vram_mb_peak": 15657.0,
+        "gpu_util_percent_peak": 81.0,
+        "power_w_peak": 209.3
+      },
+      "load_duration_ms": 5972
+    },
+    {
+      "model_id": "local-small",
+      "repeat": 2,
+      "backend": "local",
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(\n    ranges: list[Tuple[int, int]],\n    exclusions: list[Tuple[int, int]],\n) -> list[Tuple[int, int]]:\n    def validate_intervals(intervals: list[Tuple[int, int]]) -> None:\n        for i in intervals:\n            if not isinstance(i[0], int) or not isinstance(i[1], int):\n                raise ValueError(\"Границы интервалов должны быть целыми числами.\")\n            if i[0] >= i[1]:\n                raise ValueError(\"Начало интервала должно быть меньше конца.\")\n\n    validate_intervals(ranges)\n    validate_intervals(exclusions)\n\n    # Копирование для неизменности входных данных и сортировка\n    sorted_ranges = sorted(ranges, key=lambda x: (x[0], -x[1]))\n    sorted_exclusions = sorted(exclusions, key=lambda x: (x[0], -x[1]))\n\n    # Объединение пересекающихся и соседних диапазонов\n    merged_ranges = []\n    if not sorted_ranges:\n        return []\n    \n    current_start, current_end = sorted_ranges[0]\n    for i in range(1, len(sorted_ranges)):\n        next_start, next_end = sorted_ranges[i]\n        # Пересечение или соседство (end <= next_start)\n        if next_start < current_end:\n            current_end = max(current_end, next_end)\n        else:\n            merged_ranges.append((current_start, current_end))\n            current_start, current_end = next_start, next_end\n    merged_ranges.append((current_start, current_end))\n\n    # Нормализация исключений (объединение пересекающихся и соседних)\n    normalized_exclusions = []\n    if not sorted_exclusions:\n        return merged_ranges\n    \n    current_start, current_end = sorted_exclusions[0]\n    for i in range(1, len(sorted_exclusions)):\n        next_start, next_end = sorted_exclusions[i]\n        if next_start < current_end:\n            current_end = max(current_end, next_end)\n        else:\n            normalized_exclusions.append((current_start, current_end))\n            current_start, current_end = next_start, next_end\n    normalized_exclusions.append((current_start, current_end))\n\n    # Вычитание нормализованных исключений из объединенных диапазонов\n    result_ranges = []\n    for r_start, r_end in merged_ranges:\n        for e_start, e_end in normalized_exclusions:\n            if not (e_start >= r_start and e_end <= r_end):\n                # Если исключение не полностью перекрывает текущий диапазон, разбиваем его\n                new_ranges = []\n                if r_start < e_start:\n                    new_ranges.append((r_start, e_start))\n                if r_end > e_end:\n                    new_ranges.append((e_end, r_end))\n                result_ranges.extend(new_ranges)\n            else:\n                # Если исключение полностью перекрывает текущий диапазон, пропускаем его\n                continue\n\n    # Удаление пустых интервалов и сортировка результата\n    result_ranges = [r for r in result_ranges if r[0] < r[1]]\n    return sorted(result_ranges)\n\n# Сложность: O((n + m) log(n + m)) из-за сортировки, где n и m — длины списков ranges и exclusions соответственно.\n```",
+      "finish_reason": "STOP",
+      "latency_ms": 4891,
+      "ttft_ms": 203,
+      "prompt_tokens": 243,
+      "output_tokens": 763,
+      "tokens_per_second": 163.03049546313693,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 5,
+        "total": 10,
+        "score": 0.5,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": false,
+            "error": "AssertionError: [(1, 8), (8, 9), (10, 12)] != [(1, 9), (10, 12)]"
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(1, 7)] != [(1, 3), (5, 7)]"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": false,
+            "error": "AssertionError: [(1, 20)] != [(1, 2), (5, 9)]"
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": false,
+            "error": "AssertionError: [(10, 20), (10, 20)] != [(10, 20)]"
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": {
+        "vram_mb_peak": 15628.0,
+        "gpu_util_percent_peak": 81.0,
+        "power_w_peak": 209.49
+      },
+      "load_duration_ms": 2
+    },
+    {
+      "model_id": "local-small",
+      "repeat": 3,
+      "backend": "local",
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "text": "```python\nfrom typing import List, Tuple\n\ndef reconcile_ranges(\n    ranges: list[Tuple[int, int]],\n    exclusions: list[Tuple[int, int]],\n) -> list[Tuple[int, int]]:\n    def validate_intervals(intervals: list[Tuple[int, int]]) -> None:\n        for i in intervals:\n            if not isinstance(i[0], int) or not isinstance(i[1], int):\n                raise ValueError(\"Границы интервалов должны быть целыми числами.\")\n            if i[0] >= i[1]:\n                raise ValueError(\"Начало интервала должно быть меньше конца.\")\n\n    validate_intervals(ranges)\n    validate_intervals(exclusions)\n\n    # Копирование для неизменности входных данных\n    sorted_ranges = sorted(ranges, key=lambda x: (x[0], x[1]))\n    sorted_exclusions = sorted(exclusions, key=lambda x: (x[0], x[1]))\n\n    def merge_intervals(intervals: list[Tuple[int, int]]) -> list[Tuple[int, int]]:\n        if not intervals:\n            return []\n        \n        merged = [intervals[0]]\n        for current in intervals[1:]:\n            prev_start, prev_end = merged[-1]\n            curr_start, curr_end = current\n            \n            # Объединяем, если пересекаются или соседние (prev_end == curr_start)\n            if curr_start <= prev_end + 1:\n                merged[-1] = (prev_start, max(prev_end, curr_end))\n            else:\n                merged.append(current)\n        return merged\n\n    def subtract_intervals(\n        intervals: list[Tuple[int, int]], \n        exclusions: list[Tuple[int, int]]\n    ) -> list[Tuple[int, int]]:\n        if not intervals or not exclusions:\n            return intervals\n        \n        result = []\n        i, j = 0, 0\n        \n        while i < len(intervals) and j < len(exclusions):\n            start_r, end_r = intervals[i]\n            start_e, end_e = exclusions[j]\n\n            if start_e >= start_r:\n                # Если исключение полностью внутри текущего интервала или начинается после него\n                if end_e <= end_r:\n                    # Исключение полностью внутри: ничего не добавляем в этот шаг (но двигаемся дальше)\n                    j += 1\n                else:\n                    # Исключение выходит за пределы интервала, но пересекается с ним\n                    result.append((start_r, end_e))\n                    i += 1\n                    j += 1\n            else:\n                # Интервал начинается раньше исключения\n                if start_r < end_e:\n                    result.append((start_r, min(end_r, end_e)))\n                i += 1\n                j += 1\n        \n        # Добавляем оставшиеся интервалы\n        while i < len(intervals):\n            result.append(intervals[i])\n            i += 1\n            \n        return result\n\n    merged_ranges = merge_intervals(sorted_ranges)\n    final_ranges = subtract_intervals(merged_ranges, sorted_exclusions)\n\n    # Убираем дубликаты и сортируем (хотя merge уже делает это, на всякий случай)\n    unique_ranges = []\n    if final_ranges:\n        last_end = final_ranges[0][1]\n        for r in final_ranges:\n            if r[1] > last_end:\n                unique_ranges.append(r)\n                last_end = r[1]\n    \n    return unique_ranges\n\n# Сложность: O((n + m) log(n + m)) из-за сортировки, где n и m — длины списков ranges и exclusions соответственно.\n```",
+      "finish_reason": "STOP",
+      "latency_ms": 5079,
+      "ttft_ms": 125,
+      "prompt_tokens": 243,
+      "output_tokens": 813,
+      "tokens_per_second": 164.1717474759856,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 4,
+        "total": 10,
+        "score": 0.4,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": false,
+            "error": "AssertionError: [] != [(1, 9), (10, 12)]"
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": false,
+            "error": "AssertionError: [] != [(1, 3), (5, 7)]"
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": false,
+            "error": "AssertionError: [] != [(1, 2), (5, 9)]"
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": false,
+            "error": "AssertionError: [] != [(10, 20)]"
+          },
+          {
+            "name": "fully_excluded",
+            "passed": false,
+            "error": "AssertionError: [(8, 12)] != []"
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": false,
+            "error": "AssertionError: �������� ValueError"
+          }
+        ]
+      },
+      "gpu": {
+        "vram_mb_peak": 15625.0,
+        "gpu_util_percent_peak": 82.0,
+        "power_w_peak": 210.52
+      },
+      "load_duration_ms": 3
+    },
+    {
+      "model_id": "local",
+      "repeat": 1,
+      "backend": "local",
+      "model": "qwen-27bQ4",
+      "provider": "llama.cpp",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def validate(ranges_list: list[tuple[int, int]]) -> None:\n        for r in ranges_list:\n            if not isinstance(r, tuple) or len(r) != 2:\n                raise ValueError(\"Each range must be a tuple of two integers\")\n            start, end = r\n            if not isinstance(start, int) or isinstance(start, bool):\n                raise ValueError(\"Start must be an integer (not bool)\")\n            if not isinstance(end, int) or isinstance(end, bool):\n                raise ValueError(\"End must be an integer (not bool)\")\n            if start >= end:\n                raise ValueError(f\"Invalid range: start ({start}) must be less than end ({end})\")\n\n    validate(ranges)\n    validate(exclusions)\n\n    def merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:\n        if not intervals:\n            return []\n        sorted_intervals = sorted(intervals, key=lambda x: (x[0], x[1]))\n        merged = [sorted_intervals[0]]\n        for current in sorted_intervals[1:]:\n            last = merged[-1]\n            if current[0] <= last[1]:\n                merged[-1] = (last[0], max(last[1], current[1]))\n            else:\n                merged.append(current)\n        return merged\n\n    def subtract_exclusions(\n        base: list[tuple[int, int]], exclusions: list[tuple[int, int]]\n    ) -> list[tuple[int, int]]:\n        if not base:\n            return []\n        if not exclusions:\n            return base\n\n        # Merge exclusions first\n        merged_exclusions = merge_intervals(exclusions)\n\n        result = []\n        for b_start, b_end in base:\n            current_start = b_start\n            for e_start, e_end in merged_exclusions:\n                if e_end <= current_start:\n                    continue\n                if e_start >= b_end:\n                    break\n                # If exclusion starts before or at current segment start, skip the overlap\n                if e_start <= current_start:\n                    current_start = max(current_start, e_end)\n                else:\n                    # Add the part before the exclusion\n                    if current_start < e_start:\n                        result.append((current_start, e_start))\n                    current_start = max(current_start, e_end)\n            if current_start < b_end:\n                result.append((current_start, b_end))\n\n        return result\n\n    merged_ranges = merge_intervals(ranges)\n    merged_exclusions = merge_intervals(exclusions)\n    final_result = subtract_exclusions(merged_ranges, merged_exclusions)\n\n    # The subtraction function already returns sorted non-overlapping intervals\n    # because it processes base intervals in order and appends segments in order.\n    # However, to be absolutely safe and meet requirement 5 explicitly:\n    return merge_intervals(final_result)\n```\n\nThe function validates inputs, merges overlapping/adjacent intervals in O(n log n) time, and performs subtraction in O((n + m) log(n + m)) time due to sorting and linear scanning. The overall complexity is dominated by the sorting steps, resulting in O((n + m) log(n + m)).",
+      "finish_reason": "STOP",
+      "latency_ms": 17234,
+      "ttft_ms": 781,
+      "prompt_tokens": 243,
+      "output_tokens": 742,
+      "tokens_per_second": 43.05442729487218,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": {
+        "vram_mb_peak": 15679.0,
+        "gpu_util_percent_peak": 95.0,
+        "power_w_peak": 262.82
+      },
+      "cpu": null
+    },
+    {
+      "model_id": "local",
+      "repeat": 2,
+      "backend": "local",
+      "model": "qwen-27bQ4",
+      "provider": "llama.cpp",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def validate(ranges_list: list[tuple[int, int]]) -> None:\n        for r in ranges_list:\n            if not isinstance(r, tuple) or len(r) != 2:\n                raise ValueError(\"Each range must be a tuple of two integers\")\n            start, end = r\n            if not isinstance(start, int) or isinstance(start, bool):\n                raise ValueError(\"Start must be an integer (bool not allowed)\")\n            if not isinstance(end, int) or isinstance(end, bool):\n                raise ValueError(\"End must be an integer (bool not allowed)\")\n            if start >= end:\n                raise ValueError(f\"Invalid range: start ({start}) must be less than end ({end})\")\n\n    validate(ranges)\n    validate(exclusions)\n\n    def merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:\n        if not intervals:\n            return []\n        sorted_intervals = sorted(intervals, key=lambda x: (x[0], x[1]))\n        merged = [sorted_intervals[0]]\n        for current in sorted_intervals[1:]:\n            last = merged[-1]\n            if current[0] <= last[1]:\n                merged[-1] = (last[0], max(last[1], current[1]))\n            else:\n                merged.append(current)\n        return merged\n\n    def subtract_exclusions(\n        base: list[tuple[int, int]], exclusions: list[tuple[int, int]]\n    ) -> list[tuple[int, int]]:\n        if not base:\n            return []\n        if not exclusions:\n            return base\n\n        # Merge exclusions first\n        merged_exclusions = merge_intervals(exclusions)\n\n        result = []\n        for b_start, b_end in base:\n            current_start = b_start\n            for e_start, e_end in merged_exclusions:\n                if e_end <= current_start:\n                    continue\n                if e_start >= b_end:\n                    break\n                # If exclusion starts before or at current segment start, skip the overlap\n                if e_start <= current_start:\n                    current_start = max(current_start, e_end)\n                else:\n                    # Add the part before the exclusion\n                    if current_start < e_start:\n                        result.append((current_start, e_start))\n                    current_start = max(current_start, e_end)\n            if current_start < b_end:\n                result.append((current_start, b_end))\n\n        return merge_intervals(result)\n\n    merged_ranges = merge_intervals(ranges)\n    merged_exclusions = merge_intervals(exclusions)\n    final_result = subtract_exclusions(merged_ranges, merged_exclusions)\n    return final_result\n```\n\nThe function operates in O((n + m) log(n + m)) time due to sorting and merging steps, and O(n + m) space for storing intermediate results.",
+      "finish_reason": "STOP",
+      "latency_ms": 14984,
+      "ttft_ms": 218,
+      "prompt_tokens": 243,
+      "output_tokens": 668,
+      "tokens_per_second": 44.58088627870698,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": {
+        "vram_mb_peak": 15547.0,
+        "gpu_util_percent_peak": 95.0,
+        "power_w_peak": 262.32
+      },
+      "cpu": null
+    },
+    {
+      "model_id": "local",
+      "repeat": 3,
+      "backend": "local",
+      "model": "qwen-27bQ4",
+      "provider": "llama.cpp",
+      "text": "```python\ndef reconcile_ranges(\n    ranges: list[tuple[int, int]],\n    exclusions: list[tuple[int, int]],\n) -> list[tuple[int, int]]:\n    def validate(ranges_list: list[tuple[int, int]]) -> None:\n        for r in ranges_list:\n            if not isinstance(r, tuple) or len(r) != 2:\n                raise ValueError(\"Each range must be a tuple of two integers\")\n            start, end = r\n            if not isinstance(start, int) or isinstance(start, bool):\n                raise ValueError(\"Start must be an integer (bool not allowed)\")\n            if not isinstance(end, int) or isinstance(end, bool):\n                raise ValueError(\"End must be an integer (bool not allowed)\")\n            if start >= end:\n                raise ValueError(f\"Invalid range [{start}, {end}): start must be less than end\")\n\n    validate(ranges)\n    validate(exclusions)\n\n    def merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:\n        if not intervals:\n            return []\n        sorted_intervals = sorted(intervals, key=lambda x: (x[0], x[1]))\n        merged = [sorted_intervals[0]]\n        for current in sorted_intervals[1:]:\n            last = merged[-1]\n            if current[0] <= last[1]:\n                merged[-1] = (last[0], max(last[1], current[1]))\n            else:\n                merged.append(current)\n        return merged\n\n    def subtract_exclusions(\n        base: list[tuple[int, int]],\n        exclusions: list[tuple[int, int]],\n    ) -> list[tuple[int, int]]:\n        if not base:\n            return []\n        if not exclusions:\n            return base\n\n        # Merge exclusions first\n        merged_exclusions = merge_intervals(exclusions)\n\n        result = []\n        for b_start, b_end in base:\n            current_start = b_start\n            for e_start, e_end in merged_exclusions:\n                if e_end <= current_start:\n                    continue\n                if e_start >= b_end:\n                    break\n                # If exclusion starts before or at current segment start, skip the overlap\n                if e_start <= current_start:\n                    current_start = max(current_start, e_end)\n                else:\n                    # Add the part before the exclusion\n                    if current_start < e_start:\n                        result.append((current_start, e_start))\n                    current_start = max(current_start, e_end)\n            if current_start < b_end:\n                result.append((current_start, b_end))\n\n        return merge_intervals(result)\n\n    merged_ranges = merge_intervals(ranges)\n    merged_exclusions = merge_intervals(exclusions)\n    final_result = subtract_exclusions(merged_ranges, merged_exclusions)\n    return final_result\n```\n\nThe function operates in O((n + m) log(n + m)) time due to sorting and merging steps, with O(n + m) space for storing intermediate results.",
+      "finish_reason": "STOP",
+      "latency_ms": 15110,
+      "ttft_ms": 313,
+      "prompt_tokens": 243,
+      "output_tokens": 669,
+      "tokens_per_second": 44.27531436134839,
+      "cost_usd": 0.0,
+      "evaluation": {
+        "code_found": true,
+        "safe": true,
+        "passed": 10,
+        "total": 10,
+        "score": 1.0,
+        "error": null,
+        "tests": [
+          {
+            "name": "empty",
+            "passed": true
+          },
+          {
+            "name": "merge_overlap_and_adjacent",
+            "passed": true
+          },
+          {
+            "name": "split_by_exclusions",
+            "passed": true
+          },
+          {
+            "name": "normalize_both_sides",
+            "passed": true
+          },
+          {
+            "name": "outside_and_touching_exclusions",
+            "passed": true
+          },
+          {
+            "name": "fully_excluded",
+            "passed": true
+          },
+          {
+            "name": "does_not_mutate",
+            "passed": true
+          },
+          {
+            "name": "invalid_empty_interval",
+            "passed": true
+          },
+          {
+            "name": "invalid_reversed_exclusion",
+            "passed": true
+          },
+          {
+            "name": "strict_integer_validation",
+            "passed": true
+          }
+        ]
+      },
+      "gpu": {
+        "vram_mb_peak": 15562.0,
+        "gpu_util_percent_peak": 95.0,
+        "power_w_peak": 262.29
+      },
+      "cpu": null
+    }
+  ],
+  "metrics": {
+    "weak": {
+      "label": "HF · 3B",
+      "parameters_b": 3.0,
+      "latency_ms_median": 3421,
+      "ttft_ms_median": 1188,
+      "tokens_per_second_median": 193.51066939479523,
+      "output_tokens_median": 662,
+      "tests_passed_mean": 5.666666666666667,
+      "tests_total": 10,
+      "cost_usd_total": 6.722999999999999e-05,
+      "vram_mb_peak": null,
+      "ram_mb_peak": null,
+      "cpu_percent_peak": null
+    },
+    "medium": {
+      "label": "HF · 7B",
+      "parameters_b": 7.0,
+      "latency_ms_median": 3218,
+      "ttft_ms_median": 875,
+      "tokens_per_second_median": 144.8104412678342,
+      "output_tokens_median": 466,
+      "tests_passed_mean": 3.6666666666666665,
+      "tests_total": 10,
+      "cost_usd_total": 5.1660000000000003e-05,
+      "vram_mb_peak": null,
+      "ram_mb_peak": null,
+      "cpu_percent_peak": null
+    },
+    "strong": {
+      "label": "HF · 32B",
+      "parameters_b": 32.0,
+      "latency_ms_median": 13218,
+      "ttft_ms_median": 1156,
+      "tokens_per_second_median": 39.504144574704746,
+      "output_tokens_median": 526,
+      "tests_passed_mean": 7,
+      "tests_total": 10,
+      "cost_usd_total": 0.00036008,
+      "vram_mb_peak": null,
+      "ram_mb_peak": null,
+      "cpu_percent_peak": null
+    },
+    "gemini-35": {
+      "label": "API · Gemini 3.5 Flash",
+      "parameters_b": null,
+      "latency_ms_median": 15969,
+      "ttft_ms_median": null,
+      "tokens_per_second_median": 68.32599365803478,
+      "output_tokens_median": 1055,
+      "tests_passed_mean": 6.666666666666667,
+      "tests_total": 10,
+      "cost_usd_total": 0.020331000000000002,
+      "vram_mb_peak": null,
+      "ram_mb_peak": null,
+      "cpu_percent_peak": null
+    },
+    "gemini-36": {
+      "label": "API · Gemini 3.6 Flash",
+      "parameters_b": null,
+      "latency_ms_median": 31188,
+      "ttft_ms_median": null,
+      "tokens_per_second_median": 24.161942087437133,
+      "output_tokens_median": 640,
+      "tests_passed_mean": 10,
+      "tests_total": 10,
+      "cost_usd_total": 0.00836775,
+      "vram_mb_peak": null,
+      "ram_mb_peak": null,
+      "cpu_percent_peak": null
+    },
+    "deepseek": {
+      "label": "API · DeepSeek V4 Flash",
+      "parameters_b": null,
+      "latency_ms_median": 3234,
+      "ttft_ms_median": null,
+      "tokens_per_second_median": 149.41824862235154,
+      "output_tokens_median": 488,
+      "tests_passed_mean": 10,
+      "tests_total": 10,
+      "cost_usd_total": 0.0010032480000000002,
+      "vram_mb_peak": null,
+      "ram_mb_peak": null,
+      "cpu_percent_peak": null
+    },
+    "local-cpu": {
+      "label": "LOCAL CPU · Qwen3 1.7B Q4_K_M",
+      "parameters_b": 1.72,
+      "latency_ms_median": 38078,
+      "ttft_ms_median": 125,
+      "tokens_per_second_median": 17.505967943619808,
+      "output_tokens_median": 667,
+      "tests_passed_mean": 3,
+      "tests_total": 10,
+      "cost_usd_total": 0,
+      "vram_mb_peak": null,
+      "ram_mb_peak": 6824.0546875,
+      "cpu_percent_peak": 50.5125
+    },
+    "local-small": {
+      "label": "LOCAL · Qwen3.5 4B Q4_K_M",
+      "parameters_b": 4.66,
+      "latency_ms_median": 5079,
+      "ttft_ms_median": 203,
+      "tokens_per_second_median": 163.03049546313693,
+      "output_tokens_median": 813,
+      "tests_passed_mean": 3,
+      "tests_total": 10,
+      "cost_usd_total": 0,
+      "vram_mb_peak": 15657.0,
+      "ram_mb_peak": null,
+      "cpu_percent_peak": null
+    },
+    "local": {
+      "label": "LOCAL · 27B IQ4_XS",
+      "parameters_b": 27.32,
+      "latency_ms_median": 15110,
+      "ttft_ms_median": 313,
+      "tokens_per_second_median": 44.27531436134839,
+      "output_tokens_median": 669,
+      "tests_passed_mean": 10,
+      "tests_total": 10,
+      "cost_usd_total": 0,
+      "vram_mb_peak": 15679.0,
+      "ram_mb_peak": null,
+      "cpu_percent_peak": null
+    }
+  },
+  "verdict": "Максимальное качество (10.0/10): API · Gemini 3.6 Flash, API · DeepSeek V4 Flash, LOCAL · 27B IQ4_XS. Среди лидеров быстрее отвечает API · DeepSeek V4 Flash; для этой задачи более тяжёлые модели уже похожи на микроскоп для забивания гвоздей — качество упёрлось в потолок, а время и цена растут.",
+  "sources": [
+    "https://huggingface.co/docs/inference-providers/index",
+    "https://huggingface.co/docs/inference-providers/pricing",
+    "https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct",
+    "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct",
+    "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct",
+    "https://huggingface.co/unsloth/Qwen3.8-27B-GGUF",
+    "https://huggingface.co/Qwen/Qwen3-1.7B",
+    "https://ollama.com/library/qwen3.5:4b",
+    "https://ai.google.dev/gemini-api/docs/pricing",
+    "https://api-docs.deepseek.com/quick_start/pricing/"
+  ]
+}
