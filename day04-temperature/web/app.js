@@ -106,6 +106,7 @@ function handleEvent(event) {
         addRunItem(data.temperature, data.repeat, 'running');
     } else if (type === 'sample_finished') {
         updateRunItem(data);
+        bumpProgress(data.temperature);
     } else if (type === 'ExperimentFinished') {
         eventSource.close();
         runData = data.document;
@@ -164,15 +165,32 @@ function updateRunItem(data) {
         <span style="color: ${isDegraded ? 'var(--danger)' : 'var(--success)'}">${data.finish_reason}</span>`;
 }
 
+function bumpProgress(temp) {
+    const t = Number(temp).toFixed(1);
+    const container = document.getElementById(`runs-${t}`);
+    const total = container.children.length || 3;
+    const done = container.querySelectorAll('.run-item.done, .run-item.degraded').length;
+    document.getElementById(`bar-${t}`).style.width = `${(done / total) * 100}%`;
+    document.getElementById(`sim-${t}`).textContent = `${done}/${total} готово`;
+}
+
 function renderFullResults(doc) {
     document.getElementById('rawOutput').textContent = JSON.stringify(doc, null, 2);
+    const promptEl = document.getElementById('analogyPrompt');
+    if (promptEl && doc.locked?.prompt) {
+        promptEl.textContent = doc.locked.prompt;
+    }
 
     const grid = document.getElementById('analogiesGrid');
     grid.innerHTML = '';
     doc.samples.forEach(s => {
         const card = document.createElement('div');
         card.className = 'analogy-card';
-        card.innerHTML = `<h4>T=${s.temperature} · Прогон ${s.repeat}</h4><p>${s.tail}</p>`;
+        const title = document.createElement('h4');
+        title.textContent = `T=${s.temperature} · Прогон ${s.repeat}`;
+        const body = document.createElement('p');
+        body.textContent = extractAnalogy(s.text || s.tail || '');
+        card.append(title, body);
         grid.appendChild(card);
     });
 
@@ -197,6 +215,46 @@ function renderFullResults(doc) {
         document.getElementById(`sim-${t}`).textContent = sim.toFixed(2);
         document.getElementById(`bar-${t}`).style.width = `${sim * 100}%`;
     });
+}
+
+function extractAnalogy(text) {
+    const normalized = text.replace(/\r/g, '').trim();
+    const headingMatch = normalized.match(/(?:^|\n)#{1,3}\s*.*аналог[^\n]*\n+([\s\S]*)$/i);
+    if (headingMatch) return compactAnalogy(headingMatch[1]);
+
+    const markerMatch = normalized.match(/(?:Бытов[а-яё\s]*аналог[а-яё]*|Аналогия)[:\s\n-]+([\s\S]*)$/i);
+    if (markerMatch) return compactAnalogy(markerMatch[1]);
+
+    const paragraphs = normalized.split(/\n{2,}/).map(cleanText).filter(Boolean);
+    const analogyParagraph = [...paragraphs].reverse().find(p => /как|представь|это когда/i.test(p));
+    return compactAnalogy(analogyParagraph || paragraphs.at(-1) || normalized);
+}
+
+function compactAnalogy(text) {
+    const cleaned = cleanText(text);
+    const merge = firstSentence(cleaned.match(/merge\s*[—-]\s*это как\s*([^.!?]+[.!?]?)/i)?.[0]);
+    const rebase = firstSentence(cleaned.match(/rebase\s*[—-]\s*это как\s*([^.!?]+[.!?]?)/i)?.[0]);
+    if (merge && rebase) return `${merge}\n${rebase}`;
+    if (rebase) return rebase;
+
+    const sentences = cleaned.split(/(?<=[.!?])\s+/).filter(Boolean);
+    const picked = sentences.filter(s => /merge|rebase|как|представь/i.test(s)).slice(0, 2);
+    return (picked.length ? picked : sentences.slice(0, 2)).join(' ');
+}
+
+function firstSentence(text) {
+    if (!text) return '';
+    return text.split(/(?<=[.!?])\s+/)[0].trim();
+}
+
+function cleanText(text) {
+    return text
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/^[-*]\s+/gm, '')
+        .replace(/\*\*/g, '')
+        .replace(/`/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
 }
 
 async function loadReplay(fileId) {

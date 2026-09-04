@@ -65,25 +65,35 @@
     </section>
 
     <section id="tab-analogies" class="tab-content">
+        <div class="prompt-panel">
+            <div class="panel-title">Один вопрос для всех 9 вызовов</div>
+            <p id="analogyPrompt">Объясни начинающему разработчику, что такое Git rebase и чем он отличается от merge. Укажи историю коммитов, один риск, когда использовать, и добавь бытовую аналогию.</p>
+        </div>
         <div class="analogies-grid" id="analogiesGrid"></div>
     </section>
 
     <section id="tab-metrics" class="tab-content">
+        <div class="metrics-explainer">
+            <div><strong>Сходство ответов</strong><span>ниже = температура дала больше разнообразия</span></div>
+            <div><strong>Уникальные слова</strong><span>выше = богаче словарь ответа</span></div>
+            <div><strong>Факты из задания</strong><span>0-5: rebase, история, merge, риск, когда применять</span></div>
+            <div><strong>Проблемы</strong><span>обрывы, повторы, язык, max tokens</span></div>
+        </div>
         <table class="metrics-table">
             <thead>
             <tr>
-                <th>Temp</th>
-                <th>Self Similarity</th>
-                <th>TTR</th>
-                <th>Len CV</th>
-                <th>Checklist (из 5)</th>
-                <th>Degradations</th>
-                <th>Latency (мс)</th>
+                <th>Температура</th>
+                <th>Сходство<br><small>между 3 ответами</small></th>
+                <th>Уникальные слова<br><small>TTR</small></th>
+                <th>Разброс длины<br><small>Len CV</small></th>
+                <th>Факты<br><small>из 5</small></th>
+                <th>Проблемы</th>
+                <th>Время<br><small>мс</small></th>
             </tr>
             </thead>
             <tbody id="metricsBody"></tbody>
         </table>
-        <p class="note">* Проверка присутствия концепта, а не проверка истинности. Latency информационная.</p>
+        <p class="note">Метрики показывают эффект temperature на форму ответа. Это проверка присутствия нужных концептов, а не истинности каждого утверждения.</p>
     </section>
 
     <section id="tab-raw" class="tab-content">

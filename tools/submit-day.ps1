@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)][int]$Day,
     [Parameter(Mandatory=$true)][string]$Video
 )
@@ -23,7 +23,9 @@ if ($LASTEXITCODE -ne 0) { throw "Обнаружены секреты" }
 
 $title = "Day $Day"
 if (Test-Path "$($dayFolder.FullName)\challenge.json") {
-    $title = (Get-Content "$($dayFolder.FullName)\challenge.json" | ConvertFrom-Json).title
+    # -Raw -Encoding UTF8: без явной кодировки PowerShell 5.1 читает как ANSI,
+    # и кириллический title в commit message превращается в кракозябры.
+    $title = (Get-Content -Raw -Encoding UTF8 "$($dayFolder.FullName)\challenge.json" | ConvertFrom-Json).title
 }
 
 Push-Location $root

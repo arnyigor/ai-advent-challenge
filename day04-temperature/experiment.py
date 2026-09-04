@@ -121,10 +121,11 @@ def run_matrix(client: Client, repeats: int, concurrency: int, on_event=None) ->
 
     samples = []
     with ThreadPoolExecutor(max_workers=concurrency) as pool:
-        futures = {
-            pool.submit(_run_one, client, temperature, repeat): (temperature, repeat)
-            for temperature, repeat in jobs
-        }
+        futures = {}
+        for temperature, repeat in jobs:
+            if on_event:
+                on_event("sample_started", {"temperature": temperature, "repeat": repeat})
+            futures[pool.submit(_run_one, client, temperature, repeat)] = (temperature, repeat)
         for future in futures:
             sample = future.result()
             samples.append(sample)

@@ -54,12 +54,12 @@ def _run_experiment(run_id, payload):
             # gemini-цепочка — только fallback, если ключа DeepSeek нет.
             model_chain = [f"deepseek:{DEEPSEEK_DEFAULT_MODEL}"] + list(MODEL_CHAIN)
 
-        for m in model_chain:
-            if has_key_for(m):
-                model_chain = [m]
-                break
-        else:
+        # Фильтруем только недоступные (без ключа) модели, но НЕ режем цепочку:
+        # runner выполняет fallback при отказе провайдера во время эксперимента.
+        available = [m for m in model_chain if has_key_for(m)]
+        if not available:
             raise RuntimeError(missing_key_message(model_chain[0]))
+        model_chain = available
 
         repeats = int(payload.get("repeats", 3))
         concurrency = int(payload.get("concurrency", 3))

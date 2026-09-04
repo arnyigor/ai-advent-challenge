@@ -83,7 +83,7 @@ def parse_args():
     parser.add_argument(
         "--model",
         default=None,
-        help="зафиксировать одну модель, напр. deepseek:deepseek-v4-flash (по умолчанию цепочка Gemini)",
+        help="зафиксировать одну модель, напр. deepseek:deepseek-v4-flash (по умолчанию deepseek-дефолт + gemini-цепочка fallback)",
     )
     parser.add_argument("--out", default=None, help="путь для сохранения JSON (только с --mode json)")
     return parser.parse_args()
@@ -94,7 +94,7 @@ def main():
     if args.model:
         model_chain = [args.model]
     else:
-        model_chain = GEMINI_MODEL_CHAIN + [f"deepseek:{DEEPSEEK_DEFAULT_MODEL}"]
+        model_chain = [f"deepseek:{DEEPSEEK_DEFAULT_MODEL}"] + list(GEMINI_MODEL_CHAIN)
 
     if args.mode == "json":
         run_json_mode(model_chain, args.repeats, args.concurrency, args.out)

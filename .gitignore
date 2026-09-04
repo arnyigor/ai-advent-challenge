@@ -18,3 +18,8 @@ day03-reasoning-modes/video-frames/
 
 day04-temperature/*.log
 day04-temperature/video-frames/
+day04-temperature/verify-video-frames/
+
+video-frames/
+verify-video-frames/
+day04-temperature/results/run-*.json

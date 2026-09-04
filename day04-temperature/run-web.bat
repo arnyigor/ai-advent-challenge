@@ -1,32 +1,50 @@
 @echo off
 chcp 65001 >nul
-rem ============================================================
-rem Day 04 — Температура: запуск веб-интерфейса
-rem Порт: 8766 (отдельный от Day 3 — 8765 и Day 1 — 3000)
-rem ============================================================
 setlocal
 cd /d "%~dp0"
 
 set PORT=8766
+set URL=http://127.0.0.1:%PORT%/
+
 echo ============================================
-echo Day 4 Temperature — Web UI
+echo Day 04 Temperature - Web UI manual check
 echo ============================================
 echo.
-rem Проверка, что порт свободен
-netstat -ano | findstr "LISTENING" | findstr ":%PORT% " >nul
-if not errorlevel 1 (
-    echo [X] Port %PORT% already in use.
-    echo Just open http://127.0.0.1:%PORT% - or stop the old server.
+echo URL: %URL%
+echo.
+echo Manual check:
+echo   1. Click Start, or choose a Replay from the dropdown.
+echo   2. On Live, each temperature column should fill progressively.
+echo   3. Progress text should move from dash to N/3 done during the run.
+echo   4. Open Analogies and Metrics; both tabs should render readable content.
+echo   5. Press Ctrl+C in this window to stop the server.
+echo.
+
+where python >nul 2>&1
+if errorlevel 1 (
+    echo [FAIL] python was not found in PATH.
+    echo.
     pause
     exit /b 1
 )
+
+netstat -ano | findstr "LISTENING" | findstr ":%PORT% " >nul
+if not errorlevel 1 (
+    echo [WARN] Port %PORT% is already in use.
+    echo Opening the existing server.
+    start "" "%URL%"
+    echo.
+    pause
+    exit /b 0
+)
+
 echo [OK] Starting web server on port %PORT%...
-echo [OK] Open http://127.0.0.1:%PORT% in browser
+echo [OK] Browser will open in a moment.
 echo [OK] Press Ctrl+C to stop
 echo.
-rem Открываем браузер с задержкой, чтобы сервер успел стартовать
-start /b cmd /c "timeout /t 2 /nobreak >nul && start http://127.0.0.1:%PORT%"
+start /b cmd /c "timeout /t 2 /nobreak >nul && start %URL%"
 python web_server.py --host 127.0.0.1 --port %PORT%
+
 echo.
 echo [OK] Server stopped.
 endlocal

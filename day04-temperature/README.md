@@ -2,7 +2,7 @@
 
 ## Что делает
 
-<!-- TODO: 1-2 предложения о задаче дня -->
+Один зафиксированный промпт (Git rebase vs merge) прогоняется при температурах 0.0, 0.7 и 1.2 по 3 повтора каждое — между вызовами меняется только temperature. По сэмплам считаются метрики: self_similarity (повторяемость внутри одной температуры), TTR (тип-токен ratio), средний балл чеклиста фактов и деградации (обрывы, срыв языка, повторы).
 
 ## Стек
 
@@ -17,7 +17,8 @@ pip install -r requirements.txt
 
 ## Настройка ключа
 
-Ключ должен быть в переменной окружения `GEMINI_API_KEY` (не хранится в коде).
+- `DEEPSEEK_API_KEY` — основной провайдер (не хранится в коде).
+- `GEMINI_API_KEY` — fallback-цепочка, если DeepSeek недоступен.
 
 ## Запуск
 
@@ -28,13 +29,19 @@ python day04_temperature.py --mode json
 
 ## Демо
 
-Видео: <!-- TODO: вставить ссылку после submit-day.ps1 -->
+Видео: ChallengeVideos/day04-demo.mp4 (ссылка на Яндекс.Диск формируется submit-day.ps1)
 
 ## Структура
 
 ```
 day04-temperature/
-├── day04_temperature.py         # основной скрипт
-├── requirements.txt   # зависимости
+├── day04_temperature.py         # основной CLI-скрипт (text/json)
+├── experiment.py                # промпт, preflight, матрица сэмплов, fallback по цепочке
+├── metrics.py                   # self_similarity, TTR, чеклист фактов, деградации
+├── web_server.py                # локальный web-копилот (SSE-стрим событий)
+├── run-web.bat                  # запуск web-сервера
+├── record-video.mjs             # запись демо-видео
+├── web/                         # фронтенд (index.html, app.js, styles.css)
+├── requirements.txt             # зависимости
 └── README.md
 ```
