@@ -1,0 +1,5 @@
+{
+  "title": "Первый агент",
+  "entrypoint": "day06_agent.py",
+  "day": 6
+}

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Day 06 — Первый агент</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <span class="eyebrow">AI ADVENT · DAY 06</span>
+        <h1>Первый агент</h1>
+        <p>Контекстный чат с отдельным агентным слоем и LLM API</p>
+      </div>
+      <div class="agent-badge">
+        <span class="pulse"></span><span id="agentState">ChatAgent · READY</span>
+      </div>
+    </header>
+
+    <section class="route" aria-label="Архитектура запроса">
+      <span>Интерфейс</span><b>→</b><span class="active">ChatAgent</span><b>→</b>
+      <span id="routeProvider">Gemini API</span>
+    </section>
+
+    <section class="providers" id="providers" aria-label="LLM-провайдеры">
+      <span class="provider loading">Проверяем провайдеры…</span>
+    </section>
+
+    <section class="agent-config" aria-labelledby="configTitle">
+      <div class="config-heading">
+        <h2 id="configTitle">Agent Box config</h2>
+        <span class="session-usage" id="sessionUsage">Сессия: 0 токенов</span>
+      </div>
+      <div class="config-chips" id="configChips">
+        <span class="config-chip loading">Загружаем настройки…</span>
+      </div>
+    </section>
+
+    <section class="chat" id="chat" aria-live="polite">
+      <article class="message assistant welcome">
+        <div class="avatar">A</div>
+        <div class="bubble">
+          <strong>Агент готов.</strong>
+          <p>Задайте вопрос — я передам его в LLM, сохраню контекст и верну ответ.</p>
+          <div class="meta">Отдельная сущность ChatAgent · DeepSeek → Gemini → Wormsoft → RouterAI</div>
+        </div>
+      </article>
+    </section>
+
+    <form id="form" class="composer">
+      <label for="prompt">Сообщение агенту</label>
+      <div class="picker-row">
+        <label>Провайдер
+          <select id="providerSelect">
+            <option value="">Авто (fallback-цепочка)</option>
+          </select>
+        </label>
+        <label>Reasoning
+          <select id="thinkingSelect"></select>
+        </label>
+      </div>
+      <div class="input-row">
+        <textarea id="prompt" maxlength="8000" rows="2" placeholder="Например: объясни, чем агент отличается от одного API-вызова" required></textarea>
+        <button id="sendButton" type="submit" aria-label="Отправить">Отправить <span>↗</span></button>
+        <button id="stopButton" class="secondary" type="button" disabled>Стоп</button>
+      </div>
+      <div class="under-input">
+        <span>Enter — отправить · Shift+Enter — новая строка</span>
+        <button id="resetButton" type="button">Очистить контекст</button>
+      </div>
+    </form>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
