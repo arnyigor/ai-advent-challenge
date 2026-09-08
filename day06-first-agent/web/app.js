@@ -155,7 +155,7 @@ function currentSettings() {
 
 async function submitMessage(message) {
   lastMessage = message;
-  appendUserMessage(message);
+  const userTurn = appendUserMessage(message);
   setBusy(true);
   const pending = appendPending();
   activeController = new AbortController();
@@ -170,7 +170,7 @@ async function submitMessage(message) {
     pending.remove();
     if (!response.ok) {
       if (data.cancelled) {
-        appendErrorMessage('Запрос отменён');
+        appendErrorMessage('Запрос отменён', userTurn);
         return;
       }
       throw new Error(data.error || `HTTP ${response.status}`);
@@ -182,10 +182,10 @@ async function submitMessage(message) {
   } catch (error) {
     pending.remove();
     if (error.name === 'AbortError') {
-      appendErrorMessage('Запрос отменён');
+      appendErrorMessage('Запрос отменён', userTurn);
       return;
     }
-    appendErrorMessage(error.message || 'Не удалось получить ответ');
+    appendErrorMessage(error.message || 'Не удалось получить ответ', userTurn);
   } finally {
     activeController = null;
     setBusy(false);
@@ -249,7 +249,7 @@ function botAvatar() {
   return av;
 }
 
-function appendErrorMessage(text) {
+function appendErrorMessage(text, userTurn) {
   hideEmptyState();
   const turn = createElement('div', 'turn');
   turn.append(botAvatar());
@@ -261,6 +261,12 @@ function appendErrorMessage(text) {
     retry.className = 'retry-button';
     retry.textContent = 'Повторить';
     retry.addEventListener('click', () => {
+      // The failed/cancelled attempt already added a user bubble — drop it
+      // so the retry's fresh submitMessage() doesn't leave a duplicate.
+      if (userTurn) {
+        userTurn.remove();
+        decrementMessageCount();
+      }
       turn.remove();
       submitMessage(lastMessage);
     });
@@ -356,6 +362,10 @@ function updateSessionStats(usage) {
 
 function incrementMessageCount() {
   sessMessages.textContent = String(Number(sessMessages.textContent) + 1);
+}
+
+function decrementMessageCount() {
+  sessMessages.textContent = String(Math.max(0, Number(sessMessages.textContent) - 1));
 }
 
 function scrollToBottom() {
