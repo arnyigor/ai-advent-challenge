@@ -118,23 +118,28 @@ async function main() {
     `(() => { document.querySelector('.panel').scrollTo({top:0,behavior:'smooth'}); })()`,
     6000,
   );
+  await scene(
+    'Системный промпт задаёт агенту необычную личность (с именем!) — это видно и редактируется прямо здесь, а не спрятано в коде',
+    `(() => { document.getElementById('systemPrompt').scrollIntoView({block:'center'}); })()`,
+    8000,
+  );
 
-  await evaluate(sendMessageScript('Объясни коротко, чем агент отличается от одного вызова API'));
-  await scene('Интерфейс отправляет только текст и настройки. ChatAgent сам собирает сообщение и вызывает провайдера', null, 3000);
-  await requireAnswer(1, 'Первый ответ');
-  await scene('Ответ отрендерен из markdown: жирный текст, списки и код — не сырые ** и ```, а HTML', null, 9000);
+  await evaluate(sendMessageScript('Представься — кто ты и чем занимаешься? Ответь одним-двумя предложениями.'));
+  await scene('Первый вопрос проверяет системный промпт: назовёт ли агент своё имя и легенду', null, 3000);
+  await requireAnswer(1, 'Ответ с представлением');
+  await scene('Агент отвечает своим именем и легендой — это из системного промпта, а не захардкожено в UI', null, 7000);
 
-  await evaluate(sendMessageScript('А ты помнишь, о чём я только что спросил?'));
-  await scene('Второй вопрос отправлен — проверяем, хранит ли агент контекст сессии', null, 2500);
-  await requireAnswer(2, 'Второй ответ');
-  await scene('Второй ответ ссылается на первый — агент сам хранит контекст сессии', null, 9000);
+  await evaluate(sendMessageScript('Напомни, как тебя зовут, и о чём я спросил тебя первым вопросом?'));
+  await scene('Второй вопрос требует сразу и системный промпт (имя), и историю сессии (первый вопрос)', null, 2500);
+  await requireAnswer(2, 'Ответ с именем и историей');
+  await scene('Один ответ учитывает и системный промпт, и историю диалога одновременно — обе части агент хранит сам', null, 9000);
 
   await evaluate(`(() => { providerSelect.value = 'gemini'; thinkingSelect.value = 'high'; })()`);
   await evaluate(sendMessageScript('Сколько будет 17*23? Подумай пошагово.'));
   await scene('Включили Gemini с high reasoning — считаем пример с рассуждением', null, 2500);
   await requireAnswer(3, 'Ответ с рассуждением');
   await evaluate(`document.querySelector('.turn:not(.me) .reasoning summary')?.click()`);
-  await scene('Новое: агент показывает настоящий текст рассуждений модели под спойлером, а не только число токенов', null, 7000);
+  await scene('Ответ отрендерен из markdown (списки, жирный текст), а под спойлером — настоящий текст рассуждений модели, не только число токенов', null, 9000);
 
   await scene(
     'Вся история диалога видна в чате: все вопросы и ответы с provider/model/токенами',
