@@ -134,6 +134,36 @@ def test_openai_provider_accepts_input_output_usage_names(monkeypatch):
     assert reply.usage == TokenUsage(5, 3, 8, True)
 
 
+def test_openai_provider_extracts_reasoning_content_and_selected_model(monkeypatch):
+    captured = {}
+
+    def fake_post(url, **kwargs):
+        captured.update(kwargs)
+        return _response(
+            {
+                "choices": [
+                    {
+                        "message": {
+                            "content": "ответ",
+                            "reasoning_content": "думаю над ответом",
+                        }
+                    }
+                ]
+            }
+        )
+
+    provider = _openai_provider(monkeypatch, fake_post)
+
+    reply = provider.generate(
+        [Message("user", "вопрос")],
+        AgentConfig(model="test-model"),
+        threading.Event(),
+    )
+
+    assert reply.reasoning == "думаю над ответом"
+    assert captured["json"]["model"] == "test-model"
+
+
 @pytest.mark.parametrize(
     "raw_usage",
     [
@@ -226,7 +256,9 @@ def test_gemini_provider_sends_agent_config_and_maps_usage(monkeypatch):
     assert captured["call"]["generation_config"] == {
         "temperature": 0.4,
         "maxOutputTokens": 456,
-        "thinkingConfig": {"thinkingLevel": "high"},
+        "topP": AgentConfig().top_p,
+        "topK": AgentConfig().top_k,
+        "thinkingConfig": {"thinkingLevel": "high", "includeThoughts": True},
     }
     assert captured["call"]["system_instruction"] == "Gemini system"
     assert "Пользователь: Первый" in captured["call"]["prompt"]
@@ -235,6 +267,74 @@ def test_gemini_provider_sends_agent_config_and_maps_usage(monkeypatch):
     assert reply.text == "готово"
     assert reply.model == captured["runner"]["model_chain"][0]
     assert reply.usage == TokenUsage(13, 4, 17, True, 2)
+    assert reply.reasoning == ""
+
+
+def test_gemini_provider_separates_thought_parts_from_answer_text(monkeypatch):
+    data = {
+        "candidates": [
+            {
+                "content": {
+                    "parts": [
+                        {"text": "рассуждаю вслух", "thought": True},
+                        {"text": "финальный ответ"},
+                    ]
+                },
+                "finishReason": "STOP",
+            }
+        ]
+    }
+
+    class FakeClient:
+        def __init__(self, _model, quiet, cancel_event):
+            pass
+
+        def call(self, *_args, **_kwargs):
+            return data
+
+    def fake_run(model_chain, call, *, fallback_exc):
+        model = model_chain[0]
+        return call(model), model, []
+
+    monkeypatch.setattr("providers.Client", FakeClient)
+    monkeypatch.setattr("providers.run_with_model_fallback", fake_run)
+
+    reply = GeminiProvider().generate(
+        [Message("user", "вопрос")], AgentConfig(), threading.Event()
+    )
+
+    assert reply.text == "финальный ответ"
+    assert reply.reasoning == "рассуждаю вслух"
+
+
+def test_gemini_provider_uses_selected_model_first_in_fallback_chain(monkeypatch):
+    data = {"candidates": [{"content": {"parts": [{"text": "ok"}]}}]}
+
+    class FakeClient:
+        def __init__(self, _model, quiet, cancel_event):
+            pass
+
+        def call(self, *_args, **_kwargs):
+            return data
+
+    captured = {}
+
+    def fake_run(model_chain, call, *, fallback_exc):
+        captured["model_chain"] = tuple(model_chain)
+        model = model_chain[0]
+        return call(model), model, []
+
+    monkeypatch.setattr("providers.Client", FakeClient)
+    monkeypatch.setattr("providers.run_with_model_fallback", fake_run)
+    chosen = GeminiProvider().model_options()[-1]
+
+    GeminiProvider().generate(
+        [Message("user", "вопрос")],
+        AgentConfig(model=chosen),
+        threading.Event(),
+    )
+
+    assert captured["model_chain"][0] == chosen
 
 
 def test_deepseek_provider_sends_agent_config_and_maps_usage(monkeypatch):

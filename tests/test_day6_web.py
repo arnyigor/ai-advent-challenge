@@ -97,9 +97,13 @@ def test_config_returns_only_safe_public_shape(web_api):
     assert set(payload) == {"agent", "providers", "config"}
     assert payload["agent"] == "ChatAgent"
     assert set(payload["config"]) == {
+        "system_prompt",
         "temperature",
+        "top_p",
+        "top_k",
         "max_output_tokens",
         "max_history_messages",
+        "context_chars",
         "max_input_chars",
         "max_output_chars",
         "thinking_level",
@@ -107,11 +111,10 @@ def test_config_returns_only_safe_public_shape(web_api):
         "input_policy",
         "output_policy",
         "judge_enabled",
-        "system_prompt_configured",
     }
     assert payload["config"]["judge_enabled"] is False
     assert all(
-        set(provider) == {"id", "label", "model", "available"}
+        set(provider) == {"id", "label", "model", "available", "models"}
         for provider in payload["providers"]
     )
 

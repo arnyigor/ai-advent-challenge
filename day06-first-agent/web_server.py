@@ -36,12 +36,18 @@ def create_agent() -> ChatAgent:
 
 
 def public_agent_config() -> dict:
-    """Возвращает только безопасные настройки Agent Box для интерфейса."""
+    """Возвращает настройки Agent Box для интерфейса. system_prompt — это
+    жёстко заданный DEFAULT_SYSTEM_PROMPT (не секрет), безопасно показать
+    как отправную точку для редактирования в панели."""
     config = AgentConfig()
     return {
+        "system_prompt": config.system_prompt,
         "temperature": config.temperature,
+        "top_p": config.top_p,
+        "top_k": config.top_k,
         "max_output_tokens": config.max_output_tokens,
         "max_history_messages": config.max_history_messages,
+        "context_chars": config.context_chars,
         "max_input_chars": config.max_input_chars,
         "max_output_chars": config.max_output_chars,
         "thinking_level": config.thinking_level,
@@ -49,7 +55,6 @@ def public_agent_config() -> dict:
         "input_policy": DefaultInputPolicy.__name__,
         "output_policy": DefaultOutputPolicy.__name__,
         "judge_enabled": False,
-        "system_prompt_configured": bool(config.system_prompt),
     }
 
 
@@ -117,10 +122,25 @@ class Handler(SimpleHTTPRequestHandler):
             if parsed.path == "/api/cancel":
                 self._json({"ok": store.cancel(session_id)})
                 return
+            overrides = {
+                key: payload.get(key)
+                for key in (
+                    "thinking_level",
+                    "temperature",
+                    "top_p",
+                    "top_k",
+                    "max_output_tokens",
+                    "max_history_messages",
+                    "context_chars",
+                    "system_prompt",
+                    "model",
+                )
+                if payload.get(key) not in (None, "")
+            }
             reply = store.get(session_id).ask(
                 payload.get("message"),
                 provider_id=payload.get("provider") or None,
-                thinking_level=payload.get("thinking_level") or None,
+                **overrides,
             )
             self._json({"reply": reply.to_dict()})
         except (TypeError, ValueError) as exc:
