@@ -1,16 +1,40 @@
-const chat = document.getElementById('chat');
+const msgsBox = document.getElementById('msgs');
+const msgsInner = document.getElementById('msgsInner');
+const emptyState = document.getElementById('emptyState');
 const form = document.getElementById('form');
 const promptInput = document.getElementById('prompt');
 const sendButton = document.getElementById('sendButton');
 const stopButton = document.getElementById('stopButton');
-const resetButton = document.getElementById('resetButton');
-const agentState = document.getElementById('agentState');
-const sessionUsage = document.getElementById('sessionUsage');
+const clearContextBtn = document.getElementById('clearContextBtn');
+const activeProviderLabel = document.getElementById('activeProvider');
+const savedIndicator = document.getElementById('savedIndicator');
+
 const providerSelect = document.getElementById('providerSelect');
+const modelSelect = document.getElementById('modelSelect');
+const modelNote = document.getElementById('modelNote');
+const temperatureInput = document.getElementById('temperature');
+const temperatureValue = document.getElementById('temperatureValue');
+const topPInput = document.getElementById('topP');
+const topPValue = document.getElementById('topPValue');
+const topKInput = document.getElementById('topK');
+const topKValue = document.getElementById('topKValue');
 const thinkingSelect = document.getElementById('thinkingSelect');
+const contextCharsInput = document.getElementById('contextChars');
+const maxHistoryInput = document.getElementById('maxHistory');
+const maxOutputTokensInput = document.getElementById('maxOutputTokens');
+const systemPromptInput = document.getElementById('systemPrompt');
+const resetSystemPromptBtn = document.getElementById('resetSystemPromptBtn');
+
+const sessMessages = document.getElementById('sessMessages');
+const sessInput = document.getElementById('sessInput');
+const sessOutput = document.getElementById('sessOutput');
+
 const sessionId = crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
 let activeController = null;
 let lastMessage = null;
+let providersById = {};
+let defaultSystemPrompt = '';
+let savedTimer = null;
 
 document.addEventListener('DOMContentLoaded', loadConfig);
 form.addEventListener('submit', (event) => {
@@ -21,100 +45,125 @@ form.addEventListener('submit', (event) => {
   submitMessage(message);
 });
 stopButton.addEventListener('click', cancelActiveRequest);
-resetButton.addEventListener('click', resetConversation);
+clearContextBtn.addEventListener('click', resetConversation);
+resetSystemPromptBtn.addEventListener('click', () => {
+  systemPromptInput.value = defaultSystemPrompt;
+  flashSaved();
+});
 promptInput.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
     form.requestSubmit();
   }
 });
+providerSelect.addEventListener('change', () => {
+  populateModelSelect(providerSelect.value);
+  flashSaved();
+});
+
+[
+  [temperatureInput, temperatureValue, (v) => Number(v).toFixed(1)],
+  [topPInput, topPValue, (v) => Number(v).toFixed(2)],
+  [topKInput, topKValue, (v) => String(v)],
+].forEach(([input, output, format]) => {
+  input.addEventListener('input', () => { output.textContent = format(input.value); });
+  input.addEventListener('change', flashSaved);
+});
+[thinkingSelect, contextCharsInput, maxHistoryInput, maxOutputTokensInput, systemPromptInput].forEach((el) => {
+  el.addEventListener('change', flashSaved);
+});
 
 async function loadConfig() {
-  const container = document.getElementById('providers');
   try {
     const response = await fetch('/api/config');
-    const config = await response.json();
+    const data = await response.json();
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const providers = Array.isArray(config.providers) ? config.providers : [];
-    container.replaceChildren(...providers.map(providerChip));
-    renderAgentConfig(config.config);
-    populatePickers(providers, config.config);
-    const primary = providers.find(item => item.available);
-    document.getElementById('routeProvider').textContent = primary ? `${primary.label} API` : 'LLM API';
+    const providers = Array.isArray(data.providers) ? data.providers : [];
+    providersById = Object.fromEntries(providers.map((p) => [p.id, p]));
+    populateProviderSelect(providers);
+    applyConfigDefaults(data.config || {});
+    const primary = providers.find((item) => item.available);
+    activeProviderLabel.textContent = primary ? primary.label : 'нет доступных';
   } catch {
-    container.replaceChildren(createElement('span', 'provider offline', 'Сервер недоступен'));
-    document.getElementById('configChips').replaceChildren(
-      createElement('span', 'config-chip offline', 'Настройки недоступны'),
-    );
+    activeProviderLabel.textContent = 'сервер недоступен';
+    modelNote.textContent = 'Настройки недоступны';
   }
 }
 
-function providerChip(provider) {
-  const chip = document.createElement('span');
-  chip.className = `provider ${provider.available ? 'online' : 'offline'}`;
-  chip.append(
-    document.createElement('i'),
-    createElement('b', '', String(provider.label || provider.id || 'LLM')),
-    createElement('small', '', String(provider.model || 'model n/a')),
-  );
-  return chip;
+function populateProviderSelect(providers) {
+  const options = providers.filter((p) => p.available).map((p) => new Option(p.label, p.id));
+  providerSelect.replaceChildren(new Option('Авто (fallback-цепочка)', ''), ...options);
+  populateModelSelect('');
 }
 
-function renderAgentConfig(config) {
-  const container = document.getElementById('configChips');
-  if (!config || typeof config !== 'object') {
-    container.replaceChildren(createElement('span', 'config-chip offline', 'Настройки недоступны'));
+function populateModelSelect(providerId) {
+  const provider = providersById[providerId];
+  if (!provider) {
+    modelSelect.replaceChildren(new Option('По умолчанию провайдера', ''));
+    modelSelect.disabled = true;
+    modelNote.textContent = 'Выберите провайдер, чтобы задать конкретную модель.';
     return;
   }
-  const chips = [
-    ['Температура', config.temperature],
-    ['Max tokens', config.max_output_tokens],
-    ['Reasoning', config.thinking_level],
-    ['История', `${config.max_history_messages} сообщений`],
-    ['Input policy', config.input_policy],
-    ['Output policy', config.output_policy],
-    ['Judge', config.judge_enabled ? 'on' : 'off'],
-  ];
-  container.replaceChildren(...chips.map(([label, value]) => configChip(label, value)));
+  const models = Array.isArray(provider.models) && provider.models.length ? provider.models : [provider.model];
+  modelSelect.replaceChildren(new Option(`По умолчанию (${provider.model})`, ''), ...models.map((m) => new Option(m, m)));
+  modelSelect.disabled = models.length <= 1;
+  modelNote.textContent = models.length > 1
+    ? `Доступно моделей: ${models.length}`
+    : `У ${provider.label} только одна модель.`;
 }
 
-function populatePickers(providers, config) {
-  const providerOptions = providers
-    .filter(item => item.available)
-    .map(item => new Option(item.label, item.id));
-  providerSelect.replaceChildren(new Option('Авто (fallback-цепочка)', ''), ...providerOptions);
+function applyConfigDefaults(config) {
+  defaultSystemPrompt = String(config.system_prompt ?? '');
+  systemPromptInput.value = defaultSystemPrompt;
+  temperatureInput.value = config.temperature ?? 0.7;
+  temperatureValue.textContent = Number(temperatureInput.value).toFixed(1);
+  topPInput.value = config.top_p ?? 0.95;
+  topPValue.textContent = Number(topPInput.value).toFixed(2);
+  topKInput.value = config.top_k ?? 40;
+  topKValue.textContent = String(topKInput.value);
+  contextCharsInput.value = config.context_chars ?? 24000;
+  maxHistoryInput.value = config.max_history_messages ?? 50;
+  maxOutputTokensInput.value = config.max_output_tokens ?? 1024;
 
-  const levels = Array.isArray(config && config.thinking_levels) ? config.thinking_levels : [];
-  thinkingSelect.replaceChildren(...levels.map(level => new Option(level, level)));
-  if (config && config.thinking_level) thinkingSelect.value = config.thinking_level;
+  const levels = Array.isArray(config.thinking_levels) ? config.thinking_levels : [];
+  thinkingSelect.replaceChildren(...levels.map((level) => new Option(level, level)));
+  if (config.thinking_level) thinkingSelect.value = config.thinking_level;
 }
 
-function configChip(label, value) {
-  const chip = document.createElement('span');
-  chip.className = 'config-chip';
-  chip.append(
-    createElement('small', '', label),
-    createElement('b', '', String(value ?? 'н/д')),
-  );
-  return chip;
+function flashSaved(isError = false) {
+  clearTimeout(savedTimer);
+  savedIndicator.textContent = isError ? 'не сохранено' : 'сохранено';
+  savedIndicator.classList.toggle('err', isError);
+  savedIndicator.classList.add('on');
+  savedTimer = setTimeout(() => savedIndicator.classList.remove('on'), 1600);
+}
+
+function currentSettings() {
+  return {
+    provider: providerSelect.value || null,
+    model: modelSelect.value || null,
+    thinking_level: thinkingSelect.value || null,
+    temperature: Number(temperatureInput.value),
+    top_p: Number(topPInput.value),
+    top_k: Number(topKInput.value),
+    context_chars: Number(contextCharsInput.value),
+    max_history_messages: Number(maxHistoryInput.value),
+    max_output_tokens: Number(maxOutputTokensInput.value),
+    system_prompt: systemPromptInput.value.trim() || null,
+  };
 }
 
 async function submitMessage(message) {
   lastMessage = message;
-  appendMessage('user', message);
+  appendUserMessage(message);
   setBusy(true);
   const pending = appendPending();
   activeController = new AbortController();
   try {
     const response = await fetch('/api/chat', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        session_id: sessionId,
-        message,
-        provider: providerSelect.value || null,
-        thinking_level: thinkingSelect.value || null,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId, message, ...currentSettings() }),
       signal: activeController.signal,
     });
     const data = await response.json();
@@ -127,9 +176,9 @@ async function submitMessage(message) {
       throw new Error(data.error || `HTTP ${response.status}`);
     }
     const reply = data.reply;
-    appendMessage('assistant', reply.text, formatReplyMeta(reply));
-    updateSessionUsage(reply.session_usage);
-    document.getElementById('routeProvider').textContent = `${reply.provider} API`;
+    appendBotMessage(reply);
+    updateSessionStats(reply.session_usage);
+    activeProviderLabel.textContent = providersById[reply.provider]?.label || reply.provider;
   } catch (error) {
     pending.remove();
     if (error.name === 'AbortError') {
@@ -144,69 +193,118 @@ async function submitMessage(message) {
   }
 }
 
-function appendMessage(role, text, meta = '') {
-  const article = document.createElement('article');
-  article.className = `message ${role}`;
-  const avatar = role === 'user' ? 'Вы' : role === 'error' ? '!' : 'A';
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  if (role === 'assistant') {
-    const body = document.createElement('div');
-    body.className = 'msg-text';
-    body.innerHTML = renderMarkdown(String(text));
-    bubble.append(body);
-  } else {
-    bubble.append(createElement('p', '', String(text)));
+function hideEmptyState() {
+  if (emptyState.isConnected) emptyState.remove();
+}
+
+function appendUserMessage(text) {
+  hideEmptyState();
+  const turn = createElement('div', 'turn me');
+  const body = createElement('div', 'body');
+  const bubble = createElement('div', 'msg s-me');
+  bubble.textContent = text;
+  body.append(bubble);
+  turn.append(body);
+  msgsInner.appendChild(turn);
+  scrollToBottom();
+  incrementMessageCount();
+  return turn;
+}
+
+function appendBotMessage(reply) {
+  hideEmptyState();
+  const turn = createElement('div', 'turn');
+  turn.append(botAvatar());
+  const body = createElement('div', 'body');
+
+  if (reply.reasoning) {
+    body.append(reasoningSpoiler(reply.reasoning));
   }
-  if (meta) bubble.append(createElement('div', 'meta', meta));
-  article.append(createElement('div', 'avatar', avatar), bubble);
-  chat.appendChild(article);
-  chat.scrollTop = chat.scrollHeight;
-  return article;
+
+  const bubble = createElement('div', 'msg s-bot');
+  const md = createElement('div', 'md');
+  md.innerHTML = renderMarkdown(String(reply.text));
+  bubble.append(md);
+  body.append(bubble, createElement('div', 'meta', formatReplyMeta(reply)));
+  turn.append(body);
+  msgsInner.appendChild(turn);
+  scrollToBottom();
+  incrementMessageCount();
+  return turn;
+}
+
+function reasoningSpoiler(text) {
+  const details = document.createElement('details');
+  details.className = 'reasoning';
+  const summary = document.createElement('summary');
+  summary.textContent = `Рассуждение · ${text.length} симв.`;
+  const body = createElement('pre', 'r-text', text);
+  details.append(summary, body);
+  return details;
+}
+
+function botAvatar() {
+  const av = createElement('div', 'av');
+  av.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L14 9 L21 12 L14 15 L12 22 L10 15 L3 12 L10 9 Z"/></svg>';
+  return av;
 }
 
 function appendErrorMessage(text) {
-  const article = appendMessage('error', text);
-  if (!lastMessage) return article;
-  const bubble = article.querySelector('.bubble');
-  const retry = document.createElement('button');
-  retry.type = 'button';
-  retry.className = 'retry-button';
-  retry.textContent = 'Повторить';
-  retry.addEventListener('click', () => {
-    article.remove();
-    submitMessage(lastMessage);
-  });
-  bubble.append(retry);
-  return article;
+  hideEmptyState();
+  const turn = createElement('div', 'turn');
+  turn.append(botAvatar());
+  const body = createElement('div', 'body');
+  const bubble = createElement('div', 'msg err', text);
+  if (lastMessage) {
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.className = 'retry-button';
+    retry.textContent = 'Повторить';
+    retry.addEventListener('click', () => {
+      turn.remove();
+      submitMessage(lastMessage);
+    });
+    bubble.append(retry);
+  }
+  body.append(bubble);
+  turn.append(body);
+  msgsInner.appendChild(turn);
+  scrollToBottom();
+  return turn;
 }
 
 function appendPending() {
-  const article = document.createElement('article');
-  article.className = 'message assistant pending';
+  const turn = createElement('div', 'turn');
+  turn.append(botAvatar());
+  const body = createElement('div', 'body');
+  const bubble = createElement('div', 'msg s-bot');
   const typing = createElement('div', 'typing');
   typing.append(document.createElement('i'), document.createElement('i'), document.createElement('i'));
-  const bubble = createElement('div', 'bubble');
-  bubble.append(typing, createElement('div', 'meta', 'Агент вызывает LLM API…'));
-  article.append(createElement('div', 'avatar', 'A'), bubble);
-  chat.appendChild(article);
-  chat.scrollTop = chat.scrollHeight;
-  return article;
+  bubble.append(typing);
+  body.append(bubble);
+  turn.append(body);
+  msgsInner.appendChild(turn);
+  scrollToBottom();
+  return turn;
 }
 
 async function resetConversation() {
-  if (resetButton.disabled) return;
+  if (clearContextBtn.disabled) return;
   setBusy(true);
   try {
     const response = await fetch('/api/reset', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({session_id: sessionId}),
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId }),
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    chat.querySelectorAll('.message:not(.welcome)').forEach(item => item.remove());
-    sessionUsage.textContent = 'Сессия: 0 токенов';
+    msgsInner.querySelectorAll('.turn').forEach((item) => item.remove());
+    msgsInner.appendChild(emptyState);
+    sessMessages.textContent = '0';
+    sessInput.textContent = '0';
+    sessOutput.textContent = '0';
+    flashSaved();
   } catch (error) {
-    appendMessage('error', error.message || 'Не удалось очистить контекст');
+    appendErrorMessage(error.message || 'Не удалось очистить контекст');
   } finally {
     setBusy(false);
     promptInput.focus();
@@ -216,12 +314,11 @@ async function resetConversation() {
 async function cancelActiveRequest() {
   if (!activeController) return;
   stopButton.disabled = true;
-  agentState.textContent = 'ChatAgent · CANCELLING';
   try {
     await fetch('/api/cancel', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({session_id: sessionId}),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId }),
     });
   } catch {
     // Local cancellation is best effort; aborting the browser request still stops the UI.
@@ -232,26 +329,18 @@ async function cancelActiveRequest() {
 
 function setBusy(value) {
   sendButton.disabled = value;
-  resetButton.disabled = value;
+  clearContextBtn.disabled = value;
   promptInput.disabled = value;
   providerSelect.disabled = value;
-  thinkingSelect.disabled = value;
+  modelSelect.disabled = value || modelSelect.options.length <= 1;
   stopButton.disabled = !value;
   document.querySelectorAll('.retry-button').forEach((button) => { button.disabled = value; });
-  agentState.textContent = value ? 'ChatAgent · THINKING' : 'ChatAgent · READY';
 }
 
 function formatReplyMeta(reply) {
   const attempts = Array.isArray(reply.attempts) ? reply.attempts.length : 0;
   const current = formatUsage(reply.usage);
-  const cumulative = formatUsage(reply.session_usage);
-  const reasoning = reply.usage && reply.usage.reported === true
-    ? `reasoning tokens: ${reply.usage.reasoning_tokens || 0}`
-    : 'reasoning tokens: н/д';
-  const tokenMeta = current
-    ? `токены: ${current} · сессия: ${cumulative || 'н/д'}`
-    : `токены: н/д · сессия: ${cumulative || 'н/д'}`;
-  return `${reply.provider} · ${reply.model} · попыток: ${attempts} · ${reasoning} · ${tokenMeta}`;
+  return `${reply.provider} · ${reply.model} · попыток: ${attempts} · токены: ${current || 'н/д'}`;
 }
 
 function formatUsage(usage) {
@@ -259,12 +348,18 @@ function formatUsage(usage) {
   return `вход ${usage.input_tokens} · выход ${usage.output_tokens} · всего ${usage.total_tokens}`;
 }
 
-function updateSessionUsage(usage) {
-  if (!usage || usage.reported !== true) {
-    sessionUsage.textContent = 'Сессия: токены н/д';
-    return;
-  }
-  sessionUsage.textContent = `Сессия: ${usage.total_tokens} токенов`;
+function updateSessionStats(usage) {
+  if (!usage || usage.reported !== true) return;
+  sessInput.textContent = String(usage.input_tokens);
+  sessOutput.textContent = String(usage.output_tokens);
+}
+
+function incrementMessageCount() {
+  sessMessages.textContent = String(Number(sessMessages.textContent) + 1);
+}
+
+function scrollToBottom() {
+  msgsBox.scrollTop = msgsBox.scrollHeight;
 }
 
 function escapeHtml(text) {
@@ -299,13 +394,13 @@ function renderMarkdown(text) {
   const codeBlocks = [];
   const withPlaceholders = text.replace(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g, (_match, code) => {
     codeBlocks.push(`<pre><code>${escapeHtml(code.replace(/\n$/, ''))}</code></pre>`);
-    return `\u0000${codeBlocks.length - 1}\u0000`;
+    return ` ${codeBlocks.length - 1} `;
   });
 
   return withPlaceholders
     .split(/\n{2,}/)
     .map((block) => {
-      const placeholder = block.trim().match(/^\u0000(\d+)\u0000$/);
+      const placeholder = block.trim().match(/^ (\d+) $/);
       if (placeholder) return codeBlocks[Number(placeholder[1])];
 
       let lines = block.split('\n').filter((line) => line.length > 0);

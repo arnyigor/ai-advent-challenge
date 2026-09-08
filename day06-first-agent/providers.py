@@ -28,10 +28,26 @@ from tools.llm.deepseek import (
 from tools.llm.gemini import (
     MODEL_CHAIN,
     GeminiCallError,
-    extract_response,
     has_gemini_api_key,
 )
 from tools.llm.runner import run_with_model_fallback
+
+def _split_answer_and_thoughts(data: object) -> tuple[str, str]:
+    """Separates Gemini/DeepSeek 'thought' parts (from includeThoughts /
+    reasoning_content, see providers below) from the final answer text.
+    Kept local to day06: tools.llm.gemini.extract_response()'s return shape
+    is locked by tests shared with every other day, so it doesn't carry a
+    reasoning key."""
+    if not isinstance(data, dict):
+        return "", ""
+    candidates = data.get("candidates") or []
+    if not candidates:
+        return "", ""
+    parts = candidates[0].get("content", {}).get("parts", [])
+    answer = "".join(p.get("text", "") for p in parts if not p.get("thought"))
+    thought = "".join(p.get("text", "") for p in parts if p.get("thought"))
+    return answer, thought
+
 
 def _conversation_prompt(messages: Sequence[Message]) -> str:
     labels = {"user": "Пользователь", "assistant": "Ассистент"}
@@ -119,6 +135,9 @@ class ClientProvider:
     def available(self) -> bool:
         return self._has_key()
 
+    def model_options(self) -> list[str]:
+        return list(self._model_chain)
+
     def generate(
         self,
         messages: Sequence[Message],
@@ -126,6 +145,9 @@ class ClientProvider:
         cancel_event: threading.Event,
     ) -> ProviderReply:
         prompt = _conversation_prompt(messages)
+        model_chain = self._model_chain
+        if config.model and config.model in model_chain:
+            model_chain = [config.model] + [m for m in model_chain if m != config.model]
 
         def call(model: str):
             client = Client(f"{self.id}:{model}", quiet=True, cancel_event=cancel_event)
@@ -134,18 +156,23 @@ class ClientProvider:
                 {
                     "temperature": config.temperature,
                     "maxOutputTokens": config.max_output_tokens,
-                    "thinkingConfig": {"thinkingLevel": config.thinking_level},
+                    "topP": config.top_p,
+                    "topK": config.top_k,
+                    "thinkingConfig": {
+                        "thinkingLevel": config.thinking_level,
+                        "includeThoughts": True,
+                    },
                 },
                 system_instruction=config.system_prompt,
             )
 
         try:
             data, model_used, _attempts = run_with_model_fallback(
-                self._model_chain,
+                model_chain,
                 call,
                 fallback_exc=self._fallback_exc,
             )
-            parsed = extract_response(data)
+            answer_text, thought_text = _split_answer_and_thoughts(data)
             usage = _normalize_usage(
                 data.get("usageMetadata") if isinstance(data, dict) else None,
                 input_names=("promptTokenCount",),
@@ -153,7 +180,9 @@ class ClientProvider:
                 total_name="totalTokenCount",
                 reasoning_names=("thoughtsTokenCount",),
             )
-            return ProviderReply(parsed["text"], self.id, model_used, usage)
+            return ProviderReply(
+                answer_text, self.id, model_used, usage, reasoning=thought_text
+            )
         except LLMCancelledError:
             raise ProviderCancelledError(f"{self.label}: запрос отменён") from None
         except Exception as exc:
@@ -214,6 +243,9 @@ class OpenAICompatibleProvider:
     def available(self) -> bool:
         return bool((os.environ.get(self.key_env) or "").strip() and self.base_url)
 
+    def model_options(self) -> list[str]:
+        return [self.default_model]
+
     def generate(
         self,
         messages: Sequence[Message],
@@ -224,6 +256,7 @@ class OpenAICompatibleProvider:
             raise ProviderCancelledError(f"{self.label}: запрос отменён")
         if not self.available():
             raise ProviderError(f"{self.label}: конфигурация не задана")
+        model = config.model if config.model in self.model_options() else self.default_model
         payload_messages = [{"role": "system", "content": config.system_prompt}]
         payload_messages.extend(
             {"role": message.role, "content": message.content} for message in messages
@@ -236,7 +269,7 @@ class OpenAICompatibleProvider:
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": self.default_model,
+                    "model": model,
                     "messages": payload_messages,
                     "temperature": config.temperature,
                     "max_tokens": config.max_output_tokens,
@@ -253,9 +286,11 @@ class OpenAICompatibleProvider:
             raise ProviderError(f"{self.label}: HTTP {response.status_code}")
         try:
             data = response.json()
-            text = data["choices"][0]["message"]["content"]
+            message = data["choices"][0]["message"]
+            text = message["content"]
         except (ValueError, KeyError, IndexError, TypeError):
             raise ProviderError(f"{self.label}: неожиданный формат ответа") from None
+        reasoning = message.get("reasoning_content") or "" if isinstance(message, dict) else ""
         usage = _normalize_usage(
             data.get("usage") if isinstance(data, dict) else None,
             input_names=("prompt_tokens", "input_tokens"),
@@ -267,7 +302,7 @@ class OpenAICompatibleProvider:
                 "output_tokens_details",
             ),
         )
-        return ProviderReply(str(text), self.id, self.default_model, usage)
+        return ProviderReply(str(text), self.id, model, usage, reasoning=str(reasoning))
 
 
 def create_default_providers():
@@ -299,6 +334,7 @@ def public_provider_status() -> list[dict]:
             "label": provider.label,
             "model": provider.default_model,
             "available": provider.available(),
+            "models": provider.model_options(),
         }
         for provider in create_default_providers()
     ]

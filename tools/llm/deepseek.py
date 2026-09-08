@@ -86,6 +86,8 @@ def _request_payload(model, prompt, generation_config=None, system_instruction=N
             payload["temperature"] = generation_config["temperature"]
         if generation_config.get("maxOutputTokens") is not None:
             payload["max_tokens"] = generation_config["maxOutputTokens"]
+        if generation_config.get("topP") is not None:
+            payload["top_p"] = generation_config["topP"]
         if generation_config.get("stopSequences"):
             payload["stop"] = generation_config["stopSequences"]
     payload.update(_thinking_payload(generation_config))
@@ -125,7 +127,7 @@ def _finish_reason(reason):
     return reason
 
 
-def _compatible_response(text, finish_reason, usage):
+def _compatible_response(text, finish_reason, usage, reasoning_text=""):
     usage = usage or {}
     usage_metadata = {
         "promptTokenCount": usage.get("prompt_tokens"),
@@ -135,10 +137,14 @@ def _compatible_response(text, finish_reason, usage):
         usage_metadata["promptCacheHitTokenCount"] = usage.get("prompt_cache_hit_tokens")
     if "prompt_cache_miss_tokens" in usage:
         usage_metadata["promptCacheMissTokenCount"] = usage.get("prompt_cache_miss_tokens")
+    parts = []
+    if reasoning_text:
+        parts.append({"text": reasoning_text, "thought": True})
+    parts.append({"text": text or ""})
     return {
         "candidates": [
             {
-                "content": {"parts": [{"text": text or ""}]},
+                "content": {"parts": parts},
                 "finishReason": _finish_reason(finish_reason),
             }
         ],
@@ -156,6 +162,7 @@ def _extract_chat_response(data):
         message.get("content") or "",
         choice.get("finish_reason"),
         data.get("usage"),
+        reasoning_text=message.get("reasoning_content") or "",
     )
 
 

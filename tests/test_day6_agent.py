@@ -369,6 +369,13 @@ def test_invalid_judge_result_leaves_history_and_usage_unchanged():
         ({"max_output_chars": 0}, ValueError),
         ({"thinking_level": None}, TypeError),
         ({"thinking_level": "medium"}, ValueError),
+        ({"top_p": True}, TypeError),
+        ({"top_p": -0.01}, ValueError),
+        ({"top_p": 1.01}, ValueError),
+        ({"top_k": 0}, ValueError),
+        ({"top_k": 1.5}, TypeError),
+        ({"context_chars": 999}, ValueError),
+        ({"model": 123}, TypeError),
     ],
 )
 def test_agent_config_rejects_invalid_bounds_and_types(kwargs, error_type):
@@ -436,6 +443,42 @@ def test_history_trimming_uses_configured_message_limit():
         Message("assistant", "A3"),
         Message("user", "Q4"),
     )
+
+
+def test_context_chars_trims_oldest_history_from_request_but_keeps_last_turn():
+    provider = FakeProvider(outcomes=["A1", "A2"])
+    agent = ChatAgent([provider], config=AgentConfig(context_chars=1_000))
+
+    agent.ask("Q" * 1_100)
+    agent.ask("Q2")
+
+    request_messages = provider.calls[1][0]
+    assert request_messages[-1] == Message("user", "Q2")
+    assert Message("user", "Q" * 1_100) not in request_messages
+
+
+def test_context_chars_never_drops_the_current_turn_even_over_budget():
+    provider = FakeProvider()
+    agent = ChatAgent([provider], config=AgentConfig(context_chars=1_000))
+
+    agent.ask("Q" * 5_000)
+
+    assert provider.calls[0][0] == (Message("user", "Q" * 5_000),)
+
+
+def test_ask_accepts_generic_config_overrides_without_changing_saved_config():
+    provider = FakeProvider()
+    agent = ChatAgent([provider], config=AgentConfig(temperature=0.7, top_p=0.95))
+
+    agent.ask("Вопрос", temperature=0.1, top_p=0.5, top_k=10)
+
+    used_config = provider.calls[0][1]
+    assert (used_config.temperature, used_config.top_p, used_config.top_k) == (
+        0.1,
+        0.5,
+        10,
+    )
+    assert (agent.config.temperature, agent.config.top_p) == (0.7, 0.95)
 
 
 def test_cancel_before_provider_generate_stops_without_fallback_or_state_change():

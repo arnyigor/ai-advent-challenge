@@ -68,7 +68,9 @@ async function scene(caption, action, duration=4000) {
   await sleep(duration);
 }
 
-async function waitFor(expression, attempts=140) {
+// 400 attempts * 250ms = 100s — high-reasoning Gemini calls can take a while
+// to finish thinking even for a trivial prompt.
+async function waitFor(expression, attempts=400) {
   for (let i=0; i<attempts; i++) {
     if (await evaluate(expression)) return true;
     await sleep(250);
@@ -77,16 +79,18 @@ async function waitFor(expression, attempts=140) {
 }
 
 async function requireAnswer(expectedCount, label) {
+  // A finished bot reply is the only turn carrying a `.md` body (the typing
+  // placeholder only has `.typing`, and user turns are `.turn.me`).
   const ok = await waitFor(
-    `document.querySelectorAll('.message.assistant:not(.pending):not(.welcome)').length>=${expectedCount}`
+    `document.querySelectorAll('.turn:not(.me) .md').length>=${expectedCount}`
   );
   if (!ok) throw new Error(`${label}: ответ не пришёл за отведённое время — запись остановлена, а не подделана`);
-  const errorShown = await evaluate("document.querySelector('.message.error')!==null");
+  const errorShown = await evaluate("document.querySelector('.msg.err')!==null");
   if (errorShown) throw new Error(`${label}: агент вернул ошибку — видно в чате`);
 }
 
 async function requireRetryButton(label) {
-  const ok = await waitFor("document.querySelector('.message.error .retry-button')!==null");
+  const ok = await waitFor("document.querySelector('.msg.err .retry-button')!==null");
   if (!ok) throw new Error(`${label}: кнопка «Повторить» не появилась — запись остановлена`);
 }
 
@@ -104,15 +108,19 @@ async function main() {
   socket.onmessage = event => { const msg=JSON.parse(event.data); if(msg.id&&pending.has(msg.id)){const p=pending.get(msg.id);pending.delete(msg.id);msg.error?p.reject(new Error(msg.error.message)):p.resolve(msg.result)}};
   await cdp('Page.enable'); await cdp('Runtime.enable');
   await cdp('Page.navigate', {url:pageUrl});
-  await waitFor("document.getElementById('configChips')!==null && document.querySelectorAll('#configChips .config-chip').length>0 && !document.querySelector('#configChips .loading')");
+  await waitFor("document.getElementById('providerSelect')!==null && providerSelect.options.length>1");
   await sleep(600);
   const cameraPromise = camera();
 
   await scene('Day 06 · Первый агент — ChatAgent инкапсулирует историю, конфиг и вызов LLM API', null, 5000);
-  await scene('Agent Box: температура, лимиты, reasoning, policies — заданы внутри агента, не в UI', `window.scrollTo({top:0,behavior:'smooth'})`, 5000);
+  await scene(
+    'Новая панель справа: провайдер, модель, температура, top-p/top-k, история, контекст и системный промпт — настраиваются прямо в интерфейсе',
+    `(() => { document.querySelector('.panel').scrollTo({top:0,behavior:'smooth'}); })()`,
+    6000,
+  );
 
   await evaluate(sendMessageScript('Объясни коротко, чем агент отличается от одного вызова API'));
-  await scene('Интерфейс отправляет только текст. ChatAgent сам собирает сообщение и вызывает провайдера', null, 3000);
+  await scene('Интерфейс отправляет только текст и настройки. ChatAgent сам собирает сообщение и вызывает провайдера', null, 3000);
   await requireAnswer(1, 'Первый ответ');
   await scene('Ответ отрендерен из markdown: жирный текст, списки и код — не сырые ** и ```, а HTML', null, 9000);
 
@@ -121,20 +129,26 @@ async function main() {
   await requireAnswer(2, 'Второй ответ');
   await scene('Второй ответ ссылается на первый — агент сам хранит контекст сессии', null, 9000);
 
+  await evaluate(`(() => { providerSelect.value = 'gemini'; thinkingSelect.value = 'high'; })()`);
+  await evaluate(sendMessageScript('Сколько будет 17*23? Подумай пошагово.'));
+  await scene('Включили Gemini с high reasoning — считаем пример с рассуждением', null, 2500);
+  await requireAnswer(3, 'Ответ с рассуждением');
+  await evaluate(`document.querySelector('.turn:not(.me) .reasoning summary')?.click()`);
+  await scene('Новое: агент показывает настоящий текст рассуждений модели под спойлером, а не только число токенов', null, 7000);
+
   await scene(
-    'Вся история диалога видна в чате: оба вопроса и оба ответа с provider/model/токенами',
-    `(() => { const chat=document.getElementById('chat'); chat.scrollTo({top:0,behavior:'smooth'}); })()`,
+    'Вся история диалога видна в чате: все вопросы и ответы с provider/model/токенами',
+    `(() => { document.getElementById('msgs').scrollTo({top:0,behavior:'smooth'}); })()`,
     4000,
   );
   await scene(
     'Прокручиваем вниз — история сохраняется полностью, ничего не обрезается',
-    `(() => { const chat=document.getElementById('chat'); chat.scrollTo({top:chat.scrollHeight,behavior:'smooth'}); })()`,
+    `(() => { const msgs=document.getElementById('msgs'); msgs.scrollTo({top:msgs.scrollHeight,behavior:'smooth'}); })()`,
     4000,
   );
 
-  await evaluate(`(() => { providerSelect.value = 'gemini'; thinkingSelect.value = 'high'; })()`);
   await evaluate(sendMessageScript('Подробно объясни разницу между процессом и потоком в ОС'));
-  await scene('Отправили тяжёлый запрос на Gemini с high reasoning — сейчас нажмём «Стоп»', null, 2000);
+  await scene('Отправили ещё один тяжёлый запрос на Gemini с high reasoning — сейчас нажмём «Стоп»', null, 2000);
   await evaluate(`document.getElementById('stopButton').click()`);
   await requireRetryButton('Отмена запроса');
   await scene('Запрос отменён — история и токены не изменились, но текст не потерян', null, 3500);
@@ -142,10 +156,10 @@ async function main() {
   await evaluate(`(() => { providerSelect.value = 'deepseek'; thinkingSelect.value = 'minimal'; })()`);
   await evaluate(`document.querySelector('.retry-button').click()`);
   await scene('«Повторить» пересылает тот же текст без повторного ввода — ждём реальный ответ', null, 3000);
-  await requireAnswer(3, 'Ответ после повтора');
+  await requireAnswer(4, 'Ответ после повтора');
   await scene('Повтор дошёл до LLM и получил реальный ответ — текст не потерялся при отмене', null, 8000);
 
-  await evaluate(`document.getElementById('resetButton').click()`);
+  await evaluate(`document.getElementById('clearContextBtn').click()`);
   await sleep(800);
   await scene('Очистка контекста — история и счётчик токенов сбрасываются агентом', null, 4000);
 

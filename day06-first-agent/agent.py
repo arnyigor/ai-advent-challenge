@@ -13,8 +13,12 @@ from typing import Callable, Protocol, Sequence
 
 
 DEFAULT_SYSTEM_PROMPT = (
-    "Ты полезный русскоязычный чат-агент. Отвечай ясно и по существу. "
-    "Учитывай предыдущие реплики диалога, если они переданы."
+    "Ты — детектив в отставке из ретрофутуристического нуарного мегаполиса, "
+    "подрабатывающий чат-агентом между расследованиями. Отвечай ясно, по "
+    "существу и полезно — это важнее стиля. Изредка, где уместно, можно "
+    "обронить короткую нуарную метафору вроде «неона в переулках Нео-Токио», "
+    "но без ущерба точности ответа. Учитывай предыдущие реплики диалога, "
+    "если они переданы."
 )
 
 GEMINI_THINKING_LEVELS = ("minimal", "low", "high")
@@ -33,11 +37,15 @@ class AgentConfig:
 
     system_prompt: str = DEFAULT_SYSTEM_PROMPT
     temperature: float = 0.7
+    top_p: float = 0.95
+    top_k: int = 40
     max_output_tokens: int = 1_024
-    max_history_messages: int = 12
+    max_history_messages: int = 50
+    context_chars: int = 24_000
     max_input_chars: int = 8_000
     max_output_chars: int = 32_000
     thinking_level: str = "minimal"
+    model: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.system_prompt, str):
@@ -51,8 +59,14 @@ class AgentConfig:
             raise TypeError("temperature должна быть числом")
         if not math.isfinite(self.temperature) or not 0 <= self.temperature <= 2:
             raise ValueError("temperature должна быть от 0 до 2")
+        if isinstance(self.top_p, bool) or not isinstance(self.top_p, (int, float)):
+            raise TypeError("top_p должен быть числом")
+        if not math.isfinite(self.top_p) or not 0 <= self.top_p <= 1:
+            raise ValueError("top_p должен быть от 0 до 1")
+        _validate_bounded_int("top_k", self.top_k, 1, 1_000)
         _validate_bounded_int("max_output_tokens", self.max_output_tokens, 1, 1_000_000)
         _validate_bounded_int("max_history_messages", self.max_history_messages, 2, 1_000)
+        _validate_bounded_int("context_chars", self.context_chars, 1_000, 2_000_000)
         _validate_bounded_int("max_input_chars", self.max_input_chars, 1, 1_000_000)
         _validate_bounded_int("max_output_chars", self.max_output_chars, 1, 1_000_000)
         if not isinstance(self.thinking_level, str):
@@ -60,6 +74,8 @@ class AgentConfig:
         if self.thinking_level not in GEMINI_THINKING_LEVELS:
             allowed = ", ".join(GEMINI_THINKING_LEVELS)
             raise ValueError(f"thinking_level должен быть одним из: {allowed}")
+        if self.model is not None and not isinstance(self.model, str):
+            raise TypeError("model должен быть строкой")
 
 
 @dataclass(frozen=True)
@@ -104,6 +120,7 @@ class ProviderReply:
     provider: str
     model: str
     usage: TokenUsage = field(default_factory=TokenUsage)
+    reasoning: str = ""
 
 
 @dataclass(frozen=True)
@@ -127,6 +144,7 @@ class AgentReply:
     usage: TokenUsage
     session_usage: TokenUsage
     judgement: JudgeResult | None = None
+    reasoning: str = ""
 
     def to_dict(self) -> dict:
         payload = asdict(self)
@@ -279,17 +297,31 @@ class ChatAgent:
             cancel_event.set()
             return True
 
+    @staticmethod
+    def _trim_to_context(messages: list[Message], budget: int) -> list[Message]:
+        """Keeps the newest messages within a character budget, always keeping
+        at least the last one (the current user turn)."""
+        if not messages:
+            return messages
+        total = len(messages[-1].content)
+        cut = len(messages) - 1
+        for i in range(len(messages) - 2, -1, -1):
+            total += len(messages[i].content)
+            if total > budget:
+                break
+            cut = i
+        return messages[cut:]
+
     def ask(
         self,
         user_text: str,
         *,
         provider_id: str | None = None,
-        thinking_level: str | None = None,
+        **config_overrides: object,
     ) -> AgentReply:
         text = self._input_policy.apply(user_text, self._config)
-        config = self._config if thinking_level is None else replace(
-            self._config, thinking_level=thinking_level
-        )
+        overrides = {k: v for k, v in config_overrides.items() if v is not None}
+        config = replace(self._config, **overrides) if overrides else self._config
         providers = self._providers
         if provider_id is not None:
             providers = tuple(p for p in providers if p.id == provider_id)
@@ -301,7 +333,9 @@ class ChatAgent:
             with self._active_lock:
                 self._active_cancel_event = cancel_event
             try:
-                request_messages = [*self._history, Message("user", text)]
+                request_messages = self._trim_to_context(
+                    [*self._history, Message("user", text)], config.context_chars
+                )
                 attempts: list[dict] = []
 
                 for provider in providers:
@@ -361,6 +395,7 @@ class ChatAgent:
                         usage=generated.usage,
                         session_usage=session_usage,
                         judgement=judgement,
+                        reasoning=generated.reasoning,
                     )
 
                 raise AgentUnavailableError(attempts)
