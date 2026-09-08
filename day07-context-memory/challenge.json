@@ -1,0 +1,5 @@
+{
+  "title": "Сохранение контекста",
+  "entrypoint": "day07_agent.py",
+  "day": 7
+}
