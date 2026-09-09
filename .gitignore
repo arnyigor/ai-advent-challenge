@@ -26,3 +26,9 @@ day04-temperature/results/run-*.json
 day05-model-versions/results/
 day05-model-versions/video-frames/
 day07-context-memory/*.db
+day08-token-usage/*.db
+day08-token-usage/*.db-journal
+day08-token-usage/*.db-shm
+day08-token-usage/*.db-wal
+day08-token-usage/video-frames/
+day08-token-usage/verify-video-frames/

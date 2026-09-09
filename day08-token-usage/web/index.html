@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Day 08 — Работа с токенами</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="av">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2 L14 9 L21 12 L14 15 L12 22 L10 15 L3 12 L10 9 Z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="n">Работа с токенами</div>
+        <div class="s">Day 08 · текущая реплика, история, полный вход и API usage</div>
+      </div>
+    </div>
+    <div class="provider-badge">
+      <span class="k">Провайдер</span>
+      <span class="logo" id="activeProvider">—</span>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="chat">
+      <div class="msgs" id="msgs">
+        <div class="msgs-inner" id="msgsInner">
+          <div class="empty" id="emptyState">Задайте вопрос — я посчитаю токены до отправки, сохраню usage ответа и покажу рост расхода по ходу диалога.</div>
+        </div>
+      </div>
+
+      <div class="composer-wrap">
+        <form class="composer" id="form">
+          <textarea id="prompt" maxlength="1000000" rows="1" placeholder="Например: запомни код проекта — Маяк-17. Ответь кратко" required></textarea>
+          <button id="stopButton" class="stop" type="button" disabled aria-label="Остановить" title="Остановить">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+          </button>
+          <button id="sendButton" class="send" type="submit" aria-label="Отправить" title="Отправить">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+          </button>
+        </form>
+        <div class="hint">
+          <span>Enter — отправить, Shift+Enter — перенос строки</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-head">
+        <h2>Агент</h2>
+        <span class="saved" id="savedIndicator">сохранено</span>
+      </div>
+
+      <div class="field">
+        <label for="providerSelect">Провайдер</label>
+        <select id="providerSelect">
+          <option value="">Авто (fallback-цепочка)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="modelSelect">Модель</label>
+        <select id="modelSelect" disabled>
+          <option value="">По умолчанию провайдера</option>
+        </select>
+        <p class="note" id="modelNote">Выберите провайдер, чтобы задать конкретную модель.</p>
+      </div>
+
+      <div class="field">
+        <label for="temperature">Температура</label>
+        <div class="row">
+          <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7">
+          <span class="value" id="temperatureValue">0.7</span>
+        </div>
+        <p class="note">0 — предсказуемо, 2 — свободно</p>
+      </div>
+
+      <div class="field">
+        <label for="topP">Top-p</label>
+        <div class="row">
+          <input type="range" id="topP" min="0" max="1" step="0.01" value="0.95">
+          <span class="value" id="topPValue">0.95</span>
+        </div>
+        <p class="note">Ядро вероятностей токенов</p>
+      </div>
+
+      <div class="field">
+        <label for="topK">Top-k</label>
+        <div class="row">
+          <input type="range" id="topK" min="1" max="200" step="1" value="40">
+          <span class="value" id="topKValue">40</span>
+        </div>
+        <p class="note">Кандидатов на шаге — учитывает только Gemini</p>
+      </div>
+
+      <div class="field">
+        <label for="thinkingSelect">Рассуждение</label>
+        <select id="thinkingSelect"></select>
+        <p class="note">Рассуждение считается как токены ответа и оплачивается по цене выхода</p>
+      </div>
+
+      <div class="field">
+        <label for="contextChars">Контекст, символов</label>
+        <input type="number" id="contextChars" min="1000" max="2000000" step="1000" value="24000">
+        <p class="note">Day 8 отправляет полную историю; поле оставлено для совместимости настроек</p>
+      </div>
+
+      <div class="field">
+        <label for="maxHistory">История, сообщений</label>
+        <input type="number" id="maxHistory" min="2" max="1000" step="1" value="50">
+      </div>
+
+      <div class="field">
+        <label for="maxOutputTokens">Max output tokens</label>
+        <input type="number" id="maxOutputTokens" min="1" max="1000000" step="1" value="1024">
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="forceOverflowApi">
+        <span>Эксперимент: отправить в API даже при локальном превышении</span>
+      </label>
+
+      <div class="field">
+        <label for="systemPrompt">Системный промпт</label>
+        <textarea id="systemPrompt" rows="6"></textarea>
+        <button type="button" class="btn wide" id="resetSystemPromptBtn">Вернуть базовый</button>
+      </div>
+
+      <button type="button" class="btn wide" id="clearContextBtn">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+        Очистить контекст
+      </button>
+
+      <div class="field">
+        <label>Сессия</label>
+        <div class="session">
+          <div class="r"><span>Сообщений</span><b id="sessMessages">0</b></div>
+          <div class="r"><span>Токены на входе</span><b id="sessInput">0</b></div>
+          <div class="r"><span>Токены на выходе</span><b id="sessOutput">0</b></div>
+          <div class="r"><span>Всего известно</span><b id="sessTotal">0</b></div>
+          <div class="r"><span>Полнота</span><b id="sessCompleteness">—</b></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Метрики последнего хода</label>
+        <div class="metric-grid">
+          <div class="metric"><span>Новое сообщение</span><b id="metricCurrent">—</b></div>
+          <div class="metric"><span>История до</span><b id="metricHistoryBefore">—</b></div>
+          <div class="metric"><span>Вход API</span><b id="metricRequest">—</b></div>
+          <div class="metric"><span>Ответ API</span><b id="metricOutput">—</b></div>
+          <div class="metric"><span>История после</span><b id="metricHistoryAfter">—</b></div>
+          <div class="metric"><span>Контекст / лимит</span><b id="metricContext">—</b></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Рост по ходам</label>
+        <div class="chart" id="usageChart"></div>
+        <div class="usage-table-wrap">
+          <table class="usage-table">
+            <thead>
+              <tr>
+                <th>Ход</th>
+                <th>Вход</th>
+                <th>Выход</th>
+                <th>Всего</th>
+                <th>Накопл.</th>
+              </tr>
+            </thead>
+            <tbody id="usageRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

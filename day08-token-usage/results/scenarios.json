@@ -1,0 +1,1083 @@
+{
+  "schema": "day8-scenarios-v1",
+  "created_at": "2026-09-09T12:14:22.174709+00:00",
+  "provider": "deepseek",
+  "scenarios": [
+    {
+      "scenario": "A_short",
+      "turns": [
+        {
+          "label": "fact",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 1,
+          "usage": {
+            "input_tokens": 205,
+            "output_tokens": 41,
+            "total_tokens": 246,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 205,
+            "output_tokens": 41,
+            "total_tokens": 246,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 14,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 0,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 148,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 28,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 48,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 148,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Принято. «Маяк-17» — в памяти, как вывеска над забегаловкой в тумане. Ничего не забуду. Что дальше?"
+        },
+        {
+          "label": "recall",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 2,
+          "usage": {
+            "input_tokens": 269,
+            "output_tokens": 32,
+            "total_tokens": 301,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 474,
+            "output_tokens": 73,
+            "total_tokens": 547,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 12,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 48,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 194,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 20,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 86,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 194,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "«Маяк-17». Как будто кто-то зажёг фонарь в тумане — не спутаешь."
+        }
+      ]
+    },
+    {
+      "scenario": "B_long",
+      "generator": {
+        "exchange_count": 10,
+        "block_words": 400
+      },
+      "turns": [
+        {
+          "label": "fact",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 1,
+          "usage": {
+            "input_tokens": 205,
+            "output_tokens": 37,
+            "total_tokens": 242,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 205,
+            "output_tokens": 37,
+            "total_tokens": 242,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 14,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 0,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 148,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 28,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 48,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 148,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Принято. «Маяк-17» — в памяти, как вывеска над забегаловкой, которую не забудешь. Что дальше?"
+        },
+        {
+          "label": "filler_1",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 2,
+          "usage": {
+            "input_tokens": 1047,
+            "output_tokens": 41,
+            "total_tokens": 1088,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 1252,
+            "output_tokens": 78,
+            "total_tokens": 1330,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 549,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 48,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 731,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 29,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 632,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 731,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 1 принят: «Маяк-17» — данные зафиксированы, как трещина на стене после взрыва. Жду дальнейших указаний."
+        },
+        {
+          "label": "filler_2",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 3,
+          "usage": {
+            "input_tokens": 1881,
+            "output_tokens": 38,
+            "total_tokens": 1919,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 3133,
+            "output_tokens": 116,
+            "total_tokens": 3249,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 552,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 632,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 1318,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 24,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 1214,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 1318,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 2 принят: «Маяк-17» — вторая порция легла в архив, как гильза в лужу. Продолжай."
+        },
+        {
+          "label": "filler_3",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 4,
+          "usage": {
+            "input_tokens": 2696,
+            "output_tokens": 40,
+            "total_tokens": 2736,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 5829,
+            "output_tokens": 156,
+            "total_tokens": 5985,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 558,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 1214,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 1906,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 26,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 1804,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 1906,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 3 принят: «Маяк-17» — третья часть легла в архив, как тень на мокрый асфальт. Что дальше?"
+        },
+        {
+          "label": "filler_4",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 5,
+          "usage": {
+            "input_tokens": 3549,
+            "output_tokens": 38,
+            "total_tokens": 3587,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 9378,
+            "output_tokens": 194,
+            "total_tokens": 9572,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 555,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 1804,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 2493,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 25,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 2390,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 2493,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 4 принят: «Маяк-17» — четвёртая часть в архиве, как выстрел в тишине. Продолжай."
+        },
+        {
+          "label": "filler_5",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 6,
+          "usage": {
+            "input_tokens": 4371,
+            "output_tokens": 38,
+            "total_tokens": 4409,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 13749,
+            "output_tokens": 232,
+            "total_tokens": 13981,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 559,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 2390,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 3083,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 26,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 2981,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 3083,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 5 принят: «Маяк-17» — пятая часть легла в архив, как последний патрон в обойму. Что дальше?"
+        },
+        {
+          "label": "filler_6",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 7,
+          "usage": {
+            "input_tokens": 5215,
+            "output_tokens": 38,
+            "total_tokens": 5253,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 18964,
+            "output_tokens": 270,
+            "total_tokens": 19234,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 530,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 2981,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 3645,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 25,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 3542,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 3645,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 6 принят: «Маяк-17» — шестая часть в архиве, как эхо шагов в пустом депо. Продолжай."
+        },
+        {
+          "label": "filler_7",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 8,
+          "usage": {
+            "input_tokens": 6061,
+            "output_tokens": 40,
+            "total_tokens": 6101,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 25025,
+            "output_tokens": 310,
+            "total_tokens": 25335,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 558,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 3542,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 4234,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 27,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 4133,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 4234,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 7 принят: «Маяк-17» — седьмая часть легла в архив, как дождь на жестяную крышу. Продолжай."
+        },
+        {
+          "label": "filler_8",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 9,
+          "usage": {
+            "input_tokens": 6906,
+            "output_tokens": 39,
+            "total_tokens": 6945,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 31931,
+            "output_tokens": 349,
+            "total_tokens": 32280,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 540,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 4133,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 4807,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 26,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 4705,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 4807,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 8 принят: «Маяк-17» — восьмая часть в архиве, как печать на мокром конверте. Продолжай."
+        },
+        {
+          "label": "filler_9",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 10,
+          "usage": {
+            "input_tokens": 7736,
+            "output_tokens": 36,
+            "total_tokens": 7772,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 39667,
+            "output_tokens": 385,
+            "total_tokens": 40052,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 552,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 4705,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 5391,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 25,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 5288,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 5391,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 9 принят: «Маяк-17» — девятая часть легла в архив, как ключ в замок. Продолжай."
+        },
+        {
+          "label": "filler_10",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 11,
+          "usage": {
+            "input_tokens": 8580,
+            "output_tokens": 39,
+            "total_tokens": 8619,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 48247,
+            "output_tokens": 424,
+            "total_tokens": 48671,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 552,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 5288,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 5974,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 27,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 5873,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 5974,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Блок 10 принят: «Маяк-17» — десятая часть в архиве, как последний гудок в ночном порту. Продолжай."
+        },
+        {
+          "label": "recall_after_long_history",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 12,
+          "usage": {
+            "input_tokens": 8642,
+            "output_tokens": 35,
+            "total_tokens": 8677,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 56889,
+            "output_tokens": 459,
+            "total_tokens": 57348,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 12,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 5873,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 6019,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 26,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 5917,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 6019,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "«Маяк-17». Как неоновая вывеска, которую не спутаешь ни с чем в тумане Нео-Порта."
+        }
+      ]
+    },
+    {
+      "scenario": "C_overflow",
+      "history_messages_before_reset": 10,
+      "turns": [
+        {
+          "label": "fact",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 1,
+          "usage": {
+            "input_tokens": 205,
+            "output_tokens": 35,
+            "total_tokens": 240,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 205,
+            "output_tokens": 35,
+            "total_tokens": 240,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 14,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 0,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 148,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 26,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 46,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 148,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Принято. «Маяк-17» — в памяти, как вывеска над закрытым баром. Кратко: код зафиксирован."
+        },
+        {
+          "label": "warmup",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 2,
+          "usage": {
+            "input_tokens": 261,
+            "output_tokens": 22,
+            "total_tokens": 283,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 466,
+            "output_tokens": 57,
+            "total_tokens": 523,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 9,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 46,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 189,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 17,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 78,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 189,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "«Маяк-17» — принято, как сигнал с тёмной стороны залива."
+        },
+        {
+          "label": "oversized_local_check",
+          "status": "local_context_limit",
+          "error": "Запрос превышает известный контекстный лимит модели",
+          "metrics": {
+            "current_message_tokens": {
+              "value": 999999,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 78,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 1000211,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": null,
+            "history_tokens_after": null,
+            "context_budget": {
+              "request_tokens": 1000211,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 1235,
+              "status": "local_context_limit"
+            }
+          },
+          "generator": {
+            "kind": "symbol_wall",
+            "char_count": 999999
+          }
+        },
+        {
+          "label": "padding_1",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 4,
+          "usage": {
+            "input_tokens": 269443,
+            "output_tokens": 31,
+            "total_tokens": 269474,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 269909,
+            "output_tokens": 88,
+            "total_tokens": 269997,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 186638,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 78,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 186850,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 21,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 186743,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 186850,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Принято. Блок 1 зафиксирован, как шум в старом радио — много помех, но сигнал ясен.",
+          "generator": {
+            "kind": "word_diverse",
+            "word_count": 140000
+          }
+        },
+        {
+          "label": "padding_2",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 5,
+          "usage": {
+            "input_tokens": 539295,
+            "output_tokens": 23,
+            "total_tokens": 539318,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 809204,
+            "output_tokens": 111,
+            "total_tokens": 809315,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 186497,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 186743,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 373374,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 16,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 373262,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 373374,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Принято. Блок 2 зафиксирован — тот же шум, тот же канал.",
+          "generator": {
+            "kind": "word_diverse",
+            "word_count": 140000
+          }
+        },
+        {
+          "label": "padding_3",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 6,
+          "usage": {
+            "input_tokens": 808392,
+            "output_tokens": 13,
+            "total_tokens": 808405,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 1617596,
+            "output_tokens": 124,
+            "total_tokens": 1617720,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 186381,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 373262,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 559777,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 8,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 559657,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 559777,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Принято. Блок 3 зафиксирован.",
+          "generator": {
+            "kind": "word_diverse",
+            "word_count": 140000
+          }
+        },
+        {
+          "label": "padding_4",
+          "status": "provider_context_limit",
+          "error": "Провайдер отклонил запрос из-за контекстного лимита",
+          "metrics": {
+            "current_message_tokens": {
+              "value": 186808,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 559657,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 746599,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": null,
+            "history_tokens_after": null,
+            "context_budget": {
+              "request_tokens": 746599,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "generator": {
+            "kind": "word_diverse",
+            "word_count": 140000
+          }
+        },
+        {
+          "label": "recovery_after_reset",
+          "status": "ok",
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "turn_index": 1,
+          "usage": {
+            "input_tokens": 197,
+            "output_tokens": 28,
+            "total_tokens": 225,
+            "reported": true
+          },
+          "session_usage": {
+            "input_tokens": 197,
+            "output_tokens": 28,
+            "total_tokens": 225,
+            "reported": true
+          },
+          "metrics": {
+            "current_message_tokens": {
+              "value": 7,
+              "is_estimate": true
+            },
+            "history_tokens_before": {
+              "value": 0,
+              "is_estimate": true
+            },
+            "request_tokens_before_send": {
+              "value": 141,
+              "is_estimate": true
+            },
+            "visible_answer_tokens": {
+              "value": 17,
+              "is_estimate": true
+            },
+            "history_tokens_after": {
+              "value": 30,
+              "is_estimate": true
+            },
+            "context_budget": {
+              "request_tokens": 141,
+              "context_window_tokens": 1000000,
+              "response_reserve_tokens": 1024,
+              "overflow_tokens": 0,
+              "status": "ok"
+            }
+          },
+          "answer_preview": "Привет. Дементий Вечеров, бывший детектив из Нео-Порта. Слушаю."
+        }
+      ]
+    }
+  ]
+}
