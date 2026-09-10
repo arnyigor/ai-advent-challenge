@@ -1,0 +1,797 @@
+{
+  "schema": "day09-comparison-v1",
+  "created_at": "2026-09-10T12:52:13.336008+00:00",
+  "provider": "deepseek",
+  "dialogue": {
+    "setup_turns": 8,
+    "probe_turns": 4,
+    "same_messages_for_both_modes": true,
+    "background_words_per_setup_turn": 180,
+    "recent_messages": 6,
+    "summary_batch_size": 10
+  },
+  "modes": {
+    "full_history": {
+      "compression_enabled": false,
+      "quality_score": 100.0,
+      "correct_probes": 4,
+      "total_probes": 4,
+      "total_input_tokens": 29049,
+      "total_output_tokens": 130,
+      "total_tokens": 29179,
+      "usage_reported": true,
+      "api_calls": 12,
+      "summary_calls": 0,
+      "final_summary": {
+        "content": "",
+        "summarized_message_count": 0,
+        "revision": 0,
+        "usage": {}
+      },
+      "setup_turns": [
+        {
+          "kind": "setup",
+          "index": 1,
+          "usage": {
+            "input_tokens": 567,
+            "output_tokens": 4,
+            "total_tokens": 571,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 427
+        },
+        {
+          "kind": "setup",
+          "index": 2,
+          "usage": {
+            "input_tokens": 955,
+            "output_tokens": 4,
+            "total_tokens": 959,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 725
+        },
+        {
+          "kind": "setup",
+          "index": 3,
+          "usage": {
+            "input_tokens": 1340,
+            "output_tokens": 4,
+            "total_tokens": 1344,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 1021
+        },
+        {
+          "kind": "setup",
+          "index": 4,
+          "usage": {
+            "input_tokens": 1723,
+            "output_tokens": 4,
+            "total_tokens": 1727,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 1318
+        },
+        {
+          "kind": "setup",
+          "index": 5,
+          "usage": {
+            "input_tokens": 2108,
+            "output_tokens": 4,
+            "total_tokens": 2112,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 1617
+        },
+        {
+          "kind": "setup",
+          "index": 6,
+          "usage": {
+            "input_tokens": 2492,
+            "output_tokens": 53,
+            "total_tokens": 2545,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 1913
+        },
+        {
+          "kind": "setup",
+          "index": 7,
+          "usage": {
+            "input_tokens": 2924,
+            "output_tokens": 4,
+            "total_tokens": 2928,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 2243
+        },
+        {
+          "kind": "setup",
+          "index": 8,
+          "usage": {
+            "input_tokens": 3305,
+            "output_tokens": 42,
+            "total_tokens": 3347,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 2540
+        }
+      ],
+      "probes": [
+        {
+          "index": 1,
+          "question": "Какой код проекта? Ответь только кодом.",
+          "answer": "Маяк-17",
+          "passed": true,
+          "usage": {
+            "input_tokens": 3366,
+            "output_tokens": 5,
+            "total_tokens": 3371,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "compression": {
+            "enabled": false,
+            "status": "disabled",
+            "recent_messages_limit": 6,
+            "batch_size": 10,
+            "raw_message_count": 16,
+            "summarized_message_count": 0,
+            "verbatim_message_count": 16,
+            "summary_revision": 0,
+            "summary_text": "",
+            "full_history_tokens": {
+              "value": 2448,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "effective_history_tokens": {
+              "value": 2448,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "summary_tokens": {
+              "value": 0,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "estimated_tokens_saved_this_request": 0,
+            "summary_calls_this_turn": [],
+            "raw_message_count_after": 18,
+            "full_history_tokens_after": {
+              "value": 2466,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            }
+          }
+        },
+        {
+          "index": 2,
+          "question": "Какой город выбран для проекта? Ответь одним словом.",
+          "answer": "Казань",
+          "passed": true,
+          "usage": {
+            "input_tokens": 3395,
+            "output_tokens": 3,
+            "total_tokens": 3398,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "compression": {
+            "enabled": false,
+            "status": "disabled",
+            "recent_messages_limit": 6,
+            "batch_size": 10,
+            "raw_message_count": 18,
+            "summarized_message_count": 0,
+            "verbatim_message_count": 18,
+            "summary_revision": 0,
+            "summary_text": "",
+            "full_history_tokens": {
+              "value": 2466,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "effective_history_tokens": {
+              "value": 2466,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "summary_tokens": {
+              "value": 0,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "estimated_tokens_saved_this_request": 0,
+            "summary_calls_this_turn": [],
+            "raw_message_count_after": 20,
+            "full_history_tokens_after": {
+              "value": 2484,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            }
+          }
+        },
+        {
+          "index": 3,
+          "question": "Какой бюджет утверждён? Ответь только числом.",
+          "answer": "480000",
+          "passed": true,
+          "usage": {
+            "input_tokens": 3421,
+            "output_tokens": 2,
+            "total_tokens": 3423,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "compression": {
+            "enabled": false,
+            "status": "disabled",
+            "recent_messages_limit": 6,
+            "batch_size": 10,
+            "raw_message_count": 20,
+            "summarized_message_count": 0,
+            "verbatim_message_count": 20,
+            "summary_revision": 0,
+            "summary_text": "",
+            "full_history_tokens": {
+              "value": 2484,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "effective_history_tokens": {
+              "value": 2484,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "summary_tokens": {
+              "value": 0,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "estimated_tokens_saved_this_request": 0,
+            "summary_calls_this_turn": [],
+            "raw_message_count_after": 22,
+            "full_history_tokens_after": {
+              "value": 2500,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            }
+          }
+        },
+        {
+          "index": 4,
+          "question": "В каком формате нужен финальный отчёт? Ответь одним словом.",
+          "answer": "PDF",
+          "passed": true,
+          "usage": {
+            "input_tokens": 3453,
+            "output_tokens": 1,
+            "total_tokens": 3454,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "compression": {
+            "enabled": false,
+            "status": "disabled",
+            "recent_messages_limit": 6,
+            "batch_size": 10,
+            "raw_message_count": 22,
+            "summarized_message_count": 0,
+            "verbatim_message_count": 22,
+            "summary_revision": 0,
+            "summary_text": "",
+            "full_history_tokens": {
+              "value": 2500,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "effective_history_tokens": {
+              "value": 2500,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "summary_tokens": {
+              "value": 0,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "estimated_tokens_saved_this_request": 0,
+            "summary_calls_this_turn": [],
+            "raw_message_count_after": 24,
+            "full_history_tokens_after": {
+              "value": 2520,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            }
+          }
+        }
+      ]
+    },
+    "compressed": {
+      "compression_enabled": true,
+      "quality_score": 100.0,
+      "correct_probes": 4,
+      "total_probes": 4,
+      "total_input_tokens": 25654,
+      "total_output_tokens": 630,
+      "total_tokens": 26284,
+      "usage_reported": true,
+      "api_calls": 13,
+      "summary_calls": 1,
+      "final_summary": {
+        "content": "Сводка диалога:\n\n- Пользователь просит запомнить для финальной проверки: код проекта — Маяк-17. Ассистент ответил: принято.\n- Пользователь сообщил важный факт: для проекта выбран город Казань. Ассистент ответил: принято.\n- Пользователь сообщил: утверждённый бюджет проекта — 480 000 рублей. Ассистент ответил: принято.\n- Пользователь сообщил: финальный отчёт нужно отдать в формате PDF. Ассистент ответил: принято.\n- Пользователь предложил обсудить нейтральный фон: перечислить три преимущества коротких ежедневных заметок. Ассистент перечислил: снижают перегрузку памяти; создают хронологию; повышают точность отчётов.\n- В пакете присутствовали нейтральные блоки 1–5 с повторяющимся набором слов: журнал, маршрут, секция, архив, заметка, календарь, команда, задача, отчёт, проверка, статус, решение, версия, документ, таблица, встреча, план, риск, этап. Содержательных фактов, решений, обещаний или открытых вопросов в них нет.\n- Открытые вопросы: не указаны.",
+        "summarized_message_count": 10,
+        "revision": 1,
+        "usage": {
+          "input_tokens": 2200,
+          "output_tokens": 308,
+          "total_tokens": 2508,
+          "reported": true,
+          "reasoning_tokens": 0,
+          "known_calls": 0,
+          "unknown_calls": 0,
+          "complete": true
+        }
+      },
+      "setup_turns": [
+        {
+          "kind": "setup",
+          "index": 1,
+          "usage": {
+            "input_tokens": 567,
+            "output_tokens": 4,
+            "total_tokens": 571,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 427
+        },
+        {
+          "kind": "setup",
+          "index": 2,
+          "usage": {
+            "input_tokens": 955,
+            "output_tokens": 4,
+            "total_tokens": 959,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 725
+        },
+        {
+          "kind": "setup",
+          "index": 3,
+          "usage": {
+            "input_tokens": 1340,
+            "output_tokens": 4,
+            "total_tokens": 1344,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 1021
+        },
+        {
+          "kind": "setup",
+          "index": 4,
+          "usage": {
+            "input_tokens": 1723,
+            "output_tokens": 4,
+            "total_tokens": 1727,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 1318
+        },
+        {
+          "kind": "setup",
+          "index": 5,
+          "usage": {
+            "input_tokens": 2108,
+            "output_tokens": 128,
+            "total_tokens": 2236,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 1617
+        },
+        {
+          "kind": "setup",
+          "index": 6,
+          "usage": {
+            "input_tokens": 2616,
+            "output_tokens": 67,
+            "total_tokens": 2683,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 2018
+        },
+        {
+          "kind": "setup",
+          "index": 7,
+          "usage": {
+            "input_tokens": 3062,
+            "output_tokens": 61,
+            "total_tokens": 3123,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 2354
+        },
+        {
+          "kind": "setup",
+          "index": 8,
+          "usage": {
+            "input_tokens": 3500,
+            "output_tokens": 39,
+            "total_tokens": 3539,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 2687
+        }
+      ],
+      "probes": [
+        {
+          "index": 1,
+          "question": "Какой код проекта? Ответь только кодом.",
+          "answer": "Маяк-17",
+          "passed": true,
+          "usage": {
+            "input_tokens": 1853,
+            "output_tokens": 5,
+            "total_tokens": 1858,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "compression": {
+            "enabled": true,
+            "status": "compressed",
+            "recent_messages_limit": 6,
+            "batch_size": 10,
+            "raw_message_count": 16,
+            "summarized_message_count": 10,
+            "verbatim_message_count": 6,
+            "summary_revision": 1,
+            "summary_text": "Сводка диалога:\n\n- Пользователь просит запомнить для финальной проверки: код проекта — Маяк-17. Ассистент ответил: принято.\n- Пользователь сообщил важный факт: для проекта выбран город Казань. Ассистент ответил: принято.\n- Пользователь сообщил: утверждённый бюджет проекта — 480 000 рублей. Ассистент ответил: принято.\n- Пользователь сообщил: финальный отчёт нужно отдать в формате PDF. Ассистент ответил: принято.\n- Пользователь предложил обсудить нейтральный фон: перечислить три преимущества коротких ежедневных заметок. Ассистент перечислил: снижают перегрузку памяти; создают хронологию; повышают точность отчётов.\n- В пакете присутствовали нейтральные блоки 1–5 с повторяющимся набором слов: журнал, маршрут, секция, архив, заметка, календарь, команда, задача, отчёт, проверка, статус, решение, версия, документ, таблица, встреча, план, риск, этап. Содержательных фактов, решений, обещаний или открытых вопросов в них нет.\n- Открытые вопросы: не указаны.",
+            "full_history_tokens": {
+              "value": 2593,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "effective_history_tokens": {
+              "value": 1270,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "summary_tokens": {
+              "value": 245,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "estimated_tokens_saved_this_request": 1323,
+            "summary_calls_this_turn": [
+              {
+                "status": "ok",
+                "revision": 1,
+                "message_count": 10,
+                "summarized_message_count": 10,
+                "usage": {
+                  "input_tokens": 2200,
+                  "output_tokens": 308,
+                  "total_tokens": 2508,
+                  "reported": true,
+                  "reasoning_tokens": 0,
+                  "known_calls": 0,
+                  "unknown_calls": 0,
+                  "complete": true
+                }
+              }
+            ],
+            "raw_message_count_after": 18,
+            "full_history_tokens_after": {
+              "value": 2611,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            }
+          }
+        },
+        {
+          "index": 2,
+          "question": "Какой город выбран для проекта? Ответь одним словом.",
+          "answer": "Казань",
+          "passed": true,
+          "usage": {
+            "input_tokens": 1882,
+            "output_tokens": 3,
+            "total_tokens": 1885,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "compression": {
+            "enabled": true,
+            "status": "up_to_date",
+            "recent_messages_limit": 6,
+            "batch_size": 10,
+            "raw_message_count": 18,
+            "summarized_message_count": 10,
+            "verbatim_message_count": 8,
+            "summary_revision": 1,
+            "summary_text": "Сводка диалога:\n\n- Пользователь просит запомнить для финальной проверки: код проекта — Маяк-17. Ассистент ответил: принято.\n- Пользователь сообщил важный факт: для проекта выбран город Казань. Ассистент ответил: принято.\n- Пользователь сообщил: утверждённый бюджет проекта — 480 000 рублей. Ассистент ответил: принято.\n- Пользователь сообщил: финальный отчёт нужно отдать в формате PDF. Ассистент ответил: принято.\n- Пользователь предложил обсудить нейтральный фон: перечислить три преимущества коротких ежедневных заметок. Ассистент перечислил: снижают перегрузку памяти; создают хронологию; повышают точность отчётов.\n- В пакете присутствовали нейтральные блоки 1–5 с повторяющимся набором слов: журнал, маршрут, секция, архив, заметка, календарь, команда, задача, отчёт, проверка, статус, решение, версия, документ, таблица, встреча, план, риск, этап. Содержательных фактов, решений, обещаний или открытых вопросов в них нет.\n- Открытые вопросы: не указаны.",
+            "full_history_tokens": {
+              "value": 2611,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "effective_history_tokens": {
+              "value": 1288,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "summary_tokens": {
+              "value": 245,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "estimated_tokens_saved_this_request": 1323,
+            "summary_calls_this_turn": [],
+            "raw_message_count_after": 20,
+            "full_history_tokens_after": {
+              "value": 2629,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            }
+          }
+        },
+        {
+          "index": 3,
+          "question": "Какой бюджет утверждён? Ответь только числом.",
+          "answer": "480000",
+          "passed": true,
+          "usage": {
+            "input_tokens": 1908,
+            "output_tokens": 2,
+            "total_tokens": 1910,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "compression": {
+            "enabled": true,
+            "status": "up_to_date",
+            "recent_messages_limit": 6,
+            "batch_size": 10,
+            "raw_message_count": 20,
+            "summarized_message_count": 10,
+            "verbatim_message_count": 10,
+            "summary_revision": 1,
+            "summary_text": "Сводка диалога:\n\n- Пользователь просит запомнить для финальной проверки: код проекта — Маяк-17. Ассистент ответил: принято.\n- Пользователь сообщил важный факт: для проекта выбран город Казань. Ассистент ответил: принято.\n- Пользователь сообщил: утверждённый бюджет проекта — 480 000 рублей. Ассистент ответил: принято.\n- Пользователь сообщил: финальный отчёт нужно отдать в формате PDF. Ассистент ответил: принято.\n- Пользователь предложил обсудить нейтральный фон: перечислить три преимущества коротких ежедневных заметок. Ассистент перечислил: снижают перегрузку памяти; создают хронологию; повышают точность отчётов.\n- В пакете присутствовали нейтральные блоки 1–5 с повторяющимся набором слов: журнал, маршрут, секция, архив, заметка, календарь, команда, задача, отчёт, проверка, статус, решение, версия, документ, таблица, встреча, план, риск, этап. Содержательных фактов, решений, обещаний или открытых вопросов в них нет.\n- Открытые вопросы: не указаны.",
+            "full_history_tokens": {
+              "value": 2629,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "effective_history_tokens": {
+              "value": 1306,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "summary_tokens": {
+              "value": 245,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "estimated_tokens_saved_this_request": 1323,
+            "summary_calls_this_turn": [],
+            "raw_message_count_after": 22,
+            "full_history_tokens_after": {
+              "value": 2645,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            }
+          }
+        },
+        {
+          "index": 4,
+          "question": "В каком формате нужен финальный отчёт? Ответь одним словом.",
+          "answer": "PDF",
+          "passed": true,
+          "usage": {
+            "input_tokens": 1940,
+            "output_tokens": 1,
+            "total_tokens": 1941,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "compression": {
+            "enabled": true,
+            "status": "up_to_date",
+            "recent_messages_limit": 6,
+            "batch_size": 10,
+            "raw_message_count": 22,
+            "summarized_message_count": 10,
+            "verbatim_message_count": 12,
+            "summary_revision": 1,
+            "summary_text": "Сводка диалога:\n\n- Пользователь просит запомнить для финальной проверки: код проекта — Маяк-17. Ассистент ответил: принято.\n- Пользователь сообщил важный факт: для проекта выбран город Казань. Ассистент ответил: принято.\n- Пользователь сообщил: утверждённый бюджет проекта — 480 000 рублей. Ассистент ответил: принято.\n- Пользователь сообщил: финальный отчёт нужно отдать в формате PDF. Ассистент ответил: принято.\n- Пользователь предложил обсудить нейтральный фон: перечислить три преимущества коротких ежедневных заметок. Ассистент перечислил: снижают перегрузку памяти; создают хронологию; повышают точность отчётов.\n- В пакете присутствовали нейтральные блоки 1–5 с повторяющимся набором слов: журнал, маршрут, секция, архив, заметка, календарь, команда, задача, отчёт, проверка, статус, решение, версия, документ, таблица, встреча, план, риск, этап. Содержательных фактов, решений, обещаний или открытых вопросов в них нет.\n- Открытые вопросы: не указаны.",
+            "full_history_tokens": {
+              "value": 2645,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "effective_history_tokens": {
+              "value": 1322,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "summary_tokens": {
+              "value": 245,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            },
+            "estimated_tokens_saved_this_request": 1323,
+            "summary_calls_this_turn": [],
+            "raw_message_count_after": 24,
+            "full_history_tokens_after": {
+              "value": 2665,
+              "count_source": "local_unicode_segment_estimate",
+              "is_estimate": true,
+              "tokenizer": "unicode-segment-estimate-v1",
+              "model": "deepseek-v4-flash"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "input_tokens_saved": 3395,
+    "input_token_saving_percent": 11.7,
+    "total_tokens_saved": 2895,
+    "total_token_saving_percent": 9.9,
+    "summary_output_overhead_tokens": 500,
+    "quality_delta_points": 0.0
+  }
+}

@@ -32,3 +32,8 @@ day08-token-usage/*.db-shm
 day08-token-usage/*.db-wal
 day08-token-usage/video-frames/
 day08-token-usage/verify-video-frames/
+day09-context-compression/*.db
+day09-context-compression/*.db-journal
+day09-context-compression/*.db-shm
+day09-context-compression/*.db-wal
+.claude/scheduled_tasks.lock

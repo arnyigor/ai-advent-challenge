@@ -1,0 +1,73 @@
+{
+  "checked_at": "2026-09-09",
+  "note": "DeepSeek's own docs page did not return technical specs from this environment; the 1,000,000-token context window and $0.22/M input / $0.66/M output off-peak pricing below come from a web search corroborated by OpenRouter's DeepSeek V4 Flash listing (https://openrouter.ai/deepseek/deepseek-v4-flash) and https://www.morphllm.com/deepseek-v4-flash. Chosen as the fixed model for all three Day 8 scenarios after two smaller-window candidates failed in practice: the HF Router (Qwen2.5-Coder-7B-Instruct) ran out of its monthly free Inference Providers credits (HTTP 402) partway through scenario B, and Wormsoft's Qwen3.8-27B has a genuinely huge native context (~256K, see below) and just timed out at the shared 60s HTTP client timeout on a ~60K-token probe instead of rejecting cleanly. DeepSeek's deepseek-v4-flash processed a real 289,047-token prompt in 13.6s during probing, so a real overflow at its 1,000,000-token window is reachable within the same timeout by accumulating history across a few large turns (see results/scenarios.json for the actual run). The local pre-send counter is an estimate; provider API usage remains authoritative after successful calls.",
+  "providers": {
+    "deepseek": {
+      "label": "DeepSeek",
+      "models": {
+        "deepseek-v4-flash": {
+          "context_window_tokens": 1000000,
+          "max_output_tokens": 384000,
+          "context_source": "Web search corroborated by https://openrouter.ai/deepseek/deepseek-v4-flash and https://www.morphllm.com/deepseek-v4-flash (official DeepSeek-hosted figure: 1,000,000 total context, 384,000 max output, sharing the same budget rather than additive). Empirically probed during Day 8 implementation: a single real call with 289,047 prompt tokens (per API usage.prompt_tokens) succeeded in 13.6s.",
+          "token_counter": {
+            "kind": "estimate",
+            "id": "unicode-segment-estimate-v1",
+            "exact": false
+          },
+          "usage_fields": {
+            "input": "usage.prompt_tokens -> usageMetadata.promptTokenCount",
+            "output": "usage.completion_tokens -> usageMetadata.candidatesTokenCount",
+            "total": "usage.total_tokens when present; otherwise input + output",
+            "cache": [
+              "prompt_cache_hit_tokens",
+              "prompt_cache_miss_tokens"
+            ],
+            "reasoning": "message.reasoning_content text and reasoning token fields when reported"
+          }
+        }
+      }
+    },
+    "hf": {
+      "label": "HuggingFace (Qwen2.5-Coder-7B-Instruct, nscale)",
+      "models": {
+        "Qwen/Qwen2.5-Coder-7B-Instruct:nscale": {
+          "context_window_tokens": 32768,
+          "max_output_tokens": 8192,
+          "context_source": "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct (config.json max_position_embeddings=32768; the model card's 128K ceiling needs YaRN rope scaling, not confirmed enabled on the nscale router deployment). Originally picked for its small window versus DeepSeek's 1,000,000 tokens, but this HF account's monthly free Inference Providers credits ran out (HTTP 402: \"You have depleted your monthly included credits\") partway through Day 8 scenario B, so DeepSeek was used instead for the full scenario run.",
+          "token_counter": {
+            "kind": "estimate",
+            "id": "unicode-segment-estimate-v1",
+            "exact": false
+          },
+          "usage_fields": {
+            "input": "usage.prompt_tokens",
+            "output": "usage.completion_tokens",
+            "total": "usage.total_tokens when present; otherwise input + output",
+            "cache": [],
+            "reasoning": "not reported by this endpoint"
+          }
+        }
+      }
+    },
+    "gemini": {
+      "label": "Gemini",
+      "models": {}
+    },
+    "wormsoft": {
+      "label": "Wormsoft",
+      "models": {
+        "qwen/qwen3.8:27b": {
+          "context_window_tokens": null,
+          "max_output_tokens": null,
+          "context_source": "Not confirmed as a usable candidate for Day 8. The underlying model (unsloth/Qwen3.8-27B) advertises a 262,144-token native context (extendable to 1M via YaRN, per https://huggingface.co/unsloth/Qwen3.8-27B-GGUF), which is too large to probe cheaply for a controlled overflow. A direct ~60K-token probe against Wormsoft's endpoint (https://ai.wormsoft.ru/api/gpt) did not reject the request; it hit the shared 60s HTTP client timeout instead (ReadTimeout), which is not evidence of any context limit and was not used as one.",
+          "token_counter": null,
+          "usage_fields": null
+        }
+      }
+    },
+    "routerai": {
+      "label": "RouterAI",
+      "models": {}
+    }
+  }
+}

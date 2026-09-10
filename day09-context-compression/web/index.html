@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Day 09 — Сжатие истории</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><div class="av">Σ</div><div><div class="n">Управление контекстом</div><div class="s">Day 09 · summary + последние N сообщений</div></div></div>
+    <div class="provider-badge"><span class="k">Режим</span><span class="logo" id="modeBadge">Сжатие</span></div>
+  </header>
+  <main class="main">
+    <section class="chat">
+      <div class="msgs" id="msgs"><div class="msgs-inner" id="msgsInner"><div class="empty" id="emptyState">Начните длинный диалог: полная история сохранится, но старые сообщения будут заменяться сводкой в запросе к модели.</div></div></div>
+      <div class="composer-wrap">
+        <form class="composer" id="form"><textarea id="prompt" maxlength="1000000" rows="1" placeholder="Например: запомни код проекта — Маяк-17" required></textarea><button id="sendButton" class="send" type="submit" aria-label="Отправить">↑</button></form>
+        <div class="hint"><span>Enter — отправить, Shift+Enter — новая строка</span><span id="statusText">готово</span></div>
+      </div>
+    </section>
+    <aside class="panel">
+      <div class="panel-head"><h2>Контекст</h2><span class="saved" id="savedIndicator">сохранено</span></div>
+      <label class="check compression-switch"><input type="checkbox" id="compressionEnabled" checked><span><b>Сжимать историю</b><small>Выкл. — контрольный режим с полной историей</small></span></label>
+      <div class="settings-pair">
+        <div class="field"><label for="recentMessages">Последние N</label><input type="number" id="recentMessages" min="1" max="1000" value="6"></div>
+        <div class="field"><label for="batchSize">Пакет summary</label><input type="number" id="batchSize" min="1" max="1000" value="10"></div>
+      </div>
+      <div class="field"><label for="providerSelect">Провайдер</label><select id="providerSelect"><option value="">Авто (fallback)</option></select></div>
+      <div class="field"><label for="modelSelect">Модель</label><select id="modelSelect" disabled><option value="">По умолчанию</option></select></div>
+      <div class="field"><label for="temperature">Температура <span id="temperatureValue">0.7</span></label><input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7"></div>
+      <div class="metric-grid compression-metrics">
+        <div class="metric"><span>Полная история</span><b id="fullTokens">—</b></div><div class="metric"><span>Контекст LLM</span><b id="effectiveTokens">—</b></div>
+        <div class="metric accent"><span>Экономия / запрос</span><b id="savedTokens">—</b></div><div class="metric"><span>Сжато сообщений</span><b id="summarizedCount">0</b></div>
+        <div class="metric"><span>Дословный хвост</span><b id="verbatimCount">0</b></div><div class="metric"><span>Ревизия summary</span><b id="summaryRevision">0</b></div>
+      </div>
+      <div class="field"><label>Summary хранится отдельно</label><div class="summary-box" id="summaryText">Сводка ещё не создана. Она появится, когда накопится полный пакет старых сообщений.</div></div>
+      <div class="field"><label>Фактический расход сессии</label><div class="session">
+        <div class="r"><span>Вход</span><b id="sessInput">0</b></div><div class="r"><span>Выход</span><b id="sessOutput">0</b></div><div class="r"><span>Всего</span><b id="sessTotal">0</b></div><div class="r"><span>API-вызовов</span><b id="sessCalls">0</b></div>
+      </div></div>
+      <div class="field"><label>A/B: одинаковый диалог</label><div class="comparison" id="comparison"><span>Запустите <code>python run_comparison.py</code>, чтобы получить реальные числа.</span></div></div>
+      <button type="button" class="btn wide" id="clearContextBtn">Очистить историю и summary</button>
+    </aside>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
