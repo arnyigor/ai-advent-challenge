@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Day 10 — Стратегии контекста</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><div class="av">⑂</div><div><div class="n">Управление контекстом</div><div class="s">Day 10 · sliding window / facts / branching</div></div></div>
+    <div class="provider-badge"><span class="k">Стратегия</span><span class="logo" id="strategyBadge">Sliding Window</span></div>
+  </header>
+  <main class="main">
+    <section class="chat">
+      <div class="msgs" id="msgs"><div class="msgs-inner" id="msgsInner"><div class="empty" id="emptyState">Соберите ТЗ на 10–15 сообщений и переключайте стратегию: агент получает одну и ту же историю по-разному.</div></div></div>
+      <div class="composer-wrap">
+        <form class="composer" id="form"><textarea id="prompt" maxlength="1000000" rows="1" placeholder="Например: цель проекта — каталог запчастей, бюджет 480 000" required></textarea><button id="sendButton" class="send" type="submit" aria-label="Отправить">↑</button></form>
+        <div class="hint"><span>Enter — отправить, Shift+Enter — новая строка</span><span id="statusText">готово</span></div>
+      </div>
+    </section>
+    <aside class="panel">
+      <div class="panel-head"><h2>Контекст</h2><span class="saved" id="savedIndicator">сохранено</span></div>
+
+      <div class="field"><label for="strategySelect">Стратегия</label><select id="strategySelect"></select></div>
+      <p class="strategy-hint" id="strategyHint">Только последние N сообщений, остальное отбрасывается.</p>
+
+      <div class="settings-pair">
+        <div class="field"><label for="recentMessages">Последние N</label><input type="number" id="recentMessages" min="1" max="1000" value="6"></div>
+        <div class="field"><label for="temperature">Температура <span id="temperatureValue">0.7</span></label><input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7"></div>
+      </div>
+      <div class="field"><label for="providerSelect">Провайдер</label><select id="providerSelect"><option value="">Авто (fallback)</option></select></div>
+      <div class="field"><label for="modelSelect">Модель</label><select id="modelSelect" disabled><option value="">По умолчанию</option></select></div>
+
+      <div class="metric-grid compression-metrics">
+        <div class="metric"><span>Полная история</span><b id="fullTokens">—</b></div><div class="metric"><span>Контекст LLM</span><b id="effectiveTokens">—</b></div>
+        <div class="metric accent"><span>Экономия / запрос</span><b id="savedTokens">—</b></div><div class="metric"><span>Отброшено</span><b id="droppedCount">0</b></div>
+        <div class="metric"><span>Дословный хвост</span><b id="verbatimCount">0</b></div><div class="metric"><span>Фактов</span><b id="factsCount">0</b></div>
+      </div>
+
+      <div class="field"><label>Facts — key/value память</label><div class="summary-box" id="factsBox">Пусто. Стратегия Sticky Facts обновляет этот блок после каждого сообщения пользователя.</div></div>
+
+      <div class="field"><label>Ветки диалога</label>
+        <div class="branch-list" id="branchList"><span class="muted">только основная</span></div>
+        <div class="branch-actions">
+          <input type="text" id="branchName" placeholder="имя ветки, напр. mobile" maxlength="40">
+          <button type="button" class="btn" id="forkBtn">Ветка от checkpoint</button>
+        </div>
+        <small class="muted" id="checkpointHint">Checkpoint: 0 сообщений</small>
+      </div>
+
+      <div class="field"><label>Фактический расход сессии</label><div class="session">
+        <div class="r"><span>Вход</span><b id="sessInput">0</b></div><div class="r"><span>Выход</span><b id="sessOutput">0</b></div><div class="r"><span>Всего</span><b id="sessTotal">0</b></div><div class="r"><span>API-вызовов</span><b id="sessCalls">0</b></div>
+      </div></div>
+
+      <div class="field"><label>Сравнение стратегий</label><div class="comparison" id="comparison"><span>Запустите <code>python run_strategies.py</code>, чтобы получить реальные числа.</span></div></div>
+      <button type="button" class="btn wide" id="clearContextBtn">Очистить сессию (все ветки)</button>
+    </aside>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

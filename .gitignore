@@ -37,3 +37,8 @@ day09-context-compression/*.db-journal
 day09-context-compression/*.db-shm
 day09-context-compression/*.db-wal
 .claude/scheduled_tasks.lock
+day10-context-strategies/*.db
+day10-context-strategies/*.db-journal
+day10-context-strategies/*.db-shm
+day10-context-strategies/*.db-wal
+day10-context-strategies/video-frames/

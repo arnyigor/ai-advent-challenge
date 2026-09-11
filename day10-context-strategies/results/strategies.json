@@ -1,0 +1,1061 @@
+{
+  "schema": "day10-strategies-v1",
+  "created_at": "2026-09-11T13:11:46.276567+00:00",
+  "provider": "deepseek",
+  "scenario": {
+    "name": "Сбор ТЗ",
+    "setup_turns": 12,
+    "probe_turns": 5,
+    "same_messages_for_all_strategies": true,
+    "recent_messages": 6
+  },
+  "strategies": [
+    {
+      "strategy": "sliding",
+      "label": "Sliding Window",
+      "quality_score": 0.0,
+      "correct_probes": 0,
+      "total_probes": 5,
+      "total_input_tokens": 5694,
+      "total_output_tokens": 336,
+      "total_tokens": 6030,
+      "usage_reported": true,
+      "api_calls": 17,
+      "memory_calls": 0,
+      "final_facts": {
+        "values": {},
+        "revision": 0,
+        "usage": {}
+      },
+      "setup_turns": [
+        {
+          "index": 1,
+          "usage": {
+            "input_tokens": 214,
+            "output_tokens": 4,
+            "total_tokens": 218,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 154,
+          "verbatim_message_count": 0,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 2,
+          "usage": {
+            "input_tokens": 250,
+            "output_tokens": 4,
+            "total_tokens": 254,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 182,
+          "verbatim_message_count": 2,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 3,
+          "usage": {
+            "input_tokens": 282,
+            "output_tokens": 4,
+            "total_tokens": 286,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 205,
+          "verbatim_message_count": 4,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 4,
+          "usage": {
+            "input_tokens": 312,
+            "output_tokens": 4,
+            "total_tokens": 316,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 229,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 5,
+          "usage": {
+            "input_tokens": 306,
+            "output_tokens": 4,
+            "total_tokens": 310,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 224,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 2,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 6,
+          "usage": {
+            "input_tokens": 303,
+            "output_tokens": 34,
+            "total_tokens": 337,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 220,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 4,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 7,
+          "usage": {
+            "input_tokens": 333,
+            "output_tokens": 34,
+            "total_tokens": 367,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 241,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 6,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 8,
+          "usage": {
+            "input_tokens": 364,
+            "output_tokens": 37,
+            "total_tokens": 401,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 268,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 8,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 9,
+          "usage": {
+            "input_tokens": 397,
+            "output_tokens": 46,
+            "total_tokens": 443,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 298,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 10,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 10,
+          "usage": {
+            "input_tokens": 404,
+            "output_tokens": 32,
+            "total_tokens": 436,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 305,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 12,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 11,
+          "usage": {
+            "input_tokens": 401,
+            "output_tokens": 36,
+            "total_tokens": 437,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 302,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 14,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 12,
+          "usage": {
+            "input_tokens": 397,
+            "output_tokens": 36,
+            "total_tokens": 433,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 292,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 16,
+          "facts_after_turn": {}
+        }
+      ],
+      "probes": [
+        {
+          "index": 1,
+          "question": "Какой код проекта? Ответь только кодом.",
+          "answer": "Не вижу в переданном диалоге кода проекта — в предыдущих репликах он не упоминался. Уточни, где он указан, и я назову его одной строкой.",
+          "passed": false,
+          "usage": {
+            "input_tokens": 379,
+            "output_tokens": 45,
+            "total_tokens": 424,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 2,
+          "question": "Какая целевая платформа? Ответь одним словом.",
+          "answer": "Не указана.",
+          "passed": false,
+          "usage": {
+            "input_tokens": 390,
+            "output_tokens": 4,
+            "total_tokens": 394,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 3,
+          "question": "Какой бюджет утверждён? Ответь только числом.",
+          "answer": "Не указан.",
+          "passed": false,
+          "usage": {
+            "input_tokens": 354,
+            "output_tokens": 4,
+            "total_tokens": 358,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 4,
+          "question": "Какой крайний срок сдачи? Ответь только датой.",
+          "answer": "Не указан.",
+          "passed": false,
+          "usage": {
+            "input_tokens": 320,
+            "output_tokens": 4,
+            "total_tokens": 324,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 5,
+          "question": "В каком формате сдаём финальный отчёт? Ответь одним словом.",
+          "answer": "Не указан.",
+          "passed": false,
+          "usage": {
+            "input_tokens": 288,
+            "output_tokens": 4,
+            "total_tokens": 292,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        }
+      ],
+      "input_tokens_vs_full_branch_percent": 44.2
+    },
+    {
+      "strategy": "facts",
+      "label": "Sticky Facts",
+      "quality_score": 100.0,
+      "correct_probes": 5,
+      "total_probes": 5,
+      "total_input_tokens": 13242,
+      "total_output_tokens": 413,
+      "total_tokens": 13655,
+      "usage_reported": true,
+      "api_calls": 34,
+      "memory_calls": 17,
+      "final_facts": {
+        "values": {
+          "проект": "Ирбис-4",
+          "цель": "собирать ТЗ",
+          "платформа": "Android",
+          "минимальная_версия": "9",
+          "бюджет": "640 000 рублей",
+          "срок": "15 декабря",
+          "формат_сдачи": "PDF"
+        },
+        "revision": 5,
+        "usage": {
+          "input_tokens": 341,
+          "output_tokens": 10,
+          "total_tokens": 351,
+          "reported": true,
+          "reasoning_tokens": 0,
+          "known_calls": 0,
+          "unknown_calls": 0,
+          "complete": true
+        }
+      },
+      "setup_turns": [
+        {
+          "index": 1,
+          "usage": {
+            "input_tokens": 283,
+            "output_tokens": 4,
+            "total_tokens": 287,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 212,
+          "verbatim_message_count": 0,
+          "dropped_message_count": 0,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ"
+          }
+        },
+        {
+          "index": 2,
+          "usage": {
+            "input_tokens": 336,
+            "output_tokens": 4,
+            "total_tokens": 340,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 253,
+          "verbatim_message_count": 2,
+          "dropped_message_count": 0,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9"
+          }
+        },
+        {
+          "index": 3,
+          "usage": {
+            "input_tokens": 377,
+            "output_tokens": 4,
+            "total_tokens": 381,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 282,
+          "verbatim_message_count": 4,
+          "dropped_message_count": 0,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей"
+          }
+        },
+        {
+          "index": 4,
+          "usage": {
+            "input_tokens": 414,
+            "output_tokens": 4,
+            "total_tokens": 418,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 312,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 0,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря"
+          }
+        },
+        {
+          "index": 5,
+          "usage": {
+            "input_tokens": 417,
+            "output_tokens": 4,
+            "total_tokens": 421,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 313,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 2,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря",
+            "формат_сдачи": "PDF"
+          }
+        },
+        {
+          "index": 6,
+          "usage": {
+            "input_tokens": 414,
+            "output_tokens": 39,
+            "total_tokens": 453,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 309,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 4,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря",
+            "формат_сдачи": "PDF"
+          }
+        },
+        {
+          "index": 7,
+          "usage": {
+            "input_tokens": 449,
+            "output_tokens": 35,
+            "total_tokens": 484,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 334,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 6,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря",
+            "формат_сдачи": "PDF"
+          }
+        },
+        {
+          "index": 8,
+          "usage": {
+            "input_tokens": 481,
+            "output_tokens": 38,
+            "total_tokens": 519,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 361,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 8,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря",
+            "формат_сдачи": "PDF"
+          }
+        },
+        {
+          "index": 9,
+          "usage": {
+            "input_tokens": 515,
+            "output_tokens": 44,
+            "total_tokens": 559,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 392,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 10,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря",
+            "формат_сдачи": "PDF"
+          }
+        },
+        {
+          "index": 10,
+          "usage": {
+            "input_tokens": 515,
+            "output_tokens": 38,
+            "total_tokens": 553,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 394,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 12,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря",
+            "формат_сдачи": "PDF"
+          }
+        },
+        {
+          "index": 11,
+          "usage": {
+            "input_tokens": 517,
+            "output_tokens": 43,
+            "total_tokens": 560,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 398,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 14,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря",
+            "формат_сдачи": "PDF"
+          }
+        },
+        {
+          "index": 12,
+          "usage": {
+            "input_tokens": 520,
+            "output_tokens": 49,
+            "total_tokens": 569,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 391,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 16,
+          "facts_after_turn": {
+            "проект": "Ирбис-4",
+            "цель": "собирать ТЗ",
+            "платформа": "Android",
+            "минимальная_версия": "9",
+            "бюджет": "640 000 рублей",
+            "срок": "15 декабря",
+            "формат_сдачи": "PDF"
+          }
+        }
+      ],
+      "probes": [
+        {
+          "index": 1,
+          "question": "Какой код проекта? Ответь только кодом.",
+          "answer": "Ирбис-4",
+          "passed": true,
+          "usage": {
+            "input_tokens": 517,
+            "output_tokens": 6,
+            "total_tokens": 523,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 2,
+          "question": "Какая целевая платформа? Ответь одним словом.",
+          "answer": "Android",
+          "passed": true,
+          "usage": {
+            "input_tokens": 484,
+            "output_tokens": 1,
+            "total_tokens": 485,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 3,
+          "question": "Какой бюджет утверждён? Ответь только числом.",
+          "answer": "640000",
+          "passed": true,
+          "usage": {
+            "input_tokens": 438,
+            "output_tokens": 2,
+            "total_tokens": 440,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 4,
+          "question": "Какой крайний срок сдачи? Ответь только датой.",
+          "answer": "15 декабря",
+          "passed": true,
+          "usage": {
+            "input_tokens": 391,
+            "output_tokens": 2,
+            "total_tokens": 393,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 5,
+          "question": "В каком формате сдаём финальный отчёт? Ответь одним словом.",
+          "answer": "PDF",
+          "passed": true,
+          "usage": {
+            "input_tokens": 397,
+            "output_tokens": 1,
+            "total_tokens": 398,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        }
+      ],
+      "input_tokens_vs_full_branch_percent": -29.8
+    },
+    {
+      "strategy": "branching",
+      "label": "Branching",
+      "quality_score": 100.0,
+      "correct_probes": 5,
+      "total_probes": 5,
+      "total_input_tokens": 10201,
+      "total_output_tokens": 345,
+      "total_tokens": 10546,
+      "usage_reported": true,
+      "api_calls": 17,
+      "memory_calls": 0,
+      "final_facts": {
+        "values": {},
+        "revision": 0,
+        "usage": {}
+      },
+      "setup_turns": [
+        {
+          "index": 1,
+          "usage": {
+            "input_tokens": 214,
+            "output_tokens": 4,
+            "total_tokens": 218,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 154,
+          "verbatim_message_count": 0,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 2,
+          "usage": {
+            "input_tokens": 250,
+            "output_tokens": 4,
+            "total_tokens": 254,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 182,
+          "verbatim_message_count": 2,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 3,
+          "usage": {
+            "input_tokens": 282,
+            "output_tokens": 4,
+            "total_tokens": 286,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 205,
+          "verbatim_message_count": 4,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 4,
+          "usage": {
+            "input_tokens": 312,
+            "output_tokens": 4,
+            "total_tokens": 316,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 229,
+          "verbatim_message_count": 6,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 5,
+          "usage": {
+            "input_tokens": 344,
+            "output_tokens": 4,
+            "total_tokens": 348,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 253,
+          "verbatim_message_count": 8,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 6,
+          "usage": {
+            "input_tokens": 377,
+            "output_tokens": 66,
+            "total_tokens": 443,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 277,
+          "verbatim_message_count": 10,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 7,
+          "usage": {
+            "input_tokens": 471,
+            "output_tokens": 38,
+            "total_tokens": 509,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 342,
+          "verbatim_message_count": 12,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 8,
+          "usage": {
+            "input_tokens": 536,
+            "output_tokens": 34,
+            "total_tokens": 570,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 396,
+          "verbatim_message_count": 14,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 9,
+          "usage": {
+            "input_tokens": 598,
+            "output_tokens": 45,
+            "total_tokens": 643,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 447,
+          "verbatim_message_count": 16,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 10,
+          "usage": {
+            "input_tokens": 668,
+            "output_tokens": 32,
+            "total_tokens": 700,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 494,
+          "verbatim_message_count": 18,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 11,
+          "usage": {
+            "input_tokens": 727,
+            "output_tokens": 41,
+            "total_tokens": 768,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 541,
+          "verbatim_message_count": 20,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        },
+        {
+          "index": 12,
+          "usage": {
+            "input_tokens": 793,
+            "output_tokens": 57,
+            "total_tokens": 850,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          },
+          "request_tokens_estimate": 593,
+          "verbatim_message_count": 22,
+          "dropped_message_count": 0,
+          "facts_after_turn": {}
+        }
+      ],
+      "probes": [
+        {
+          "index": 1,
+          "question": "Какой код проекта? Ответь только кодом.",
+          "answer": "Ирбис-4",
+          "passed": true,
+          "usage": {
+            "input_tokens": 870,
+            "output_tokens": 6,
+            "total_tokens": 876,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 2,
+          "question": "Какая целевая платформа? Ответь одним словом.",
+          "answer": "Android",
+          "passed": true,
+          "usage": {
+            "input_tokens": 900,
+            "output_tokens": 1,
+            "total_tokens": 901,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 3,
+          "question": "Какой бюджет утверждён? Ответь только числом.",
+          "answer": "640000",
+          "passed": true,
+          "usage": {
+            "input_tokens": 924,
+            "output_tokens": 2,
+            "total_tokens": 926,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 4,
+          "question": "Какой крайний срок сдачи? Ответь только датой.",
+          "answer": "15 декабря",
+          "passed": true,
+          "usage": {
+            "input_tokens": 951,
+            "output_tokens": 2,
+            "total_tokens": 953,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        },
+        {
+          "index": 5,
+          "question": "В каком формате сдаём финальный отчёт? Ответь одним словом.",
+          "answer": "PDF",
+          "passed": true,
+          "usage": {
+            "input_tokens": 984,
+            "output_tokens": 1,
+            "total_tokens": 985,
+            "reported": true,
+            "reasoning_tokens": 0,
+            "known_calls": 0,
+            "unknown_calls": 0,
+            "complete": true
+          }
+        }
+      ],
+      "input_tokens_vs_full_branch_percent": 0.0
+    }
+  ],
+  "branching_demo": {
+    "checkpoint_messages": 6,
+    "branches": {
+      "mobile": {
+        "fork_index": 6,
+        "answer": "приложение",
+        "message_count": 10,
+        "sees_own_decision": true,
+        "sees_other_branch": false,
+        "shares_common_prefix": true
+      },
+      "web": {
+        "fork_index": 6,
+        "answer": "кабинет",
+        "message_count": 10,
+        "sees_own_decision": true,
+        "sees_other_branch": false,
+        "shares_common_prefix": true
+      }
+    },
+    "isolated": true,
+    "total_tokens": 2538,
+    "api_calls": 7
+  }
+}
