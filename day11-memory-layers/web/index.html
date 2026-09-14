@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>День 11 · Модель памяти агента</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header><span class="eyebrow">AI ADVENT CHALLENGE / DAY 11</span><h1>Память агента — по слоям</h1><p>Каждый факт попадает туда, куда вы его направили. Смените сессию или задачу и проверьте границы.</p></header>
+  <main>
+    <section class="controls card">
+      <label>Пользователь <input id="user" value="demo"></label>
+      <label>Сессия <input id="session" value="session-1"></label>
+      <label>Задача <input id="task" value="task-1"></label>
+      <button id="load" type="button">Открыть контекст</button>
+    </section>
+    <section class="memory-grid">
+      <article class="card memory"><div class="layer-head"><span class="layer-dot short"></span><h2>Краткосрочная</h2><code>user + session</code></div><p>Текущий диалог и заметки сессии</p><div id="short-facts" class="facts"></div><div id="short-count" class="count"></div></article>
+      <article class="card memory"><div class="layer-head"><span class="layer-dot working"></span><h2>Рабочая</h2><code>user + task</code></div><p>Данные активной задачи</p><div id="working-facts" class="facts"></div></article>
+      <article class="card memory"><div class="layer-head"><span class="layer-dot long"></span><h2>Долговременная</h2><code>user</code></div><p>Профиль, решения, знания</p><div id="long-facts" class="facts"></div></article>
+    </section>
+    <section class="card save"><h2>Сохранить факт явно</h2><div class="save-row"><label>Слой <select id="layer"><option value="short">Краткосрочная</option><option value="working">Рабочая</option><option value="long">Долговременная</option></select></label><label>Ключ <input id="key" placeholder="например, срок"></label><label>Значение <input id="value" placeholder="например, 15 декабря"></label><button id="save" type="button">Сохранить</button></div></section>
+    <section class="workspace">
+      <article class="card chat-card"><div class="section-title"><h2>Диалог</h2><span id="scope"></span></div><div id="chat" class="chat"></div><div class="chat-compose"><textarea id="prompt" rows="2" placeholder="Задайте вопрос агенту…"></textarea><button id="ask" type="button">Спросить</button></div></article>
+      <aside class="card context-card"><h2>Что увидит модель</h2><p>Включите слои и сравните ответ на один вопрос.</p><label>Провайдер и модель <select id="provider"><option value="deepseek">DeepSeek V4 Flash</option><option value="wormsoft">Wormsoft · GPT-OSS 20B</option><option value="gemini">Gemini</option><option value="auto">Авто</option></select></label><div class="checks"><label><input type="checkbox" data-layer="short" checked> Краткосрочная</label><label><input type="checkbox" data-layer="working" checked> Рабочая</label><label><input type="checkbox" data-layer="long" checked> Долговременная</label></div><button id="preview" type="button" class="secondary">Показать контекст</button><pre id="context">Контекст появится здесь.</pre></aside>
+    </section>
+    <div id="status" role="status"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

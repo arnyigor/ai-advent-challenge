@@ -42,3 +42,4 @@ day10-context-strategies/*.db-journal
 day10-context-strategies/*.db-shm
 day10-context-strategies/*.db-wal
 day10-context-strategies/video-frames/
+day11-memory-layers/data/
