@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>День 13 · Task State Machine</title><link rel="stylesheet" href="styles.css"></head>
+<body><main>
+  <header><span class="day">AI ADVENT · ДЕНЬ 13</span><h1>Состояние задачи как конечный автомат</h1><p>Этап, текущий шаг и ожидаемое действие сохраняются формально — агент продолжает без повторного объяснения.</p></header>
+  <section class="controls panel">
+    <label>ID задачи<input id="task-id" value="demo-task"></label>
+    <label class="wide">Цель задачи<textarea id="objective">Реализовать экспорт отчёта в PDF и проверить результат</textarea></label>
+    <div class="buttons"><button id="create">Создать</button><button id="load" class="secondary">Загрузить по ID</button></div>
+  </section>
+  <section class="machine panel">
+    <div id="stages" class="stages"><div data-stage="planning">1 · planning</div><i>→</i><div data-stage="execution">2 · execution</div><i>→</i><div data-stage="validation">3 · validation</div><i>→</i><div data-stage="done">4 · done</div></div>
+    <div class="state-grid">
+      <article><small>Текущий этап</small><strong id="stage">—</strong></article>
+      <article><small>Текущий шаг</small><strong id="step">—</strong></article>
+      <article><small>Ожидаемое действие</small><strong id="expected">—</strong></article>
+      <article><small>Состояние</small><strong id="paused">—</strong></article>
+    </div>
+    <div id="pause-reason" class="pause-reason"></div>
+  </section>
+  <section class="workspace">
+    <div class="panel action-card"><h2>Управление автоматом</h2>
+      <label>Результат текущего шага<textarea id="result" placeholder="План, результат реализации или отчёт проверки"></textarea></label>
+      <button id="advance">Выполнить ожидаемое действие</button>
+      <div class="pause-row"><input id="reason" value="Нужна проверка человеком"><button id="pause" class="warn">Пауза</button><button id="resume" class="success">Продолжить</button></div>
+      <button id="wrong" class="danger">Проверить неверный переход</button>
+    </div>
+    <div class="panel"><h2>Сохранённые артефакты</h2><pre id="artifacts">{}</pre><h2>Ответ агента</h2><p id="message">Создайте или загрузите задачу.</p></div>
+  </section>
+  <section class="panel comparison"><h2>Сравнение моделей на одинаковом состоянии</h2>
+    <p>Обе модели получают одну цель, один этап и одинаковые артефакты. Ответ модели сам по себе не меняет автомат.</p>
+    <button id="compare">Сравнить DeepSeek V4 Flash и GPT-OSS 20B</button>
+    <div id="comparison-meta" class="comparison-meta">Сравнение ещё не запускалось.</div>
+    <div id="model-results" class="model-results"></div>
+  </section>
+  <section class="panel"><h2>Журнал переходов</h2><div id="history" class="history"></div></section>
+  <div id="status" class="status">Готово к демонстрации.</div>
+</main><script src="app.js"></script></body></html>
