@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "invariants": [
+    {
+      "id": "architecture-clean",
+      "category": "architecture",
+      "title": "Архитектура Clean Architecture",
+      "rule": "Новые функции сохраняют разделение presentation, domain и data; UI не обращается к базе напрямую.",
+      "conflict_terms": ["sql из ui", "база из ui", "ui напрямую в базу", "ui обращается к базе", "запрос к базе в composable"],
+      "required_terms": []
+    },
+    {
+      "id": "stack-kotlin",
+      "category": "stack",
+      "title": "Утверждённый стек",
+      "rule": "Клиентская реализация использует Kotlin и Compose; React Native и Flutter запрещены.",
+      "conflict_terms": ["react native", "flutter", "переписать на react", "переписать на flutter", "заменить kotlin"],
+      "required_terms": []
+    },
+    {
+      "id": "decision-postgresql",
+      "category": "technical_decision",
+      "title": "Основная БД — PostgreSQL",
+      "rule": "PostgreSQL остаётся основной серверной базой; миграция основной БД на MongoDB не допускается.",
+      "conflict_terms": ["перейти на mongodb", "заменить postgresql", "замени postgresql", "миграция на mongodb", "mongodb вместо postgresql"],
+      "required_terms": []
+    },
+    {
+      "id": "business-no-passwords",
+      "category": "business_rule",
+      "title": "Пароли не хранятся в открытом виде",
+      "rule": "Пароли нельзя сохранять или журналировать в открытом виде; допускается только стойкий хеш.",
+      "conflict_terms": ["пароль в открытом виде", "пароли в открытом виде", "логировать пароль", "сохранить пароль без хеша", "хранить пароль как текст"],
+      "required_terms": []
+    }
+  ]
+}
