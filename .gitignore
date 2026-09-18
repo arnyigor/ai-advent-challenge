@@ -44,3 +44,4 @@ day10-context-strategies/*.db-wal
 day10-context-strategies/video-frames/
 day11-memory-layers/data/
 day13-task-state-machine/data/
+day15-controlled-transitions/data/

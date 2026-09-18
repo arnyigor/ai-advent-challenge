@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "initial_state": "planning",
+  "terminal_states": ["completed"],
+  "states": [
+    {"id": "planning", "title": "Планирование", "description": "Подготовить план", "transitions": {"submit_plan": {"target": "plan_review", "artifact": "plan"}}},
+    {"id": "plan_review", "title": "Согласование", "description": "Утвердить или отклонить план", "transitions": {"approve_plan": {"target": "implementation", "artifact": "plan_approval"}, "reject_plan": {"target": "planning", "artifact": "plan_rejection"}}},
+    {"id": "implementation", "title": "Реализация", "description": "Выполнить утверждённый план", "transitions": {"submit_result": {"target": "validation", "artifact": "implementation"}}},
+    {"id": "validation", "title": "Валидация", "description": "Проверить результат", "transitions": {"fail_validation": {"target": "implementation", "artifact": "validation_failure"}, "approve_validation": {"target": "completed", "artifact": "validation_report"}}},
+    {"id": "completed", "title": "Готово", "description": "Задача завершена", "transitions": {}}
+  ]
+}
