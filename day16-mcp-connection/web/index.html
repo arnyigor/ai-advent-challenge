@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>День 16 · Подключение MCP</title><link rel="stylesheet" href="styles.css"></head>
+<body><main>
+  <header><span>AI ADVENT · ДЕНЬ 16</span><h1>Инструменты вашего MCP</h1><p>MCP позволяет приложению узнать, какие инструменты предоставляет сервер и как ими пользоваться.</p></header>
+  <section class="panel connection" aria-labelledby="connection-title">
+    <div><h2 id="connection-title">1. Выберите сервер</h2><div class="connect-controls"><label class="sr-only" for="server">MCP-сервер</label><select id="server" disabled><option>Загрузка серверов…</option></select><button id="connect" class="primary" disabled>Подключиться</button></div><p id="server-description" class="muted">Загружаем доступные подключения.</p></div>
+    <div class="connection-result"><span id="status" class="badge" role="status" aria-live="polite">Ещё не подключались</span><p id="connection-note">Нажмите «Подключиться», чтобы получить список инструментов.</p></div>
+  </section>
+  <div class="timeline" aria-label="Этапы подключения"><div id="step-connect" class="step"><b>01 · Подключение</b><small>Запуск MCP-сервера</small></div><div id="step-init" class="step"><b>02 · Ответ сервера</b><small>Проверка соединения</small></div><div id="step-list" class="step"><b>03 · Каталог инструментов</b><small>Получение названий и параметров</small></div></div>
+  <section class="metrics" aria-label="Результат подключения"><div><small>Сервер ответил</small><strong id="server-name">—</strong></div><div><small>Доступно инструментов</small><strong id="tool-count">—</strong></div><div><small>Протокол MCP</small><strong id="protocol">—</strong></div><div><small>Способ подключения</small><strong id="transport">—</strong></div></section>
+  <section class="catalog">
+    <div class="panel tool-panel"><div class="heading"><h2>2. Найдите инструмент</h2><span id="found" class="muted">0</span></div><label for="search" class="sr-only">Поиск инструментов</label><input id="search" type="search" placeholder="Поиск по названию или описанию" disabled><div id="tools" class="tool-list"><div class="empty"><span class="empty-icon">⌘</span><h3>Здесь появятся инструменты</h3><p>Сначала подключитесь к серверу.<br>Список придёт от него по MCP.</p></div></div></div>
+    <article id="detail" class="panel detail" aria-live="polite"><div class="empty"><span class="empty-icon">↗</span><h2>3. Посмотрите параметры</h2><p>Выберите инструмент слева, чтобы узнать,<br>что он делает и какие данные принимает.</p></div></article>
+  </section>
+  <section class="panel journal"><div class="heading"><h2>Как прошло подключение</h2><small>События реального MCP-клиента</small></div><ol id="events"><li class="muted">Пока нет событий.</li></ol></section>
+  <footer>День 16 — знакомство с MCP. Здесь мы получаем каталог; запуск инструментов будет отдельным шагом.</footer>
+</main><script src="app.js"></script></body></html>
