@@ -1,0 +1,10 @@
+[Unit]
+Description=Create Day 18 RSS digest daily at 09:00 Yekaterinburg
+
+[Timer]
+OnCalendar=*-*-* 04:00:00 UTC
+Persistent=true
+Unit=day18-digest.service
+
+[Install]
+WantedBy=timers.target

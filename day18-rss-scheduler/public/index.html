@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>День 18 — Habr RSS 24/7</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="topline"><span>AI ADVENT CHALLENGE / ДЕНЬ 18</span><span class="live"><i></i> Публичное демо · только чтение</span></div>
+      <h1>Новости ИИ, собранные<br><em>по расписанию</em></h1>
+      <p class="lead">Капсула работает постоянно: читает RSS Хабра, сохраняет публикации в SQLite и раз в день создаёт сводку без модели. MCP-инструмент читает эту же сохранённую сводку.</p>
+      <div class="pipeline"><span>Habr RSS</span><b>→</b><span>SQLite</span><b>→</b><span>systemd timers</span><b>→</b><span>Сводка + MCP</span><a class="video-link" href="/demo.mp4" target="_blank" rel="noopener">▶ Видео проверки · 34 сек</a></div>
+    </header>
+
+    <section class="metrics" aria-label="Текущее состояние">
+      <article><small>СТАТЕЙ В БАЗЕ</small><strong id="articles-count">—</strong><span>повторы не добавляются</span></article>
+      <article><small>ПОСЛЕДНИЙ СБОР</small><strong id="last-found">—</strong><span id="last-collect-time">ожидаем данные</span></article>
+      <article><small>НОВЫХ В ПОСЛЕДНЕМ СБОРЕ</small><strong id="last-new">—</strong><span>после удаления повторов</span></article>
+      <article><small>ПОСЛЕДНЯЯ СВОДКА</small><strong id="digest-count">—</strong><span id="digest-time">без модели</span></article>
+    </section>
+
+    <section class="schedule" aria-label="Расписание">
+      <div><small>01 / АВТОМАТИЧЕСКИЙ СБОР</small><strong>Каждые 2 часа</strong><span id="next-collect">Следующий запуск: —</span></div>
+      <div><small>02 / АВТОМАТИЧЕСКАЯ СВОДКА</small><strong>Каждый день · 09:00 ЕКБ</strong><span id="next-digest">Следующий запуск: —</span></div>
+    </section>
+
+    <section class="content">
+      <article class="panel digest-panel">
+        <div class="panel-head"><div><small>СОХРАНЁННЫЙ РЕЗУЛЬТАТ</small><h2>Последняя сводка</h2></div><a class="download" href="/digest.txt" download="habr-digest.txt">↓ Скачать TXT</a></div>
+        <div id="digest-meta" class="meta">Загружаем…</div>
+        <div id="digest-body" class="digest-body">Загружаем сводку…</div>
+      </article>
+      <aside class="side">
+        <article class="panel"><small>ЧТО ПОПАЛО В БАЗУ</small><h2>Публикации RSS</h2><div id="article-list">Загружаем…</div></article>
+        <article class="panel"><small>ПРОВЕРЯЕМЫЕ ЗАПУСКИ</small><h2>Журнал сборов</h2><div id="run-list">Загружаем…</div></article>
+      </aside>
+    </section>
+    <footer><span>Источник: RSS хаба «Искусственный интеллект» на Хабре. Сводка использует заголовки и описания RSS, полные статьи не анализирует.</span><span id="checked-at">Обновление…</span></footer>
+  </main>
+</body>
+</html>

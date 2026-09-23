@@ -1,0 +1,11 @@
+[Unit]
+Description=Day 18 Habr RSS collection
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=user
+WorkingDirectory=/home/user/ai-advent/day18-rss-scheduler
+Environment=DAY18_DB_PATH=/home/user/ai-advent/data/feed.sqlite3
+ExecStart=/home/user/ai-advent/day18-rss-scheduler/.venv/bin/python worker.py collect

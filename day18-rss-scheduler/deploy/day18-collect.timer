@@ -1,0 +1,10 @@
+[Unit]
+Description=Collect Habr RSS every two hours
+
+[Timer]
+OnCalendar=*-*-* 00/2:00:00 UTC
+Persistent=true
+Unit=day18-collect.service
+
+[Install]
+WantedBy=timers.target
