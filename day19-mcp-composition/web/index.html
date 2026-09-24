@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>День 19 · Композиция MCP</title><link rel="stylesheet" href="styles.css"></head>
+<body><main>
+<header><span class="kicker">AI ADVENT · ДЕНЬ 19</span><h1>Один MCP. Три инструмента. Одна цепочка.</h1><p>Клиент передаёт найденные материалы из <code>search</code> в <code>summarize</code>, затем передаёт сводку в <code>saveToFile</code>. Все вызовы выполняются через одно соединение с MCP-сервером.</p><p class="model-line">Сводка: <strong id="model">Ожидаем запуск · Gemini 3.5 Flash при доступном ключе</strong></p></header>
+<section class="launch"><label for="query">Поисковый запрос</label><div class="controls"><input id="query" maxlength="200" value="MCP"><button id="run">Запустить цепочку</button></div><p id="status" role="status">Готово к запуску</p></section>
+<div class="steps"><article><b>01</b><h2>search</h2><p>Найти материалы</p></article><article><b>02</b><h2>summarize</h2><p>Передать материалы модели</p></article><article><b>03</b><h2>saveToFile</h2><p>Передать сводку в TXT</p></article></div>
+<section class="handoff"><h2>Что передано между методами</h2><p id="handoff-items">search → summarize: ожидаем данные</p><p id="handoff-summary">summarize → saveToFile: ожидаем сводку</p></section>
+<section id="catalog" class="catalog"><h2>Каталог MCP-инструментов</h2><p>Появится после подключения.</p></section>
+<section id="trace" class="trace"><h2>Трасса tools/call</h2><p>Аргументы и ответы каждого инструмента появятся здесь.</p></section>
+<section class="result"><h2>Сохранённый результат</h2><p id="path">—</p><pre id="content">—</pre></section>
+<footer>Локальная демонстрация · один stdio MCP-сервер · без API-ключей и VPS</footer>
+</main><script src="app.js"></script></body></html>
