@@ -1,0 +1,2 @@
+-r ../day19-mcp-composition/requirements.txt
+jsonschema>=4.23,<5

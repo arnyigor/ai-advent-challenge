@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>День 20 · Orchestration MCP</title><link rel="stylesheet" href="styles.css"></head>
+<body><main>
+<header><span class="kicker">AI ADVENT · ДЕНЬ 20</span><h1>Найти материалы и сохранить проверенный отчёт.</h1><p>Введите тему «MCP» и нажмите «Запустить агента». Модель найдёт материалы дней 16–18, выберет инструменты разных серверов и сохранит проверенный TXT на вашем компьютере.</p><p class="model-line">Модель: Gemini 3.5 Flash. Она выбирает инструмент после каждого ответа MCP-сервера. Фактическая модель и число обращений появятся после запуска.</p></header>
+<section class="launch"><label for="query">Тема поиска · добавьте «без сохранения», чтобы изменить маршрут</label><div class="controls"><input id="query" maxlength="200" value="" placeholder="Например: MCP"><button id="run">Запустить агента</button></div><p id="status" role="status">Готово к запуску</p></section>
+<div class="steps"><article><b>01 · knowledge</b><h2>Поиск и чтение</h2><p>Где: отдельный процесс knowledge. Ищет в локальных материалах дней 16–18.</p></article><article><b>02 · analysis</b><h2>Сводка и проверка</h2><p>Где: процесс analysis. Собирает текст и сверяет его с источниками.</p></article><article><b>03 · storage</b><h2>Запись и контроль</h2><p>Где: процесс storage. Пишет TXT и читает его обратно для проверки.</p></article></div>
+<section id="catalog" class="catalog"><h2>Каталог MCP-инструментов</h2><p>Появится после initialize и tools/list на каждом сервере.</p></section>
+<section id="trace" class="trace"><h2>Решения агента и tools/call</h2></section>
+<section class="result"><h2>Ответ Gemini</h2><p id="model-answer">—</p><h2>Готовый отчёт</h2><p id="path">—</p><pre id="content">—</pre></section>
+<footer>День 19: фиксированная композиция → День 20: маршрутизация между серверами и выбор по состоянию</footer>
+</main><script src="app.js"></script></body></html>

@@ -1,0 +1,5 @@
+{
+  "knowledge": {"script": "server.py", "args": ["knowledge"]},
+  "analysis": {"script": "server.py", "args": ["analysis"]},
+  "storage": {"script": "server.py", "args": ["storage"]}
+}
