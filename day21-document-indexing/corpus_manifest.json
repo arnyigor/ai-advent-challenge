@@ -1,0 +1,13 @@
+{
+  "description": "Материалы дней 15–20 и демонстрационный документ Atlas: документация, планы, сценарии и Python-код.",
+  "repo_root": "..",
+  "sources": [
+    {"root": "day21-document-indexing/corpus", "include": ["*.md"]},
+    {"root": "day15-controlled-transitions", "include": ["README.md", "PLAN.md", "VIDEO_SCRIPT.md", "*.py"]},
+    {"root": "day16-mcp-connection", "include": ["README.md", "PLAN.md", "VIDEO_SCRIPT.md", "*.py"]},
+    {"root": "day17-first-mcp-tool", "include": ["README.md", "PLAN.md", "VIDEO_SCRIPT.md", "*.py"]},
+    {"root": "day18-rss-scheduler", "include": ["README.md", "PLAN.md", "VIDEO_SCRIPT.md", "*.py"]},
+    {"root": "day19-mcp-composition", "include": ["README.md", "PLAN.md", "VIDEO_SCRIPT.md", "*.py"]},
+    {"root": "day20-mcp-orchestration", "include": ["README.md", "PLAN.md", "VIDEO_SCRIPT.md", "*.py"]}
+  ]
+}

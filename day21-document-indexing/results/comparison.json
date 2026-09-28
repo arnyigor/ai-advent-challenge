@@ -1,0 +1,1423 @@
+{
+  "embedding_model": "intfloat/multilingual-e5-small",
+  "queries": 13,
+  "strategies": {
+    "fixed": {
+      "id": 1,
+      "strategy": "fixed",
+      "embedding_model": "intfloat/multilingual-e5-small",
+      "embedding_dim": 384,
+      "chunk_size": 1200,
+      "corpus_hash": "f9e1b164fff123fd75b819729f8d15a0997de4d3aa37ac14c80e5bc741330e4d",
+      "created_at": 1790596692.8490238,
+      "documents": 42,
+      "chunks": 150,
+      "embeddings": 150,
+      "avg_chars": 1054.6,
+      "median_chars": 1200,
+      "p95_chars": 1200,
+      "min_chars": 202,
+      "max_chars": 1200,
+      "db_size_bytes": 1134592,
+      "index_file": "fixed.sqlite3",
+      "hit_at_1": 0.923,
+      "hit_at_5": 1.0,
+      "mrr_at_5": 0.949,
+      "avg_relevant_score": 0.8538
+    },
+    "structure": {
+      "id": 1,
+      "strategy": "structure",
+      "embedding_model": "intfloat/multilingual-e5-small",
+      "embedding_dim": 384,
+      "chunk_size": 1200,
+      "corpus_hash": "f9e1b164fff123fd75b819729f8d15a0997de4d3aa37ac14c80e5bc741330e4d",
+      "created_at": 1790596722.2588956,
+      "documents": 42,
+      "chunks": 224,
+      "embeddings": 224,
+      "avg_chars": 634.6,
+      "median_chars": 533,
+      "p95_chars": 1182,
+      "min_chars": 26,
+      "max_chars": 1199,
+      "db_size_bytes": 1290240,
+      "index_file": "structure.sqlite3",
+      "hit_at_1": 0.923,
+      "hit_at_5": 1.0,
+      "mrr_at_5": 0.962,
+      "avg_relevant_score": 0.8611
+    }
+  },
+  "cases": [
+    {
+      "query": "Какой аварийный код у проекта Atlas?",
+      "relevant_sources": [
+        "day21-document-indexing/corpus/atlas-handbook.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.853235,
+          "top": [
+            {
+              "chunk_id": "fixed:e625dc69014cc71d4885",
+              "source": "day21-document-indexing/corpus/atlas-handbook.md",
+              "title": "Руководство проекта Atlas",
+              "file": "atlas-handbook.md",
+              "section": "Руководство проекта Atlas",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1141,
+              "char_count": 1140,
+              "text": "# Руководство проекта Atlas\n\nЭтот документ описывает локальный сервис Atlas и используется как наглядный\nпример прохождения одного файла через pipeline индексации.\n\n## Подключение\n\nСервис запускается только в локальной сети. Клиент открывает соединение с\nузлом `atlas.local`, выполняет handshake и получает каталог доступных команд.\nДля повторного подключения используется тот же идентификатор проекта.\n\n## Безопасность\n\nПеред выполнением операции клиент обязан проверить цифровую подпись ответа.\nСекреты не записываются в журнал и не добавляются в metadata чанка. Аварийный\nкод проекта Atlas — **ORBIT-47**. Код разрешено использовать только после\nподтверждения оператора.\n\n## Диагностика\n\nЕсли соединение не установлено, нужно проверить локальный адрес, состояние\nсервера и журнал handshake. После восстановления соединения клиент повторно\nзапрашивает каталог, но не повторяет уже подтверждённые операции.\n\n## Хранение индекса\n\nКаждый чанк получает `source`, `title`, `section` и стабильный `chunk_id`.\nНормализованный embedding сохраняется в SQLite как float32 BLOB. Исходный\nдокумент остаётся доступен для проверки найденного контекста.",
+              "score": 0.853235
+            },
+            {
+              "chunk_id": "fixed:1607d3c139dc144b57ae",
+              "source": "day15-controlled-transitions/task_lifecycle.py",
+              "title": "Declarative, deterministic lifecycle for Day 15.",
+              "file": "task_lifecycle.py",
+              "section": "class LifecycleContract",
+              "strategy": "fixed",
+              "chunk_index": 3,
+              "start_char": 3000,
+              "end_char": 4200,
+              "char_count": 1200,
+              "text": ".titles[state], \"description\": self.descriptions[state],\n                 \"actions\": [{\"id\": rule.action, \"target\": rule.target, \"artifact\": rule.artifact}\n                             for rule in self.transitions[state].values()]}\n                for state in self.titles\n            ],\n        }\n\n\nclass TransitionRejected(ValueError):\n    def __init__(self, code: str, message: str, allowed_actions: tuple[str, ...] = ()):\n        super().__init__(message)\n        self.code = code\n        self.allowed_actions = allowed_actions\n\n\nclass TransitionGuard:\n    def __init__(self, contract: LifecycleContract):\n        self.contract = contract\n\n    def check(self, *, state: str, action: str, paused: bool) -> TransitionRule:\n        allowed = self.contract.allowed_actions(state)\n        if paused:\n            raise TransitionRejected(\"paused\", \"Задача на паузе; сначала выполните resume\", allowed)\n        if state in self.contract.terminal_states:\n            raise TransitionRejected(\"already_completed\", \"Завершённую задачу нельзя изменить\", ())\n        rule = self.contract.transitions[state].get(action)\n        if rule is None:\n            expected = \", \".join(allowed) or \"нет\"\n            r",
+              "score": 0.815913
+            },
+            {
+              "chunk_id": "fixed:0b29117da9080e4aef2b",
+              "source": "day15-controlled-transitions/lifecycle_assistant.py",
+              "title": "Assistant facade: models may suggest, only the guard may transition.",
+              "file": "lifecycle_assistant.py",
+              "section": "class LifecycleAssistant",
+              "strategy": "fixed",
+              "chunk_index": 3,
+              "start_char": 3000,
+              "end_char": 4129,
+              "char_count": 1127,
+              "text": "паузу; этап и артефакты сохранены.\")\n\n    def resume(self, task_id: str) -> dict:\n        state = self.store.get(task_id)\n        if not state.paused:\n            raise ValueError(\"Задача не находится на паузе\")\n        updated = TaskState(**{**state.to_dict(), \"paused\": False, \"pause_reason\": None,\n                               \"version\": state.version + 1})\n        self.store.save(updated, state.version, event=\"resumed\", from_state=state.state,\n                        action=\"resume\", code=\"resumed\", details=\"\")\n        return self._response(updated, \"Продолжаю с сохранённого этапа; повторять задачу не нужно.\")\n\n    def _response(self, state: TaskState, message: str, *, allowed: bool = True,\n                  code: str = \"ok\", override_actions=None) -> dict:\n        actions = tuple(override_actions) if override_actions is not None else self.contract.allowed_actions(state.state)\n        return {\"allowed\": allowed, \"code\": code, \"message\": message, \"state_changed\": allowed,\n                \"allowed_actions\": list(actions), \"state\": state.to_dict(),\n                \"history\": self.store.history(state.task_id)}",
+              "score": 0.815116
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.89538,
+          "top": [
+            {
+              "chunk_id": "structure:c9dc1cf27997e8ca42a8",
+              "source": "day21-document-indexing/corpus/atlas-handbook.md",
+              "title": "Руководство проекта Atlas",
+              "file": "atlas-handbook.md",
+              "section": "Руководство проекта Atlas > Безопасность",
+              "strategy": "structure",
+              "chunk_index": 2,
+              "start_char": 404,
+              "end_char": 675,
+              "char_count": 269,
+              "text": "## Безопасность\n\nПеред выполнением операции клиент обязан проверить цифровую подпись ответа.\nСекреты не записываются в журнал и не добавляются в metadata чанка. Аварийный\nкод проекта Atlas — **ORBIT-47**. Код разрешено использовать только после\nподтверждения оператора.",
+              "score": 0.89538
+            },
+            {
+              "chunk_id": "structure:cd58ad3c185f181ed7c8",
+              "source": "day21-document-indexing/corpus/atlas-handbook.md",
+              "title": "Руководство проекта Atlas",
+              "file": "atlas-handbook.md",
+              "section": "Руководство проекта Atlas",
+              "strategy": "structure",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 165,
+              "char_count": 163,
+              "text": "# Руководство проекта Atlas\n\nЭтот документ описывает локальный сервис Atlas и используется как наглядный\nпример прохождения одного файла через pipeline индексации.",
+              "score": 0.846344
+            },
+            {
+              "chunk_id": "structure:a31a6cfbb702ed47babe",
+              "source": "day21-document-indexing/corpus/atlas-handbook.md",
+              "title": "Руководство проекта Atlas",
+              "file": "atlas-handbook.md",
+              "section": "Руководство проекта Atlas > Подключение",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 165,
+              "end_char": 404,
+              "char_count": 237,
+              "text": "## Подключение\n\nСервис запускается только в локальной сети. Клиент открывает соединение с\nузлом `atlas.local`, выполняет handshake и получает каталог доступных команд.\nДля повторного подключения используется тот же идентификатор проекта.",
+              "score": 0.820239
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как клиент получает все страницы каталога tools/list?",
+      "relevant_sources": [
+        "day16-mcp-connection/mcp_client.py",
+        "day16-mcp-connection/README.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 3,
+          "score": 0.839172,
+          "top": [
+            {
+              "chunk_id": "fixed:df649d6a158d21856e16",
+              "source": "day19-mcp-composition/pipeline.py",
+              "title": "Run three tools from one MCP server in one session.",
+              "file": "pipeline.py",
+              "section": "function run",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 2200,
+              "char_count": 1199,
+              "text": "if not isinstance(query, str) or not query.strip() or len(query) > 200:\n        raise ValueError(\"Введите запрос длиной 1–200 символов\")\n    inherited = {key: os.environ[key] for key in (\"DAY19_OUTPUT_DIR\", \"DAY19_SUMMARY_MODE\", \"DAY19_MODEL\", \"GEMINI_API_KEY\") if key in os.environ}\n    params = StdioServerParameters(command=sys.executable, args=[str(server_path)], env=inherited or None)\n    async with asyncio.timeout(timeout):\n        async with stdio_client(params) as (read, write):\n            async with ClientSession(read, write) as session:\n                info = await session.initialize()\n                catalog = await session.list_tools()\n                tools = {tool.name: tool for tool in catalog.tools}\n                if not all(name in tools for name in NAMES):\n                    raise RuntimeError(\"Сервер не объявил все три инструмента\")\n                trace = []\n\n                async def call(name, arguments):\n                    result = payload(await session.call_tool(name, arguments=arguments))\n                    trace.append({\"tool\": name, \"arguments\": arguments, \"result\": result})\n                    return result\n\n                found = await call(\"search\"",
+              "score": 0.842919
+            },
+            {
+              "chunk_id": "fixed:795964e2604d52b1a6e5",
+              "source": "day19-mcp-composition/mcp_server.py",
+              "title": "One stdio MCP server with three composable tools.",
+              "file": "mcp_server.py",
+              "section": "module",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "\"\"\"One stdio MCP server with three composable tools.\"\"\"\n\nimport os\nfrom pathlib import Path\nfrom uuid import uuid4\nimport sys\n\nfrom mcp.server import MCPServer\n\n\nmcp = MCPServer(\"day19-composition\", version=\"1.0.0\", log_level=\"WARNING\")\nCORPUS = [\n    {\"id\": \"d16\", \"title\": \"День 16: подключение MCP\", \"text\": \"Клиент устанавливает соединение, выполняет initialize и получает каталог инструментов через tools/list.\", \"source\": \"day16-mcp-connection\"},\n    {\"id\": \"d17\", \"title\": \"День 17: первый MCP-инструмент\", \"text\": \"Локальный MCP-сервер объявляет инструмент get_git_snapshot. Клиент вызывает его через tools/call и использует результат.\", \"source\": \"day17-first-mcp-tool\"},\n    {\"id\": \"d18\", \"title\": \"День 18: RSS и MCP\", \"text\": \"Сборщик сохраняет RSS-материалы, а MCP-инструмент get_habr_digest отдаёт последнюю сводку.\", \"source\": \"day18-rss-scheduler\"},\n]\nOUTPUT_DIR = Path(os.environ.get(\"DAY19_OUTPUT_DIR\", Path(__file__).resolve().parent / \"output\")).resolve()\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"day18-rss-scheduler\"))\nfrom day18_providers import GEMINI_MODELS, generate\n\nMODEL = os.environ.get(\"DAY19_MODEL\", GEMINI_MODELS[1])\n\n\n@mcp.tool(description=\"Найти",
+              "score": 0.841159
+            },
+            {
+              "chunk_id": "fixed:fba3db55c33c1da444af",
+              "source": "day16-mcp-connection/README.md",
+              "title": "День 16. Подключение MCP",
+              "file": "README.md",
+              "section": "День 16. Подключение MCP > Интерфейс на основе дня 15",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 2200,
+              "char_count": 1200,
+              "text": "P-сессии. UI явно показывает это:\nкаталог остаётся доступен как снимок; **Обновить каталог** создаёт новое соединение.\nПри смене сервера старый результат очищается. Вызов инструментов не выполняется.\n\nПо умолчанию Jarvis ищется в соседнем с репозиторием каталоге `MCPs/McpServer`.\nЕсли сервер находится в другом месте, задайте `JARVIS_MCP_ROOT` перед запуском.\nИспользуется собственный `.venv` Jarvis. Если он не найден, профиль недоступен,\nно учебный пример работает. API принимает только идентификатор настроенного профиля.\n\nОформление (палитра, панели, этапы) и HTTP-подход взяты из дня 15.\nВеб-сервер вызывает существующую `discover()` из `mcp_client.py`.\n\nPython-клиент подключается к MCP-серверу, выполняет `initialize` и `tools/list`,\nвыводит названия, описания и JSON Schema инструментов, затем закрывает сессию.\nИнструменты не вызываются. LLM и API-ключи для локального примера не нужны.\n\n## Отдельный CLI\n\nPython 3.11+; команды из папки `day16-mcp-connection`:\n\n```powershell\npython -m pip install -r requirements.txt\npython mcp_client.py\n```\n\nКлиент автоматически запускает `demo_server.py` тем же Python и соединяется\nс ним по stdio. В выводе: `MCP handshake: OK`, сервер `day16-demo`,\n`A",
+              "score": 0.839172
+            }
+          ]
+        },
+        "structure": {
+          "rank": 2,
+          "score": 0.849658,
+          "top": [
+            {
+              "chunk_id": "structure:e37a1fb7995df4bee6be",
+              "source": "day19-mcp-composition/PLAN.md",
+              "title": "День 19 — композиция MCP-инструментов: план до разработки",
+              "file": "PLAN.md",
+              "section": "День 19 — композиция MCP-инструментов: план до разработки > Цель и границы",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 61,
+              "end_char": 886,
+              "char_count": 823,
+              "text": "## Цель и границы\n\nСделать один локальный MCP-сервер, который объявляет три отдельных инструмента: `search`, `summarize`, `saveToFile`. Один клиентский запуск автоматически вызывает их в этом порядке через MCP `tools/call`, передавая структурированные результаты без ручного копирования. Результат — сохранённый файл, исходный код и видео реальной цепочки.\n\nПод «в рамках одного MCP» понимаем один MCP-сервер и одно клиентское соединение на весь запуск. Это сохраняет смысл задания про композицию **нескольких инструментов**. Оркестрация находится в клиенте: так в трассе видны три независимых вызова. Если требование буквально означает один экспортируемый `mcp-tool`, контракт нужно изменить до реализации: тогда внутри него будут три этапа, но показать композицию отдельных MCP-инструментов через `tools/call` уже нельзя.",
+              "score": 0.853277
+            },
+            {
+              "chunk_id": "structure:9fad901da1cc743f4f83",
+              "source": "day16-mcp-connection/README.md",
+              "title": "День 16. Подключение MCP",
+              "file": "README.md",
+              "section": "Получить весь каталог в машиночитаемом виде.",
+              "strategy": "structure",
+              "chunk_index": 6,
+              "start_char": 2537,
+              "end_char": 2647,
+              "char_count": 108,
+              "text": "# Получить весь каталог в машиночитаемом виде.\npython mcp_client.py --json --command <программа> <аргументы>",
+              "score": 0.849658
+            },
+            {
+              "chunk_id": "structure:8341ebd433d05a6005c0",
+              "source": "day16-mcp-connection/README.md",
+              "title": "День 16. Подключение MCP",
+              "file": "README.md",
+              "section": "Streamable HTTP endpoint без авторизации.",
+              "strategy": "structure",
+              "chunk_index": 7,
+              "start_char": 2647,
+              "end_char": 3106,
+              "char_count": 457,
+              "text": "# Streamable HTTP endpoint без авторизации.\npython mcp_client.py --url http://localhost:8000/mcp\n```\n\n`--server <script.py>` запускает другой Python-сервер интерпретатором клиента.\nДля сервера со своим окружением используйте `--command` и его Python.\nКлиент обрабатывает страницы `tools/list`, если сервер возвращает `nextCursor`.\nТаймаут по умолчанию — 30 секунд; ошибки завершают CLI с кодом 1.\nHTTP-авторизация/OAuth в минимальном примере не реализованы.",
+              "score": 0.849221
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как подключается Jarvis MCP через переменную окружения?",
+      "relevant_sources": [
+        "day16-mcp-connection/README.md",
+        "day16-mcp-connection/web_server.py"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.884776,
+          "top": [
+            {
+              "chunk_id": "fixed:c9b9faaa3e690f3781fc",
+              "source": "day16-mcp-connection/README.md",
+              "title": "День 16. Подключение MCP",
+              "file": "README.md",
+              "section": "День 16. Подключение MCP",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1199,
+              "text": "# День 16. Подключение MCP\n\n**Видео-демо:** [day16-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/1MsrK6XwBPMpRg) — подключение учебного MCP и вашего Jarvis через UI предыдущих дней, получение 31 инструмента, поиск по каталогу, просмотр параметров и журнал соединения.\n\n## Интерфейс на основе дня 15\n\n```powershell\ncd day16-mcp-connection\npython -m pip install -r requirements.txt\npython web_server.py\n```\n\nОткройте адрес, напечатанный сервером. Порт выбирается автоматически.\nВ корневом окружении проекта можно запускать из корня:\n\n```powershell\n.\\.venv\\Scripts\\python.exe day16-mcp-connection/web_server.py\n```\n\n1. Выберите **Jarvis** или **Учебный сервер** и нажмите **Подключиться**.\n2. Проверьте имя ответившего сервера и число инструментов.\n3. Найдите инструмент через поиск и выберите его в списке.\n4. Справа появятся описание, типы параметров и отметки обязательности.\n5. Исходная JSON-схема раскрывается отдельно; ниже расположен журнал подключения.\n\nПолучение каталога завершается закрытием MCP-сессии. UI явно показывает это:\nкаталог остаётся доступен как снимок; **Обновить каталог** создаёт новое соединение.\nПри смене сервера старый результат очищается. Вызов инструментов не выполняется.",
+              "score": 0.884776
+            },
+            {
+              "chunk_id": "fixed:c75f91e8ee4732bc2aa8",
+              "source": "day16-mcp-connection/web_server.py",
+              "title": "Day 16 local UI, following the HTTP server pattern from Day 15.",
+              "file": "web_server.py",
+              "section": "class Handler",
+              "strategy": "fixed",
+              "chunk_index": 3,
+              "start_char": 3000,
+              "end_char": 4200,
+              "char_count": 1200,
+              "text": ".headers.get(\"Host\") != expected.removeprefix(\"http://\") or (origin and origin != expected):\n                self.send_json({\"error\": \"Запрос разрешён только из локального интерфейса\"}, 403)\n                return\n            if not isinstance(body, dict) or not isinstance(body.get(\"server_id\"), str):\n                raise ValueError(\"Нужно выбрать MCP-сервер\")\n            profile = self.server.profiles.get(body[\"server_id\"])\n            if not profile or not profile[\"available\"]:\n                raise ValueError(\"Сервер недоступен. Выберите учебный сервер или настройте JARVIS_MCP_ROOT\")\n        except (ValueError, UnicodeDecodeError) as exc:\n            self.send_json({\"error\": str(exc)}, 400)\n            return\n        if not self.server.discovery_lock.acquire(blocking=False):\n            self.send_json({\"error\": \"Подключение уже выполняется. Дождитесь результата\"}, 409)\n            return\n        events = []\n\n        def on_event(stage, message):\n            events.append({\"stage\": stage, \"message\": message,\n                           \"time\": datetime.now().strftime(\"%H:%M:%S\")})\n\n        try:\n            result = asyncio.run(discover(command=profile[\"command\"], timeout=60, on_e",
+              "score": 0.876612
+            },
+            {
+              "chunk_id": "fixed:fba3db55c33c1da444af",
+              "source": "day16-mcp-connection/README.md",
+              "title": "День 16. Подключение MCP",
+              "file": "README.md",
+              "section": "День 16. Подключение MCP > Интерфейс на основе дня 15",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 2200,
+              "char_count": 1200,
+              "text": "P-сессии. UI явно показывает это:\nкаталог остаётся доступен как снимок; **Обновить каталог** создаёт новое соединение.\nПри смене сервера старый результат очищается. Вызов инструментов не выполняется.\n\nПо умолчанию Jarvis ищется в соседнем с репозиторием каталоге `MCPs/McpServer`.\nЕсли сервер находится в другом месте, задайте `JARVIS_MCP_ROOT` перед запуском.\nИспользуется собственный `.venv` Jarvis. Если он не найден, профиль недоступен,\nно учебный пример работает. API принимает только идентификатор настроенного профиля.\n\nОформление (палитра, панели, этапы) и HTTP-подход взяты из дня 15.\nВеб-сервер вызывает существующую `discover()` из `mcp_client.py`.\n\nPython-клиент подключается к MCP-серверу, выполняет `initialize` и `tools/list`,\nвыводит названия, описания и JSON Schema инструментов, затем закрывает сессию.\nИнструменты не вызываются. LLM и API-ключи для локального примера не нужны.\n\n## Отдельный CLI\n\nPython 3.11+; команды из папки `day16-mcp-connection`:\n\n```powershell\npython -m pip install -r requirements.txt\npython mcp_client.py\n```\n\nКлиент автоматически запускает `demo_server.py` тем же Python и соединяется\nс ним по stdio. В выводе: `MCP handshake: OK`, сервер `day16-demo`,\n`A",
+              "score": 0.875252
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.895875,
+          "top": [
+            {
+              "chunk_id": "structure:230c20ac4c2b2e02ec7f",
+              "source": "day16-mcp-connection/README.md",
+              "title": "День 16. Подключение MCP",
+              "file": "README.md",
+              "section": "День 16. Подключение MCP > Интерфейс на основе дня 15",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 267,
+              "end_char": 1441,
+              "char_count": 1173,
+              "text": "## Интерфейс на основе дня 15\n\n```powershell\ncd day16-mcp-connection\npython -m pip install -r requirements.txt\npython web_server.py\n```\n\nОткройте адрес, напечатанный сервером. Порт выбирается автоматически.\nВ корневом окружении проекта можно запускать из корня:\n\n```powershell\n.\\.venv\\Scripts\\python.exe day16-mcp-connection/web_server.py\n```\n\n1. Выберите **Jarvis** или **Учебный сервер** и нажмите **Подключиться**.\n2. Проверьте имя ответившего сервера и число инструментов.\n3. Найдите инструмент через поиск и выберите его в списке.\n4. Справа появятся описание, типы параметров и отметки обязательности.\n5. Исходная JSON-схема раскрывается отдельно; ниже расположен журнал подключения.\n\nПолучение каталога завершается закрытием MCP-сессии. UI явно показывает это:\nкаталог остаётся доступен как снимок; **Обновить каталог** создаёт новое соединение.\nПри смене сервера старый результат очищается. Вызов инструментов не выполняется.\n\nПо умолчанию Jarvis ищется в соседнем с репозиторием каталоге `MCPs/McpServer`.\nЕсли сервер находится в другом месте, задайте `JARVIS_MCP_ROOT` перед запуском.\nИспользуется собственный `.venv` Jarvis. Если он не найден, профиль недоступен,",
+              "score": 0.895875
+            },
+            {
+              "chunk_id": "structure:e437d52c6f0fddb34693",
+              "source": "day16-mcp-connection/README.md",
+              "title": "День 16. Подключение MCP",
+              "file": "README.md",
+              "section": "День 16. Подключение MCP > Интерфейс на основе дня 15",
+              "strategy": "structure",
+              "chunk_index": 2,
+              "start_char": 1321,
+              "end_char": 1898,
+              "char_count": 575,
+              "text": "дайте `JARVIS_MCP_ROOT` перед запуском.\nИспользуется собственный `.venv` Jarvis. Если он не найден, профиль недоступен,\nно учебный пример работает. API принимает только идентификатор настроенного профиля.\n\nОформление (палитра, панели, этапы) и HTTP-подход взяты из дня 15.\nВеб-сервер вызывает существующую `discover()` из `mcp_client.py`.\n\nPython-клиент подключается к MCP-серверу, выполняет `initialize` и `tools/list`,\nвыводит названия, описания и JSON Schema инструментов, затем закрывает сессию.\nИнструменты не вызываются. LLM и API-ключи для локального примера не нужны.",
+              "score": 0.891569
+            },
+            {
+              "chunk_id": "structure:034481f53693cea8aa53",
+              "source": "day16-mcp-connection/web_server.py",
+              "title": "Day 16 local UI, following the HTTP server pattern from Day 15.",
+              "file": "web_server.py",
+              "section": "function server_profiles",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 393,
+              "end_char": 1097,
+              "char_count": 701,
+              "text": "def server_profiles():\n    root = Path(os.environ.get(\"JARVIS_MCP_ROOT\", DAY_DIR.parents[1] / \"MCPs\" / \"McpServer\"))\n    python = root / \".venv\" / (\"Scripts/python.exe\" if os.name == \"nt\" else \"bin/python\")\n    script = root / \"server.py\"\n    return {\n        \"jarvis\": {\n            \"id\": \"jarvis\", \"name\": \"Jarvis\", \"description\": \"Ваш MCP: файлы, поиск, код и документы\",\n            \"available\": python.is_file() and script.is_file(),\n            \"command\": [str(python), str(script)],\n        },\n        \"demo\": {\n            \"id\": \"demo\", \"name\": \"Учебный сервер\", \"description\": \"Два простых инструмента: сложение и приветствие\",\n            \"available\": True, \"command\": None,\n        },\n    }",
+              "score": 0.882368
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как инструмент Git показывает staged diff?",
+      "relevant_sources": [
+        "day17-first-mcp-tool/git_mcp_server.py",
+        "day17-first-mcp-tool/PLAN.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.86156,
+          "top": [
+            {
+              "chunk_id": "fixed:ecca62a0e31510cd2d40",
+              "source": "day17-first-mcp-tool/git_mcp_server.py",
+              "title": "Read-only Git API exposed as a local MCP tool over stdio.",
+              "file": "git_mcp_server.py",
+              "section": "module",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "\"\"\"Read-only Git API exposed as a local MCP tool over stdio.\"\"\"\n\nimport os\nfrom pathlib import Path\nimport subprocess\nfrom typing import Literal\n\nfrom mcp.server import MCPServer\n\n\nPROJECT_ROOT = Path(__file__).resolve().parents[1]\nmcp = MCPServer(\"day17-git\", version=\"1.0.0\", log_level=\"WARNING\")\n\n\ndef git(*arguments: str) -> str:\n    root = Path(os.environ.get(\"DAY17_REPO_ROOT\", PROJECT_ROOT)).resolve()\n    result = subprocess.run(\n        [\"git\", \"-C\", str(root), *arguments], capture_output=True, text=True,\n        encoding=\"utf-8\", errors=\"replace\", timeout=10, check=False,\n    )\n    if result.returncode:\n        raise RuntimeError(result.stderr.strip() or \"Git command failed\")\n    return result.stdout.strip()\n\n\n@mcp.tool(description=\"Прочитать сводку Git или последний коммит текущего репозитория. Только чтение.\")\ndef get_git_snapshot(scope: Literal[\"summary\", \"latest_commit\"]) -> dict:\n    \"\"\"Return a Git snapshot. scope: summary for branch/change counts, latest_commit for commit details.\"\"\"\n    repository = Path(git(\"rev-parse\", \"--show-toplevel\")).name\n    if scope == \"summary\":\n        lines = git(\"status\", \"--porcelain=v1\", \"--untracked-files=no\").splitlines()\n        retu",
+              "score": 0.86156
+            },
+            {
+              "chunk_id": "fixed:edca9e94a0d42199fb68",
+              "source": "day17-first-mcp-tool/git_agent.py",
+              "title": "Small deterministic agent that discovers and calls the Day 17 MCP tool.",
+              "file": "git_agent.py",
+              "section": "module",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "\"\"\"Small deterministic agent that discovers and calls the Day 17 MCP tool.\"\"\"\n\nimport argparse\nimport asyncio\nimport json\nfrom pathlib import Path\nimport sys\n\nfrom mcp import ClientSession, StdioServerParameters\nfrom mcp.client.stdio import stdio_client\n\n\nSERVER = Path(__file__).with_name(\"git_mcp_server.py\")\nQUESTIONS = {\n    \"summary\": \"Что сейчас с Git-репозиторием?\",\n    \"latest_commit\": \"Какой последний коммит?\",\n}\n\n\ndef answer(snapshot: dict) -> str:\n    if snapshot[\"scope\"] == \"summary\":\n        changes = snapshot[\"tracked_changes\"]\n        condition = \"отслеживаемые файлы чистые\" if snapshot[\"clean_tracked_files\"] else f\"изменённых отслеживаемых файлов: {changes}\"\n        return f\"Репозиторий {snapshot['repository']}, ветка {snapshot['branch']}; {condition}.\"\n    return (f\"Последний коммит в {snapshot['repository']}: {snapshot['short_hash']} — \"\n            f\"{snapshot['subject']}. Автор: {snapshot['author']}; дата: {snapshot['date']}.\")\n\n\nasync def ask(scope: str, *, server_path: Path = SERVER, timeout: float = 30) -> dict:\n    if scope not in QUESTIONS:\n        raise ValueError(\"Доступны запросы summary и latest_commit\")\n    parameters = StdioServerParameters(command=sys.",
+              "score": 0.856764
+            },
+            {
+              "chunk_id": "fixed:3e3da09566d17004fde9",
+              "source": "day17-first-mcp-tool/git_agent.py",
+              "title": "Small deterministic agent that discovers and calls the Day 17 MCP tool.",
+              "file": "git_agent.py",
+              "section": "function ask",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 2200,
+              "char_count": 1200,
+              "text": "th: Path = SERVER, timeout: float = 30) -> dict:\n    if scope not in QUESTIONS:\n        raise ValueError(\"Доступны запросы summary и latest_commit\")\n    parameters = StdioServerParameters(command=sys.executable, args=[str(server_path)])\n    async with asyncio.timeout(timeout):\n        async with stdio_client(parameters) as (read, write):\n            async with ClientSession(read, write) as session:\n                initialized = await session.initialize()\n                catalog = await session.list_tools()\n                tool = next((item for item in catalog.tools if item.name == \"get_git_snapshot\"), None)\n                if tool is None:\n                    raise RuntimeError(\"MCP-сервер не объявил get_git_snapshot\")\n                arguments = {\"scope\": scope}\n                result = await session.call_tool(tool.name, arguments=arguments)\n                if result.is_error:\n                    raise RuntimeError(\"MCP tool error: \" + \" \".join(\n                        block.text for block in result.content if block.type == \"text\"))\n                payload = result.structured_content\n                if payload is None:\n                    text_blocks = [block.text for block in res",
+              "score": 0.853779
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.861166,
+          "top": [
+            {
+              "chunk_id": "structure:f51469fc3e2498c489dd",
+              "source": "day17-first-mcp-tool/git_mcp_server.py",
+              "title": "Read-only Git API exposed as a local MCP tool over stdio.",
+              "file": "git_mcp_server.py",
+              "section": "function git",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 301,
+              "end_char": 830,
+              "char_count": 528,
+              "text": "def git(*arguments: str) -> str:\n    root = Path(os.environ.get(\"DAY17_REPO_ROOT\", PROJECT_ROOT)).resolve()\n    result = subprocess.run(\n        [\"git\", \"-C\", str(root), *arguments], capture_output=True, text=True,\n        encoding=\"utf-8\", errors=\"replace\", timeout=10, check=False,\n    )\n    if result.returncode:\n        raise RuntimeError(result.stderr.strip() or \"Git command failed\")\n    return result.stdout.strip()\n\n\n@mcp.tool(description=\"Прочитать сводку Git или последний коммит текущего репозитория. Только чтение.\")",
+              "score": 0.861166
+            },
+            {
+              "chunk_id": "structure:187efd7fa4bf043f77fb",
+              "source": "day19-mcp-composition/PLAN.md",
+              "title": "День 19 — композиция MCP-инструментов: план до разработки",
+              "file": "PLAN.md",
+              "section": "День 19 — композиция MCP-инструментов: план до разработки > Артефакты и критерии готовности",
+              "strategy": "structure",
+              "chunk_index": 7,
+              "start_char": 5008,
+              "end_char": 5487,
+              "char_count": 477,
+              "text": "## Артефакты и критерии готовности\n\n- Код сервера, клиента, веб-интерфейса и скрипта записи — в `day19-mcp-composition/`.\n- Проверки — в `tests/test_day19_mcp_composition.py`.\n- Видео — `ChallengeVideos/day19-demo.mp4` (как у предыдущих дней, локальный файл может быть исключён из Git).\n- Одна команда/кнопка запускает всю цепочку без ручного переноса данных; сервер объявляет три отдельных инструмента; итоговый файл содержит сводку именно тех данных, которые вернул `search`.",
+              "score": 0.855632
+            },
+            {
+              "chunk_id": "structure:fa30ac5330ee3e231327",
+              "source": "day17-first-mcp-tool/git_agent.py",
+              "title": "Small deterministic agent that discovers and calls the Day 17 MCP tool.",
+              "file": "git_agent.py",
+              "section": "function ask",
+              "strategy": "structure",
+              "chunk_index": 2,
+              "start_char": 962,
+              "end_char": 2138,
+              "char_count": 1175,
+              "text": "async def ask(scope: str, *, server_path: Path = SERVER, timeout: float = 30) -> dict:\n    if scope not in QUESTIONS:\n        raise ValueError(\"Доступны запросы summary и latest_commit\")\n    parameters = StdioServerParameters(command=sys.executable, args=[str(server_path)])\n    async with asyncio.timeout(timeout):\n        async with stdio_client(parameters) as (read, write):\n            async with ClientSession(read, write) as session:\n                initialized = await session.initialize()\n                catalog = await session.list_tools()\n                tool = next((item for item in catalog.tools if item.name == \"get_git_snapshot\"), None)\n                if tool is None:\n                    raise RuntimeError(\"MCP-сервер не объявил get_git_snapshot\")\n                arguments = {\"scope\": scope}\n                result = await session.call_tool(tool.name, arguments=arguments)\n                if result.is_error:\n                    raise RuntimeError(\"MCP tool error: \" + \" \".join(\n                        block.text for block in result.content if block.type == \"text\"))\n                payload = result.structured_content\n                if payload is None:",
+              "score": 0.853532
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как ограничивается путь к разрешённому Git-репозиторию?",
+      "relevant_sources": [
+        "day17-first-mcp-tool/git_mcp_server.py",
+        "day17-first-mcp-tool/PLAN.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.835431,
+          "top": [
+            {
+              "chunk_id": "fixed:8970603e0e73eb278ef7",
+              "source": "day17-first-mcp-tool/PLAN.md",
+              "title": "День 17 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 17 — план до разработки",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "# День 17 — план до разработки\n\n## Контракт\n\n- Продолжить день 16: Python, официальный MCP SDK 2.2.0, stdio и локальный веб-интерфейс.\n- Собственный MCP-сервер оборачивает локальный Git через безопасные команды только для чтения.\n- Инструмент `get_git_snapshot(scope: Literal[\"summary\", \"latest_commit\"])` объявляет имя, описание и схему аргументов через SDK. Он возвращает данные о текущем репозитории в JSON.\n- Агент получает каталог по MCP, выбирает инструмент для одного из двух запросов, вызывает `tools/call`, читает ответ и формирует ответ пользователю из полученных данных.\n- Веб-приложение показывает вопрос, имя и аргументы вызова, сырой результат MCP и ответ агента. CLI запускает тот же агентный код.\n- Git-корень берётся из расположения проекта или `DAY17_REPO_ROOT`; произвольный путь из веб-запроса не принимается.\n\n## Последовательность\n\n1. Реализовать MCP-сервер и проверить схему через настоящий `tools/list`.\n2. Реализовать агентный MCP-клиент и проверить реальный `tools/call` на двух сценариях.\n3. Подключить агент к локальному веб-интерфейсу в стиле дней 15–16.\n4. Написать интеграционные проверки, README и сценарий видео.\n5. Записать реальный интерфейс и проверить MP4 с контр",
+              "score": 0.835431
+            },
+            {
+              "chunk_id": "fixed:edca9e94a0d42199fb68",
+              "source": "day17-first-mcp-tool/git_agent.py",
+              "title": "Small deterministic agent that discovers and calls the Day 17 MCP tool.",
+              "file": "git_agent.py",
+              "section": "module",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "\"\"\"Small deterministic agent that discovers and calls the Day 17 MCP tool.\"\"\"\n\nimport argparse\nimport asyncio\nimport json\nfrom pathlib import Path\nimport sys\n\nfrom mcp import ClientSession, StdioServerParameters\nfrom mcp.client.stdio import stdio_client\n\n\nSERVER = Path(__file__).with_name(\"git_mcp_server.py\")\nQUESTIONS = {\n    \"summary\": \"Что сейчас с Git-репозиторием?\",\n    \"latest_commit\": \"Какой последний коммит?\",\n}\n\n\ndef answer(snapshot: dict) -> str:\n    if snapshot[\"scope\"] == \"summary\":\n        changes = snapshot[\"tracked_changes\"]\n        condition = \"отслеживаемые файлы чистые\" if snapshot[\"clean_tracked_files\"] else f\"изменённых отслеживаемых файлов: {changes}\"\n        return f\"Репозиторий {snapshot['repository']}, ветка {snapshot['branch']}; {condition}.\"\n    return (f\"Последний коммит в {snapshot['repository']}: {snapshot['short_hash']} — \"\n            f\"{snapshot['subject']}. Автор: {snapshot['author']}; дата: {snapshot['date']}.\")\n\n\nasync def ask(scope: str, *, server_path: Path = SERVER, timeout: float = 30) -> dict:\n    if scope not in QUESTIONS:\n        raise ValueError(\"Доступны запросы summary и latest_commit\")\n    parameters = StdioServerParameters(command=sys.",
+              "score": 0.830072
+            },
+            {
+              "chunk_id": "fixed:8e21f391086e06ea1058",
+              "source": "day16-mcp-connection/PLAN.md",
+              "title": "День 16 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 16 — план до разработки",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "# День 16 — план до разработки\n\n## Переделка UI по запросу пользователя\n\n1. Переиспользовать визуальные паттерны дня 15: панели, палитру, этапы и журнал.\n2. Добавить web_server.py с GET /api/servers и POST /api/discover {server_id}.\n   Запускать только заранее настроенные профили Jarvis и demo; использовать\n   существующую discover(), не дублировать MCP-клиент.\n3. Показывать выбор сервера, реальный результат handshake, каталог с поиском,\n   описания и таблицу параметров. Отдельно обозначать закрытие MCP-сессии:\n   полученный каталог — снимок, а не постоянное подключение.\n4. Проверить API, действия в браузере и запись через настоящий интерфейс.\n5. Обновить README и записать day16-ui-demo.mp4 в совместимом формате.\n\n## Основа\n\nПроверены README дней 1–15, реализация HTTP-сервера, тесты и запись дня 15,\nAGENT_RULES.md и tools/RECORDING.md. Сохраняем Python, отдельную папку дня,\npytest, README и локальное MP4 в ChallengeVideos (исключено из git).\n\n## Контракт\n\n- Локальный дочерний MCP-сервер, транспорт stdio, официальный пакет mcp.\n- Клиент выполняет initialize, затем tools/list и закрывает сессию.\n- Два инструмента: add(a: int, b: int) -> int и greet(name: str) -> str.\n- Сервер объявля",
+              "score": 0.828144
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.849875,
+          "top": [
+            {
+              "chunk_id": "structure:f51469fc3e2498c489dd",
+              "source": "day17-first-mcp-tool/git_mcp_server.py",
+              "title": "Read-only Git API exposed as a local MCP tool over stdio.",
+              "file": "git_mcp_server.py",
+              "section": "function git",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 301,
+              "end_char": 830,
+              "char_count": 528,
+              "text": "def git(*arguments: str) -> str:\n    root = Path(os.environ.get(\"DAY17_REPO_ROOT\", PROJECT_ROOT)).resolve()\n    result = subprocess.run(\n        [\"git\", \"-C\", str(root), *arguments], capture_output=True, text=True,\n        encoding=\"utf-8\", errors=\"replace\", timeout=10, check=False,\n    )\n    if result.returncode:\n        raise RuntimeError(result.stderr.strip() or \"Git command failed\")\n    return result.stdout.strip()\n\n\n@mcp.tool(description=\"Прочитать сводку Git или последний коммит текущего репозитория. Только чтение.\")",
+              "score": 0.849875
+            },
+            {
+              "chunk_id": "structure:4cab96223709f49a0b6d",
+              "source": "day17-first-mcp-tool/PLAN.md",
+              "title": "День 17 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 17 — план до разработки > Контракт",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 32,
+              "end_char": 831,
+              "char_count": 797,
+              "text": "## Контракт\n\n- Продолжить день 16: Python, официальный MCP SDK 2.2.0, stdio и локальный веб-интерфейс.\n- Собственный MCP-сервер оборачивает локальный Git через безопасные команды только для чтения.\n- Инструмент `get_git_snapshot(scope: Literal[\"summary\", \"latest_commit\"])` объявляет имя, описание и схему аргументов через SDK. Он возвращает данные о текущем репозитории в JSON.\n- Агент получает каталог по MCP, выбирает инструмент для одного из двух запросов, вызывает `tools/call`, читает ответ и формирует ответ пользователю из полученных данных.\n- Веб-приложение показывает вопрос, имя и аргументы вызова, сырой результат MCP и ответ агента. CLI запускает тот же агентный код.\n- Git-корень берётся из расположения проекта или `DAY17_REPO_ROOT`; произвольный путь из веб-запроса не принимается.",
+              "score": 0.84892
+            },
+            {
+              "chunk_id": "structure:d2b43645785ce9b1ae3c",
+              "source": "day16-mcp-connection/PLAN.md",
+              "title": "День 16 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 16 — план до разработки > Основа",
+              "strategy": "structure",
+              "chunk_index": 2,
+              "start_char": 724,
+              "end_char": 957,
+              "char_count": 231,
+              "text": "## Основа\n\nПроверены README дней 1–15, реализация HTTP-сервера, тесты и запись дня 15,\nAGENT_RULES.md и tools/RECORDING.md. Сохраняем Python, отдельную папку дня,\npytest, README и локальное MP4 в ChallengeVideos (исключено из git).",
+              "score": 0.837521
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как RSS worker предотвращает повторную обработку записей?",
+      "relevant_sources": [
+        "day18-rss-scheduler/worker.py",
+        "day18-rss-scheduler/feed_store.py",
+        "day18-rss-scheduler/README.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.845583,
+          "top": [
+            {
+              "chunk_id": "fixed:8b7feb96d2a7347f0169",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "fixed",
+              "chunk_index": 3,
+              "start_char": 3000,
+              "end_char": 4200,
+              "char_count": 1200,
+              "text": "ler.py -q`. Она подменяет ответы провайдеров и проверяет порядок переходов без расхода квоты. Реальные вызовы проверяются отдельно. Перед сдачей `python -m pytest tests -q`: **296 passed**.\n\nЛокальная панель без фоновых запусков: `python day18-rss-scheduler/web_server.py`. Для **короткого расписания демо**:\n\n```powershell\npython day18-rss-scheduler/web_server.py --demo-schedule --collect-seconds 6 --digest-seconds 45\n```\n\nПока этот процесс запущен, он сам собирает RSS каждые 6 секунд и пытается создать новую сводку каждые 45 секунд. Панель показывает время следующего запуска и исход предыдущего. Если с прошлой сводки новых публикаций нет, генерация пропускается. Для отдельного фонового процесса без панели: `python day18-rss-scheduler/scheduler.py --collect-seconds 6 --digest-seconds 45`. Закрытие локального процесса останавливает расписание.\n\nКнопка **«Сбросить демо»** очищает только локальную базу дня 18: статьи, журнал загрузок и сводки. Параметры активного расписания сохраняются, и следующий плановый сбор заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок. Локальная база проекта была сброшена после добавления эт",
+              "score": 0.845583
+            },
+            {
+              "chunk_id": "fixed:d2b095d88405597aa1f9",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "fixed",
+              "chunk_index": 2,
+              "start_char": 2000,
+              "end_char": 3200,
+              "char_count": 1200,
+              "text": "duler/requirements.txt\npython day18-rss-scheduler/worker.py collect\npython day18-rss-scheduler/worker.py digest\npython day18-rss-scheduler/rss_mcp_server.py\n```\n\nПоследняя команда запускает MCP по stdio и ожидает клиента. Для базы в другом месте задайте `DAY18_DB_PATH` в окружении обоих процессов.\n\nДля сводки строго без модели задайте `DAY18_DIGEST_MODE=plain` перед запуском `worker.py digest` или планировщика. В этом режиме нет вызовов провайдеров и не нужны API-ключи; ссылки и выдержки берутся из RSS.\n\nЦепочка генерации: Gemini `gemini-3.7-flash` → Gemini `gemini-3.5-flash` → OpenRouter `qwen/qwen3.8-27b:free` → Wormsoft `qwen/qwen3.8:27b` → резервный Gemini `gemini-2.5-flash` → сводка из RSS без модели. Ключи: `GEMINI_API_KEY`, `OPENROUTER_API_KEY`, `WORMSOFT_API_KEY`. `WORMSOFT_BASE_URL` необязателен. Значения ключей не сохраняются в SQLite и не печатаются. В базе сохраняются названия попыток и безопасные типы ошибок.\n\nПроверка цепочки: `python -m pytest tests/test_day18_rss_scheduler.py -q`. Она подменяет ответы провайдеров и проверяет порядок переходов без расхода квоты. Реальные вызовы проверяются отдельно. Перед сдачей `python -m pytest tests -q`: **296 passed**.\n\nЛокальная",
+              "score": 0.838557
+            },
+            {
+              "chunk_id": "fixed:d894c76457f01534c497",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "fixed",
+              "chunk_index": 5,
+              "start_char": 5000,
+              "end_char": 6200,
+              "char_count": 1200,
+              "text": "eVideos/day18-reset-demo.mp4` (около 27 секунд): 0 статей → 40 получено и 40 новых → сброс → повторная загрузка. Перед каждым нажатием кнопка подсвечивается золотой рамкой, курсор перемещается на неё и выполняет настоящий клик. Затем подсвечиваются изменившиеся счётчики и журнал. Видео сохраняются локально; эти команды не загружают их в облако.\n\nЛокальная проверка 23.09.2026: RSS вернул 40 публикаций; короткие запросы ответили через Gemini 2.5, OpenRouter и Wormsoft 27B. В первом длинном запросе Gemini 3.7/3.5 ответили HTTP 503, OpenRouter Qwen — HTTP 429, Wormsoft — таймаут; сохранилась расширенная сводка из RSS. При повторной проверке Gemini 3.7 дал HTTP 503, а Gemini 3.5 создал реальную сводку длиной 7047 символов. Интеграционные тесты проверяют переключение провайдеров, расписание и вызов `get_habr_digest` через отдельный MCP-процесс. Для Wormsoft каталог моделей не сообщает цену, поэтому перед длительным запуском на VPS нужно подтвердить бесплатный режим в аккаунте провайдера.\n\n## Работающая капсула Ubuntu 24.04 LTS\n\nДанные подключения, команды проверки и схема файлов: [VPS_SETUP.md](VPS_SETUP.md). На капсуле работают два `systemd`-таймера: сбор каждые два часа и сводка без мо",
+              "score": 0.837716
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.847577,
+          "top": [
+            {
+              "chunk_id": "structure:450ef2f3074fc20ae1f8",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "structure",
+              "chunk_index": 4,
+              "start_char": 2973,
+              "end_char": 4143,
+              "char_count": 1170,
+              "text": "tests/test_day18_rss_scheduler.py -q`. Она подменяет ответы провайдеров и проверяет порядок переходов без расхода квоты. Реальные вызовы проверяются отдельно. Перед сдачей `python -m pytest tests -q`: **296 passed**.\n\nЛокальная панель без фоновых запусков: `python day18-rss-scheduler/web_server.py`. Для **короткого расписания демо**:\n\n```powershell\npython day18-rss-scheduler/web_server.py --demo-schedule --collect-seconds 6 --digest-seconds 45\n```\n\nПока этот процесс запущен, он сам собирает RSS каждые 6 секунд и пытается создать новую сводку каждые 45 секунд. Панель показывает время следующего запуска и исход предыдущего. Если с прошлой сводки новых публикаций нет, генерация пропускается. Для отдельного фонового процесса без панели: `python day18-rss-scheduler/scheduler.py --collect-seconds 6 --digest-seconds 45`. Закрытие локального процесса останавливает расписание.\n\nКнопка **«Сбросить демо»** очищает только локальную базу дня 18: статьи, журнал загрузок и сводки. Параметры активного расписания сохраняются, и следующий плановый сбор заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок.",
+              "score": 0.847577
+            },
+            {
+              "chunk_id": "structure:e1d4a1babf5c265ccd6b",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "structure",
+              "chunk_index": 6,
+              "start_char": 4992,
+              "end_char": 5998,
+              "char_count": 1004,
+              "text": "ChallengeVideos/day18-reset-demo.mp4` (около 27 секунд): 0 статей → 40 получено и 40 новых → сброс → повторная загрузка. Перед каждым нажатием кнопка подсвечивается золотой рамкой, курсор перемещается на неё и выполняет настоящий клик. Затем подсвечиваются изменившиеся счётчики и журнал. Видео сохраняются локально; эти команды не загружают их в облако.\n\nЛокальная проверка 23.09.2026: RSS вернул 40 публикаций; короткие запросы ответили через Gemini 2.5, OpenRouter и Wormsoft 27B. В первом длинном запросе Gemini 3.7/3.5 ответили HTTP 503, OpenRouter Qwen — HTTP 429, Wormsoft — таймаут; сохранилась расширенная сводка из RSS. При повторной проверке Gemini 3.7 дал HTTP 503, а Gemini 3.5 создал реальную сводку длиной 7047 символов. Интеграционные тесты проверяют переключение провайдеров, расписание и вызов `get_habr_digest` через отдельный MCP-процесс. Для Wormsoft каталог моделей не сообщает цену, поэтому перед длительным запуском на VPS нужно подтвердить бесплатный режим в аккаунте провайдера.",
+              "score": 0.84162
+            },
+            {
+              "chunk_id": "structure:685f241941ce23a509fa",
+              "source": "day21-document-indexing/corpus/atlas-handbook.md",
+              "title": "Руководство проекта Atlas",
+              "file": "atlas-handbook.md",
+              "section": "Руководство проекта Atlas > Диагностика",
+              "strategy": "structure",
+              "chunk_index": 3,
+              "start_char": 675,
+              "end_char": 909,
+              "char_count": 232,
+              "text": "## Диагностика\n\nЕсли соединение не установлено, нужно проверить локальный адрес, состояние\nсервера и журнал handshake. После восстановления соединения клиент повторно\nзапрашивает каталог, но не повторяет уже подтверждённые операции.",
+              "score": 0.841471
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как планировщик запускает сбор RSS по расписанию?",
+      "relevant_sources": [
+        "day18-rss-scheduler/scheduler.py",
+        "day18-rss-scheduler/README.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.864729,
+          "top": [
+            {
+              "chunk_id": "fixed:8b7feb96d2a7347f0169",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "fixed",
+              "chunk_index": 3,
+              "start_char": 3000,
+              "end_char": 4200,
+              "char_count": 1200,
+              "text": "ler.py -q`. Она подменяет ответы провайдеров и проверяет порядок переходов без расхода квоты. Реальные вызовы проверяются отдельно. Перед сдачей `python -m pytest tests -q`: **296 passed**.\n\nЛокальная панель без фоновых запусков: `python day18-rss-scheduler/web_server.py`. Для **короткого расписания демо**:\n\n```powershell\npython day18-rss-scheduler/web_server.py --demo-schedule --collect-seconds 6 --digest-seconds 45\n```\n\nПока этот процесс запущен, он сам собирает RSS каждые 6 секунд и пытается создать новую сводку каждые 45 секунд. Панель показывает время следующего запуска и исход предыдущего. Если с прошлой сводки новых публикаций нет, генерация пропускается. Для отдельного фонового процесса без панели: `python day18-rss-scheduler/scheduler.py --collect-seconds 6 --digest-seconds 45`. Закрытие локального процесса останавливает расписание.\n\nКнопка **«Сбросить демо»** очищает только локальную базу дня 18: статьи, журнал загрузок и сводки. Параметры активного расписания сохраняются, и следующий плановый сбор заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок. Локальная база проекта была сброшена после добавления эт",
+              "score": 0.864729
+            },
+            {
+              "chunk_id": "fixed:fd5528db958d73a8cdca",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "fixed",
+              "chunk_index": 4,
+              "start_char": 4000,
+              "end_char": 5200,
+              "char_count": 1199,
+              "text": "следующий плановый сбор заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок. Локальная база проекта была сброшена после добавления этой функции; при запуске без расписания она пуста до нажатия «Собрать RSS».\n\nЛокальное видео: `node day18-rss-scheduler/record-video.mjs`; нужны Node.js 22+, Chrome и ffmpeg. Без дополнительных настроек ролик использует реальный RSS и эмулированные отказы моделей, явно обозначенные в панели. Для записи с ранее сохранённой **реальной** модельной сводкой укажите путь к её SQLite в `DAY18_VIDEO_SEED_DB`. Эта запись показывает два автоматических сбора, расписание следующей сводки и реальный сохранённый ответ Gemini 3.5. Золотая рамка выделяет текущий элемент интерфейса. MP4 сохраняется в `ChallengeVideos/day18-local-schedule-demo.mp4` и исключён из Git.\n\nОтдельное видео загрузки и сброса с пустой базой: установите `DAY18_VIDEO_MODE=reset` перед запуском `record-video.mjs`. Оно создаёт `ChallengeVideos/day18-reset-demo.mp4` (около 27 секунд): 0 статей → 40 получено и 40 новых → сброс → повторная загрузка. Перед каждым нажатием кнопка подсвечивается золотой рамкой, курсор перемещается на неё",
+              "score": 0.858891
+            },
+            {
+              "chunk_id": "fixed:277870e341645500f3d8",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "# День 18 — Habr RSS по расписанию\n\n**Видео-демо:** [day18-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/LWiKXs55n0xgCA) — публичный URL работающей капсулы, сохранённые статьи и сводка, расписание и скачивание TXT.\n\nСборщик читает RSS хаба «Искусственный интеллект», сохраняет новые публикации в SQLite и формирует сводку. MCP-инструмент `get_habr_digest` отдаёт последнюю сохранённую сводку и состояние сборщика. Сборщик и генератор — короткие одноразовые процессы; на VPS их запускают таймеры.\n\n## Публичная проверка работающей капсулы\n\n**URL:** [http://176.53.175.196:8080/](http://176.53.175.196:8080/)\n\n**Видео по URL:** [http://176.53.175.196:8080/demo.mp4](http://176.53.175.196:8080/demo.mp4)\n\nНа странице видны число сохранённых статей, последний сбор, время следующих запусков, полная сводка без модели, ссылки на RSS-публикации и журнал сборов. Кнопка **«Скачать TXT»** отдаёт сохранённую сводку отдельным файлом. Страница обновляет данные каждые 30 секунд. Для открытия не нужны SSH, учётная запись или API-ключи.\n\nПубличный процесс `public_server.py` работает как отдельная служба `day18-public.service` на порту 8080 и читает SQLite в режиме `mode=ro`. Он предоставляет только `GET /`, `G",
+              "score": 0.858229
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.864482,
+          "top": [
+            {
+              "chunk_id": "structure:450ef2f3074fc20ae1f8",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "structure",
+              "chunk_index": 4,
+              "start_char": 2973,
+              "end_char": 4143,
+              "char_count": 1170,
+              "text": "tests/test_day18_rss_scheduler.py -q`. Она подменяет ответы провайдеров и проверяет порядок переходов без расхода квоты. Реальные вызовы проверяются отдельно. Перед сдачей `python -m pytest tests -q`: **296 passed**.\n\nЛокальная панель без фоновых запусков: `python day18-rss-scheduler/web_server.py`. Для **короткого расписания демо**:\n\n```powershell\npython day18-rss-scheduler/web_server.py --demo-schedule --collect-seconds 6 --digest-seconds 45\n```\n\nПока этот процесс запущен, он сам собирает RSS каждые 6 секунд и пытается создать новую сводку каждые 45 секунд. Панель показывает время следующего запуска и исход предыдущего. Если с прошлой сводки новых публикаций нет, генерация пропускается. Для отдельного фонового процесса без панели: `python day18-rss-scheduler/scheduler.py --collect-seconds 6 --digest-seconds 45`. Закрытие локального процесса останавливает расписание.\n\nКнопка **«Сбросить демо»** очищает только локальную базу дня 18: статьи, журнал загрузок и сводки. Параметры активного расписания сохраняются, и следующий плановый сбор заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок.",
+              "score": 0.864482
+            },
+            {
+              "chunk_id": "structure:19f371bb25cb1c58cb56",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию",
+              "strategy": "structure",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 495,
+              "char_count": 493,
+              "text": "# День 18 — Habr RSS по расписанию\n\n**Видео-демо:** [day18-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/LWiKXs55n0xgCA) — публичный URL работающей капсулы, сохранённые статьи и сводка, расписание и скачивание TXT.\n\nСборщик читает RSS хаба «Искусственный интеллект», сохраняет новые публикации в SQLite и формирует сводку. MCP-инструмент `get_habr_digest` отдаёт последнюю сохранённую сводку и состояние сборщика. Сборщик и генератор — короткие одноразовые процессы; на VPS их запускают таймеры.",
+              "score": 0.859906
+            },
+            {
+              "chunk_id": "structure:93de70a84deac22f0754",
+              "source": "day18-rss-scheduler/README.md",
+              "title": "День 18 — Habr RSS по расписанию",
+              "file": "README.md",
+              "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+              "strategy": "structure",
+              "chunk_index": 5,
+              "start_char": 4023,
+              "end_char": 5112,
+              "char_count": 1088,
+              "text": "заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок. Локальная база проекта была сброшена после добавления этой функции; при запуске без расписания она пуста до нажатия «Собрать RSS».\n\nЛокальное видео: `node day18-rss-scheduler/record-video.mjs`; нужны Node.js 22+, Chrome и ffmpeg. Без дополнительных настроек ролик использует реальный RSS и эмулированные отказы моделей, явно обозначенные в панели. Для записи с ранее сохранённой **реальной** модельной сводкой укажите путь к её SQLite в `DAY18_VIDEO_SEED_DB`. Эта запись показывает два автоматических сбора, расписание следующей сводки и реальный сохранённый ответ Gemini 3.5. Золотая рамка выделяет текущий элемент интерфейса. MP4 сохраняется в `ChallengeVideos/day18-local-schedule-demo.mp4` и исключён из Git.\n\nОтдельное видео загрузки и сброса с пустой базой: установите `DAY18_VIDEO_MODE=reset` перед запуском `record-video.mjs`. Оно создаёт `ChallengeVideos/day18-reset-demo.mp4` (около 27 секунд): 0 статей → 40 получено и 40 новых → сброс → повторная загрузка.",
+              "score": 0.853513
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как результаты MCP-инструментов передаются следующему шагу pipeline?",
+      "relevant_sources": [
+        "day19-mcp-composition/pipeline.py",
+        "day19-mcp-composition/PLAN.md",
+        "day19-mcp-composition/README.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.859577,
+          "top": [
+            {
+              "chunk_id": "fixed:4df3c6dd426e67517a5e",
+              "source": "day19-mcp-composition/PLAN.md",
+              "title": "День 19 — композиция MCP-инструментов: план до разработки",
+              "file": "PLAN.md",
+              "section": "День 19 — композиция MCP-инструментов: план до разработки",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "# День 19 — композиция MCP-инструментов: план до разработки\n\n## Цель и границы\n\nСделать один локальный MCP-сервер, который объявляет три отдельных инструмента: `search`, `summarize`, `saveToFile`. Один клиентский запуск автоматически вызывает их в этом порядке через MCP `tools/call`, передавая структурированные результаты без ручного копирования. Результат — сохранённый файл, исходный код и видео реальной цепочки.\n\nПод «в рамках одного MCP» понимаем один MCP-сервер и одно клиентское соединение на весь запуск. Это сохраняет смысл задания про композицию **нескольких инструментов**. Оркестрация находится в клиенте: так в трассе видны три независимых вызова. Если требование буквально означает один экспортируемый `mcp-tool`, контракт нужно изменить до реализации: тогда внутри него будут три этапа, но показать композицию отдельных MCP-инструментов через `tools/call` уже нельзя.\n\n## Связь с предыдущими днями\n\n- День 16: оставить официальный Python MCP SDK, `initialize`, `tools/list`, stdio и проверку схем через настоящее соединение.\n- День 17: взять структуру небольшого MCP-сервера, детерминированного клиента, локального веб-интерфейса и запись видео через Chrome/ffmpeg. Не копировать его",
+              "score": 0.859577
+            },
+            {
+              "chunk_id": "fixed:3fd0c7fa98e6080f57dd",
+              "source": "day19-mcp-composition/README.md",
+              "title": "День 19. Композиция MCP-инструментов",
+              "file": "README.md",
+              "section": "День 19. Композиция MCP-инструментов > Запуск",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 2200,
+              "char_count": 1200,
+              "text": "omposition/pipeline.py\npython day19-mcp-composition/web_server.py\n```\n\nПоследняя команда напечатает локальный URL. В браузере достаточно нажать **«Запустить цепочку»**. Страница показывает каталог инструментов, аргументы и результаты каждого реального `tools/call`, путь и содержимое сохранённого TXT. Для другого запроса: `python day19-mcp-composition/pipeline.py \"RSS\" --json`.\n\nФайлы сохраняются в `day19-mcp-composition/output/`. Для отдельного каталога задайте `DAY19_OUTPUT_DIR`. Имя генерируется по `run_id`; произвольный путь клиенту не доступен. Для гарантированного запуска без модели задайте `DAY19_SUMMARY_MODE=plain`.\n\n## Проверка и видео\n\n```powershell\npython -m pytest tests/test_day19_mcp_composition.py -q\npython -m py_compile day19-mcp-composition/mcp_server.py day19-mcp-composition/pipeline.py day19-mcp-composition/web_server.py\nnode --check day19-mcp-composition/web/app.js\nnode day19-mcp-composition/record-video.mjs\n```\n\nЗапись требует Node.js 22+, Chrome и ffmpeg. Результат: [day19-demo.mp4](../ChallengeVideos/day19-demo.mp4). Видео показывает один запуск и все три MCP-вызова. Для путей к программам доступны `PYTHON_PATH`, `CHROME_PATH`, `FFMPEG_PATH`.\n\nПлан: [PLAN.md](P",
+              "score": 0.85185
+            },
+            {
+              "chunk_id": "fixed:dc4312bd9dd58b24c815",
+              "source": "day16-mcp-connection/PLAN.md",
+              "title": "День 16 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 16 — план до разработки > Контракт",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 2200,
+              "char_count": 1200,
+              "text": "р, транспорт stdio, официальный пакет mcp.\n- Клиент выполняет initialize, затем tools/list и закрывает сессию.\n- Два инструмента: add(a: int, b: int) -> int и greet(name: str) -> str.\n- Сервер объявляет инструменты; клиент получает описания и inputSchema по MCP,\n  а не импортирует серверный реестр. Вызов инструментов не входит в задание.\n- CLI печатает результат соединения, сервер, версию протокола, число инструментов,\n  имена, описания и JSON Schema. --json предоставляет машиночитаемый результат.\n- Ошибка подключения даёт ненулевой код возврата; предусмотрен таймаут.\n\n## Реализация и проверка\n\n1. Установить и закрепить проверенную версию SDK в requirements.txt.\n2. Написать demo_server.py и mcp_client.py с освобождением ресурсов.\n3. Проверить реальный handshake и список инструментов через отдельный процесс;\n   проверить схемы, повторное соединение, ошибку запуска и таймаут.\n4. Подготовить README и VIDEO_SCRIPT.md.\n5. Записать запуск CLI и вывод; отображать реальные результаты процессов,\n   используя существующий подход Chrome CDP + ffmpeg с русскими подписями.\n6. Проверить синтаксис, pytest, запуск без аргументов, MP4 и контрольные кадры.\n\n## Результат для проверки\n\nКод, инструкции",
+              "score": 0.851021
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.871119,
+          "top": [
+            {
+              "chunk_id": "structure:e37a1fb7995df4bee6be",
+              "source": "day19-mcp-composition/PLAN.md",
+              "title": "День 19 — композиция MCP-инструментов: план до разработки",
+              "file": "PLAN.md",
+              "section": "День 19 — композиция MCP-инструментов: план до разработки > Цель и границы",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 61,
+              "end_char": 886,
+              "char_count": 823,
+              "text": "## Цель и границы\n\nСделать один локальный MCP-сервер, который объявляет три отдельных инструмента: `search`, `summarize`, `saveToFile`. Один клиентский запуск автоматически вызывает их в этом порядке через MCP `tools/call`, передавая структурированные результаты без ручного копирования. Результат — сохранённый файл, исходный код и видео реальной цепочки.\n\nПод «в рамках одного MCP» понимаем один MCP-сервер и одно клиентское соединение на весь запуск. Это сохраняет смысл задания про композицию **нескольких инструментов**. Оркестрация находится в клиенте: так в трассе видны три независимых вызова. Если требование буквально означает один экспортируемый `mcp-tool`, контракт нужно изменить до реализации: тогда внутри него будут три этапа, но показать композицию отдельных MCP-инструментов через `tools/call` уже нельзя.",
+              "score": 0.871119
+            },
+            {
+              "chunk_id": "structure:a25eab39b7105b829f05",
+              "source": "day16-mcp-connection/VIDEO_SCRIPT.md",
+              "title": "Сценарий видео — День 16",
+              "file": "VIDEO_SCRIPT.md",
+              "section": "Сценарий видео — День 16 > Предыдущая техническая версия",
+              "strategy": "structure",
+              "chunk_index": 2,
+              "start_char": 771,
+              "end_char": 1534,
+              "char_count": 762,
+              "text": "## Предыдущая техническая версия\n\n1. Показать последовательность initialize → tools/list → закрытие сессии.\n2. Показать реальный фрагмент mcp_client.py с ClientSession.\n3. Запустить CLI с командой существующего Jarvis MCP Server.\n4. Показать фактический handshake, сервер, версию протокола и число инструментов.\n5. Показать весь полученный список инструментов на нескольких экранах.\n6. Показать JSON Schema list_directory: обязательный path, типы и значения по умолчанию.\n7. Запустить интеграционные pytest-тесты и показать итог.\n\nРусские подписи, без озвучки. Данные получаются заново при записи.\nПри отсутствии MCP_DEMO_COMMAND тот же сценарий использует локальный demo_server.py.\nРезультат: ChallengeVideos/day16-cli-demo.mp4; формат H.264/yuv420p, 1440×1000.",
+              "score": 0.854484
+            },
+            {
+              "chunk_id": "structure:5a95fb168fbe39b46943",
+              "source": "day16-mcp-connection/PLAN.md",
+              "title": "День 16 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 16 — план до разработки > Контракт",
+              "strategy": "structure",
+              "chunk_index": 3,
+              "start_char": 957,
+              "end_char": 1576,
+              "char_count": 617,
+              "text": "## Контракт\n\n- Локальный дочерний MCP-сервер, транспорт stdio, официальный пакет mcp.\n- Клиент выполняет initialize, затем tools/list и закрывает сессию.\n- Два инструмента: add(a: int, b: int) -> int и greet(name: str) -> str.\n- Сервер объявляет инструменты; клиент получает описания и inputSchema по MCP,\n  а не импортирует серверный реестр. Вызов инструментов не входит в задание.\n- CLI печатает результат соединения, сервер, версию протокола, число инструментов,\n  имена, описания и JSON Schema. --json предоставляет машиночитаемый результат.\n- Ошибка подключения даёт ненулевой код возврата; предусмотрен таймаут.",
+              "score": 0.854184
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Какие инструменты композиции публикует MCP server?",
+      "relevant_sources": [
+        "day19-mcp-composition/mcp_server.py",
+        "day19-mcp-composition/PLAN.md",
+        "day19-mcp-composition/README.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.858588,
+          "top": [
+            {
+              "chunk_id": "fixed:4df3c6dd426e67517a5e",
+              "source": "day19-mcp-composition/PLAN.md",
+              "title": "День 19 — композиция MCP-инструментов: план до разработки",
+              "file": "PLAN.md",
+              "section": "День 19 — композиция MCP-инструментов: план до разработки",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "# День 19 — композиция MCP-инструментов: план до разработки\n\n## Цель и границы\n\nСделать один локальный MCP-сервер, который объявляет три отдельных инструмента: `search`, `summarize`, `saveToFile`. Один клиентский запуск автоматически вызывает их в этом порядке через MCP `tools/call`, передавая структурированные результаты без ручного копирования. Результат — сохранённый файл, исходный код и видео реальной цепочки.\n\nПод «в рамках одного MCP» понимаем один MCP-сервер и одно клиентское соединение на весь запуск. Это сохраняет смысл задания про композицию **нескольких инструментов**. Оркестрация находится в клиенте: так в трассе видны три независимых вызова. Если требование буквально означает один экспортируемый `mcp-tool`, контракт нужно изменить до реализации: тогда внутри него будут три этапа, но показать композицию отдельных MCP-инструментов через `tools/call` уже нельзя.\n\n## Связь с предыдущими днями\n\n- День 16: оставить официальный Python MCP SDK, `initialize`, `tools/list`, stdio и проверку схем через настоящее соединение.\n- День 17: взять структуру небольшого MCP-сервера, детерминированного клиента, локального веб-интерфейса и запись видео через Chrome/ffmpeg. Не копировать его",
+              "score": 0.858588
+            },
+            {
+              "chunk_id": "fixed:795964e2604d52b1a6e5",
+              "source": "day19-mcp-composition/mcp_server.py",
+              "title": "One stdio MCP server with three composable tools.",
+              "file": "mcp_server.py",
+              "section": "module",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1200,
+              "text": "\"\"\"One stdio MCP server with three composable tools.\"\"\"\n\nimport os\nfrom pathlib import Path\nfrom uuid import uuid4\nimport sys\n\nfrom mcp.server import MCPServer\n\n\nmcp = MCPServer(\"day19-composition\", version=\"1.0.0\", log_level=\"WARNING\")\nCORPUS = [\n    {\"id\": \"d16\", \"title\": \"День 16: подключение MCP\", \"text\": \"Клиент устанавливает соединение, выполняет initialize и получает каталог инструментов через tools/list.\", \"source\": \"day16-mcp-connection\"},\n    {\"id\": \"d17\", \"title\": \"День 17: первый MCP-инструмент\", \"text\": \"Локальный MCP-сервер объявляет инструмент get_git_snapshot. Клиент вызывает его через tools/call и использует результат.\", \"source\": \"day17-first-mcp-tool\"},\n    {\"id\": \"d18\", \"title\": \"День 18: RSS и MCP\", \"text\": \"Сборщик сохраняет RSS-материалы, а MCP-инструмент get_habr_digest отдаёт последнюю сводку.\", \"source\": \"day18-rss-scheduler\"},\n]\nOUTPUT_DIR = Path(os.environ.get(\"DAY19_OUTPUT_DIR\", Path(__file__).resolve().parent / \"output\")).resolve()\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"day18-rss-scheduler\"))\nfrom day18_providers import GEMINI_MODELS, generate\n\nMODEL = os.environ.get(\"DAY19_MODEL\", GEMINI_MODELS[1])\n\n\n@mcp.tool(description=\"Найти",
+              "score": 0.852607
+            },
+            {
+              "chunk_id": "fixed:f2d749c332c6c7981f2d",
+              "source": "day20-mcp-orchestration/README.md",
+              "title": "День 20. Orchestration MCP",
+              "file": "README.md",
+              "section": "День 20. Orchestration MCP > Проверка",
+              "strategy": "fixed",
+              "chunk_index": 3,
+              "start_char": 3000,
+              "end_char": 3239,
+              "char_count": 238,
+              "text": "лученным MCP-ответам, и запускают реальные MCP-процессы. Отдельно выполнен живой запуск Gemini. Запись требует Node.js 22+, Chrome и ffmpeg; пути можно задать через `PYTHON_PATH`, `CHROME_PATH`, `FFMPEG_PATH`.\n\n[План и контракт](PLAN.md).",
+              "score": 0.850727
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.868373,
+          "top": [
+            {
+              "chunk_id": "structure:e37a1fb7995df4bee6be",
+              "source": "day19-mcp-composition/PLAN.md",
+              "title": "День 19 — композиция MCP-инструментов: план до разработки",
+              "file": "PLAN.md",
+              "section": "День 19 — композиция MCP-инструментов: план до разработки > Цель и границы",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 61,
+              "end_char": 886,
+              "char_count": 823,
+              "text": "## Цель и границы\n\nСделать один локальный MCP-сервер, который объявляет три отдельных инструмента: `search`, `summarize`, `saveToFile`. Один клиентский запуск автоматически вызывает их в этом порядке через MCP `tools/call`, передавая структурированные результаты без ручного копирования. Результат — сохранённый файл, исходный код и видео реальной цепочки.\n\nПод «в рамках одного MCP» понимаем один MCP-сервер и одно клиентское соединение на весь запуск. Это сохраняет смысл задания про композицию **нескольких инструментов**. Оркестрация находится в клиенте: так в трассе видны три независимых вызова. Если требование буквально означает один экспортируемый `mcp-tool`, контракт нужно изменить до реализации: тогда внутри него будут три этапа, но показать композицию отдельных MCP-инструментов через `tools/call` уже нельзя.",
+              "score": 0.868373
+            },
+            {
+              "chunk_id": "structure:5a95fb168fbe39b46943",
+              "source": "day16-mcp-connection/PLAN.md",
+              "title": "День 16 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 16 — план до разработки > Контракт",
+              "strategy": "structure",
+              "chunk_index": 3,
+              "start_char": 957,
+              "end_char": 1576,
+              "char_count": 617,
+              "text": "## Контракт\n\n- Локальный дочерний MCP-сервер, транспорт stdio, официальный пакет mcp.\n- Клиент выполняет initialize, затем tools/list и закрывает сессию.\n- Два инструмента: add(a: int, b: int) -> int и greet(name: str) -> str.\n- Сервер объявляет инструменты; клиент получает описания и inputSchema по MCP,\n  а не импортирует серверный реестр. Вызов инструментов не входит в задание.\n- CLI печатает результат соединения, сервер, версию протокола, число инструментов,\n  имена, описания и JSON Schema. --json предоставляет машиночитаемый результат.\n- Ошибка подключения даёт ненулевой код возврата; предусмотрен таймаут.",
+              "score": 0.863417
+            },
+            {
+              "chunk_id": "structure:80fead939de6f5696dae",
+              "source": "day16-mcp-connection/PLAN.md",
+              "title": "День 16 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 16 — план до разработки > Уточнение в ходе работы",
+              "strategy": "structure",
+              "chunk_index": 6,
+              "start_char": 2250,
+              "end_char": 2628,
+              "char_count": 377,
+              "text": "## Уточнение в ходе работы\n\nПользователь сообщил, что уже имеет много MCP, и разрешил выбрать любой,\nвключая McpServer. Для основной демонстрации выбран существующий Jarvis MCP\nServer; клиент поддерживает произвольную команду stdio и Streamable HTTP URL.\nЛокальный сервер сохранён для воспроизводимых тестов. Дополнительных проектных\nособенностей Python пользователь не указал.",
+              "score": 0.861925
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Почему storage.save разрешён только после analysis.verify?",
+      "relevant_sources": [
+        "day20-mcp-orchestration/orchestrator.py",
+        "day20-mcp-orchestration/PLAN.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.88228,
+          "top": [
+            {
+              "chunk_id": "fixed:c343aa3ea866783d2fc3",
+              "source": "day20-mcp-orchestration/PLAN.md",
+              "title": "День 20: план и контракт",
+              "file": "PLAN.md",
+              "section": "День 20: план и контракт > Контракты",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 1389,
+              "char_count": 388,
+              "text": "(items) → {summary,source_ids}; analysis.verify(items,summary,source_ids) → {valid}.\n- storage.save(content) → {id,path}; storage.read(id) → {content,path}.\n- `knowledge.read` и `storage.read` имеют одинаковое локальное имя, поэтому модель видит полные имена, а маршрутизатор использует разные сессии.\n- Корпус импортируется из дня 19; сервер хранения принимает только сгенерированные ID.",
+              "score": 0.88228
+            },
+            {
+              "chunk_id": "fixed:66c5e2aa0a63dd8b7e82",
+              "source": "day20-mcp-orchestration/orchestrator.py",
+              "title": "Gemini selects tools; this client routes them across three real MCP sessions.",
+              "file": "orchestrator.py",
+              "section": "function run",
+              "strategy": "fixed",
+              "chunk_index": 4,
+              "start_char": 4000,
+              "end_char": 5200,
+              "char_count": 1200,
+              "text": "max_steps:\n                    raise RuntimeError(\"Превышен лимит шагов\")\n                result = await router.call(decision[\"tool\"], decision[\"arguments\"], \"Инструмент выбран моделью\")\n                model_agent.observe(decision, result)\n            else:\n                raise RuntimeError(\"Модель не завершила задачу\")\n    results = {step[\"tool\"]: step[\"result\"] for step in router.trace}\n    saved = results.get(\"storage.read\", {})\n    digest = results.get(\"analysis.summarize\", {})\n    if \"storage.save\" in results:\n        if not saved or saved[\"content\"] != digest.get(\"summary\"):\n            raise RuntimeError(\"Записанный отчёт не был проверен чтением\")\n    if digest and not results.get(\"analysis.verify\", {}).get(\"valid\"):\n        raise RuntimeError(\"Сводка не прошла проверку\")\n    return {\"agent\": \"Gemini function calling\", \"model\": model_agent.model,\n            \"model_turns\": model_agent.turns, \"model_answer\": decision[\"answer\"],\n            \"servers\": list(registry), \"catalog\": router.catalog, \"trace\": router.trace,\n            \"file\": saved.get(\"path\"), \"content\": saved.get(\"content\", digest.get(\"summary\", \"Ничего не найдено\")),\n            \"verified\": \"storage.read\" in res",
+              "score": 0.870262
+            },
+            {
+              "chunk_id": "fixed:10ea5c4db781b997aaf9",
+              "source": "day20-mcp-orchestration/orchestrator.py",
+              "title": "Gemini selects tools; this client routes them across three real MCP sessions.",
+              "file": "orchestrator.py",
+              "section": "class Router",
+              "strategy": "fixed",
+              "chunk_index": 2,
+              "start_char": 2000,
+              "end_char": 3200,
+              "char_count": 1200,
+              "text": "session, tool)\n                self.catalog.append({\"name\": route, \"server\": name, \"description\": tool.description, \"inputSchema\": tool.input_schema})\n\n    async def call(self, route, arguments, reason):\n        if route not in self.routes:\n            raise ValueError(f\"Неизвестный маршрут: {route}\")\n        session, tool = self.routes[route]\n        validate(arguments, tool.input_schema)\n        if route == \"storage.save\":\n            verified = [step for step in self.trace if step[\"tool\"] == \"analysis.verify\" and step[\"result\"].get(\"valid\")]\n            digests = [step for step in self.trace if step[\"tool\"] == \"analysis.summarize\"]\n            if not verified or not digests or arguments[\"content\"] != digests[-1][\"result\"][\"summary\"]:\n                raise RuntimeError(\"Сохранение разрешено только для проверенной сводки\")\n        step = {\"server\": route.split('.')[0], \"tool\": route, \"reason\": reason, \"arguments\": arguments}\n        self.trace.append(step)\n        try:\n            step[\"result\"] = payload(await session.call_tool(tool.name, arguments=arguments))\n        except Exception:\n            step[\"error\"] = \"Вызов MCP завершился ошибкой\"\n            raise\n        return ste",
+              "score": 0.867754
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.873076,
+          "top": [
+            {
+              "chunk_id": "structure:28fdb663a01a55a9e5cd",
+              "source": "day20-mcp-orchestration/orchestrator.py",
+              "title": "Gemini selects tools; this client routes them across three real MCP sessions.",
+              "file": "orchestrator.py",
+              "section": "class Router",
+              "strategy": "structure",
+              "chunk_index": 3,
+              "start_char": 1895,
+              "end_char": 3079,
+              "char_count": 1183,
+              "text": ".routes:\n                    raise RuntimeError(\"Повтор маршрута\")\n                self.routes[route] = (session, tool)\n                self.catalog.append({\"name\": route, \"server\": name, \"description\": tool.description, \"inputSchema\": tool.input_schema})\n\n    async def call(self, route, arguments, reason):\n        if route not in self.routes:\n            raise ValueError(f\"Неизвестный маршрут: {route}\")\n        session, tool = self.routes[route]\n        validate(arguments, tool.input_schema)\n        if route == \"storage.save\":\n            verified = [step for step in self.trace if step[\"tool\"] == \"analysis.verify\" and step[\"result\"].get(\"valid\")]\n            digests = [step for step in self.trace if step[\"tool\"] == \"analysis.summarize\"]\n            if not verified or not digests or arguments[\"content\"] != digests[-1][\"result\"][\"summary\"]:\n                raise RuntimeError(\"Сохранение разрешено только для проверенной сводки\")\n        step = {\"server\": route.split('.')[0], \"tool\": route, \"reason\": reason, \"arguments\": arguments}\n        self.trace.append(step)\n        try:\n            step[\"result\"] = payload(await session.call_tool(tool.name, arguments=arguments))",
+              "score": 0.873076
+            },
+            {
+              "chunk_id": "structure:577e9d7e7db0d18cfbdc",
+              "source": "day20-mcp-orchestration/orchestrator.py",
+              "title": "Gemini selects tools; this client routes them across three real MCP sessions.",
+              "file": "orchestrator.py",
+              "section": "function run",
+              "strategy": "structure",
+              "chunk_index": 6,
+              "start_char": 4274,
+              "end_char": 5208,
+              "char_count": 930,
+              "text": "raise RuntimeError(\"Модель не завершила задачу\")\n    results = {step[\"tool\"]: step[\"result\"] for step in router.trace}\n    saved = results.get(\"storage.read\", {})\n    digest = results.get(\"analysis.summarize\", {})\n    if \"storage.save\" in results:\n        if not saved or saved[\"content\"] != digest.get(\"summary\"):\n            raise RuntimeError(\"Записанный отчёт не был проверен чтением\")\n    if digest and not results.get(\"analysis.verify\", {}).get(\"valid\"):\n        raise RuntimeError(\"Сводка не прошла проверку\")\n    return {\"agent\": \"Gemini function calling\", \"model\": model_agent.model,\n            \"model_turns\": model_agent.turns, \"model_answer\": decision[\"answer\"],\n            \"servers\": list(registry), \"catalog\": router.catalog, \"trace\": router.trace,\n            \"file\": saved.get(\"path\"), \"content\": saved.get(\"content\", digest.get(\"summary\", \"Ничего не найдено\")),\n            \"verified\": \"storage.read\" in results}",
+              "score": 0.86848
+            },
+            {
+              "chunk_id": "structure:c66c5b7fb1b269bd2920",
+              "source": "day15-controlled-transitions/lifecycle_assistant.py",
+              "title": "Assistant facade: models may suggest, only the guard may transition.",
+              "file": "lifecycle_assistant.py",
+              "section": "class LifecycleAssistant",
+              "strategy": "structure",
+              "chunk_index": 4,
+              "start_char": 3333,
+              "end_char": 4129,
+              "char_count": 795,
+              "text": "\"version\": state.version + 1})\n        self.store.save(updated, state.version, event=\"resumed\", from_state=state.state,\n                        action=\"resume\", code=\"resumed\", details=\"\")\n        return self._response(updated, \"Продолжаю с сохранённого этапа; повторять задачу не нужно.\")\n\n    def _response(self, state: TaskState, message: str, *, allowed: bool = True,\n                  code: str = \"ok\", override_actions=None) -> dict:\n        actions = tuple(override_actions) if override_actions is not None else self.contract.allowed_actions(state.state)\n        return {\"allowed\": allowed, \"code\": code, \"message\": message, \"state_changed\": allowed,\n                \"allowed_actions\": list(actions), \"state\": state.to_dict(),\n                \"history\": self.store.history(state.task_id)}",
+              "score": 0.866698
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как роутер различает одинаковые имена инструментов разных серверов?",
+      "relevant_sources": [
+        "day20-mcp-orchestration/orchestrator.py",
+        "day20-mcp-orchestration/PLAN.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.845193,
+          "top": [
+            {
+              "chunk_id": "fixed:c343aa3ea866783d2fc3",
+              "source": "day20-mcp-orchestration/PLAN.md",
+              "title": "День 20: план и контракт",
+              "file": "PLAN.md",
+              "section": "День 20: план и контракт > Контракты",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 1389,
+              "char_count": 388,
+              "text": "(items) → {summary,source_ids}; analysis.verify(items,summary,source_ids) → {valid}.\n- storage.save(content) → {id,path}; storage.read(id) → {content,path}.\n- `knowledge.read` и `storage.read` имеют одинаковое локальное имя, поэтому модель видит полные имена, а маршрутизатор использует разные сессии.\n- Корпус импортируется из дня 19; сервер хранения принимает только сгенерированные ID.",
+              "score": 0.845193
+            },
+            {
+              "chunk_id": "fixed:ff1e250b44d4fe2b0259",
+              "source": "day17-first-mcp-tool/README.md",
+              "title": "День 17. Первый MCP-инструмент",
+              "file": "README.md",
+              "section": "День 17. Первый MCP-инструмент > Запуск",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 2200,
+              "char_count": 1199,
+              "text": "_server.py\n```\n\nОткройте адрес из консоли. Порт выбирается автоматически. Выберите вопрос и нажмите «Спросить агента». Интерфейс показывает объявленную сервером схему, аргументы `tools/call`, сырой результат и ответ агента.\n\nCLI:\n\n```powershell\npython day17-first-mcp-tool/git_agent.py\npython day17-first-mcp-tool/git_agent.py latest_commit --json\n```\n\nПо умолчанию читается Git-репозиторий проекта. Для другого локального репозитория задайте `DAY17_REPO_ROOT` перед запуском. Веб-запрос принимает только один из двух сценариев и не принимает путь или команду Git.\n\n## Проверка\n\n```powershell\npython -m pytest tests/test_day17_mcp_tool.py -q\npython -m py_compile day17-first-mcp-tool/git_mcp_server.py day17-first-mcp-tool/git_agent.py day17-first-mcp-tool/web_server.py\nnode --check day17-first-mcp-tool/web/app.js\nnode --check day17-first-mcp-tool/record-video.mjs\n```\n\nТесты запускают реальный дочерний MCP-процесс и проверяют оба сценария вызова, JSON Schema, использование ответа в тексте агента и веб-API. Проверка перед сдачей: `python -m pytest tests -q` — **288 passed**.\n\n## Видео\n\n[Локальный файл ChallengeVideos/day17-demo.mp4](../ChallengeVideos/day17-demo.mp4), 29,8 с. Для перезаписи:",
+              "score": 0.823985
+            },
+            {
+              "chunk_id": "fixed:c58ca7fa8431c10ebdb9",
+              "source": "day16-mcp-connection/VIDEO_SCRIPT.md",
+              "title": "Сценарий видео — День 16",
+              "file": "VIDEO_SCRIPT.md",
+              "section": "Сценарий видео — День 16 > Предыдущая техническая версия",
+              "strategy": "fixed",
+              "chunk_index": 1,
+              "start_char": 1000,
+              "end_char": 1534,
+              "char_count": 532,
+              "text": "4. Показать фактический handshake, сервер, версию протокола и число инструментов.\n5. Показать весь полученный список инструментов на нескольких экранах.\n6. Показать JSON Schema list_directory: обязательный path, типы и значения по умолчанию.\n7. Запустить интеграционные pytest-тесты и показать итог.\n\nРусские подписи, без озвучки. Данные получаются заново при записи.\nПри отсутствии MCP_DEMO_COMMAND тот же сценарий использует локальный demo_server.py.\nРезультат: ChallengeVideos/day16-cli-demo.mp4; формат H.264/yuv420p, 1440×1000.",
+              "score": 0.82258
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.837361,
+          "top": [
+            {
+              "chunk_id": "structure:feff2fc5ca08206f3ada",
+              "source": "day20-mcp-orchestration/PLAN.md",
+              "title": "День 20: план и контракт",
+              "file": "PLAN.md",
+              "section": "День 20: план и контракт > Контракты",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 902,
+              "end_char": 1389,
+              "char_count": 486,
+              "text": "## Контракты\n\n- knowledge.search(query) → ids; knowledge.read(id) → документ.\n- analysis.summarize(items) → {summary,source_ids}; analysis.verify(items,summary,source_ids) → {valid}.\n- storage.save(content) → {id,path}; storage.read(id) → {content,path}.\n- `knowledge.read` и `storage.read` имеют одинаковое локальное имя, поэтому модель видит полные имена, а маршрутизатор использует разные сессии.\n- Корпус импортируется из дня 19; сервер хранения принимает только сгенерированные ID.",
+              "score": 0.837361
+            },
+            {
+              "chunk_id": "structure:5a95fb168fbe39b46943",
+              "source": "day16-mcp-connection/PLAN.md",
+              "title": "День 16 — план до разработки",
+              "file": "PLAN.md",
+              "section": "День 16 — план до разработки > Контракт",
+              "strategy": "structure",
+              "chunk_index": 3,
+              "start_char": 957,
+              "end_char": 1576,
+              "char_count": 617,
+              "text": "## Контракт\n\n- Локальный дочерний MCP-сервер, транспорт stdio, официальный пакет mcp.\n- Клиент выполняет initialize, затем tools/list и закрывает сессию.\n- Два инструмента: add(a: int, b: int) -> int и greet(name: str) -> str.\n- Сервер объявляет инструменты; клиент получает описания и inputSchema по MCP,\n  а не импортирует серверный реестр. Вызов инструментов не входит в задание.\n- CLI печатает результат соединения, сервер, версию протокола, число инструментов,\n  имена, описания и JSON Schema. --json предоставляет машиночитаемый результат.\n- Ошибка подключения даёт ненулевой код возврата; предусмотрен таймаут.",
+              "score": 0.829158
+            },
+            {
+              "chunk_id": "structure:3463e29dcb2a9b1c5352",
+              "source": "day16-mcp-connection/VIDEO_SCRIPT.md",
+              "title": "Сценарий видео — День 16",
+              "file": "VIDEO_SCRIPT.md",
+              "section": "Сценарий видео — День 16 > Основная версия: UI предыдущих дней",
+              "strategy": "structure",
+              "chunk_index": 1,
+              "start_char": 28,
+              "end_char": 771,
+              "char_count": 741,
+              "text": "## Основная версия: UI предыдущих дней\n\n1. Открыть интерфейс; объяснить выбор сервера, каталог и параметры.\n2. Выбрать учебный сервер, нажать «Подключиться», получить 2 инструмента.\n3. Показать add с обязательными a и b, затем greet с параметром name.\n4. Выбрать Jarvis и подключиться; показать реальное число инструментов.\n5. Найти list_directory, открыть карточку с описанием и параметрами.\n6. Показать обязательный path и необязательные параметры, раскрыть JSON-схему.\n7. Проверить поиск без совпадений, затем найти rag_search.\n8. Показать журнал: запуск, успешный handshake, каталог, закрытие сессии.\n\nЗапись: `node record-ui.mjs`. Результат: `ChallengeVideos/day16-demo.mp4`.\n1920×1080, H.264 Baseline/AAC, русские подписи, без озвучки.",
+              "score": 0.828806
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Как проверяются допустимые переходы состояния задачи?",
+      "relevant_sources": [
+        "day15-controlled-transitions/task_lifecycle.py",
+        "day15-controlled-transitions/PLAN.md",
+        "day15-controlled-transitions/README.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.834223,
+          "top": [
+            {
+              "chunk_id": "fixed:6811f86826fc4af11f57",
+              "source": "day15-controlled-transitions/task_lifecycle.py",
+              "title": "Declarative, deterministic lifecycle for Day 15.",
+              "file": "task_lifecycle.py",
+              "section": "class TransitionGuard",
+              "strategy": "fixed",
+              "chunk_index": 4,
+              "start_char": 4000,
+              "end_char": 4426,
+              "char_count": 425,
+              "text": "pleted\", \"Завершённую задачу нельзя изменить\", ())\n        rule = self.contract.transitions[state].get(action)\n        if rule is None:\n            expected = \", \".join(allowed) or \"нет\"\n            raise TransitionRejected(\n                \"invalid_transition\",\n                f\"Действие {action!r} недопустимо в состоянии {state!r}. Сейчас разрешено: {expected}\",\n                allowed,\n            )\n        return rule",
+              "score": 0.834223
+            },
+            {
+              "chunk_id": "fixed:d30e338a541d37c52220",
+              "source": "day15-controlled-transitions/README.md",
+              "title": "День 15. Контролируемые переходы состояний",
+              "file": "README.md",
+              "section": "День 15. Контролируемые переходы состояний",
+              "strategy": "fixed",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 1200,
+              "char_count": 1180,
+              "text": "# День 15. Контролируемые переходы состояний\n\n**Видео-демо:** [day15-demo.mp4 на Яндекс.Диске](https://yadi.sk/d/K4aXX36VdDiK2w) — отказ на попытке реализовать задачу до утверждения плана и завершить её без валидации, возврат плана и реализации на доработку, сравнение DeepSeek V4 Flash и Qwen3.8-27B на одном снимке, пауза с восстановлением только по `task_id` и полный журнал разрешённых и отклонённых переходов.\n\nАссистент работает через явный жизненный цикл. Модели могут предложить действие, но изменить состояние способен только детерминированный `TransitionGuard`.\n\n## Что реализовано\n\n- декларативный контракт `lifecycle.json`;\n- обязательное согласование плана до реализации;\n- обязательная валидация до завершения;\n- возврат плана на доработку и реализации после неудачной проверки;\n- серверная блокировка прыжков между этапами;\n- пауза и восстановление только по `task_id`;\n- SQLite, оптимистические версии и аудит успешных/отклонённых попыток;\n- сравнение `deepseek-v4-flash` и `qwen/qwen3.8-27b` через RouterAI на одном снимке.\n\n## Жизненный цикл\n\n```text\nplanning → plan_review → implementation → validation → completed\n             ↘ planning        ↑             ↙",
+              "score": 0.832215
+            },
+            {
+              "chunk_id": "fixed:abf771b582a5da6f6fdc",
+              "source": "day15-controlled-transitions/task_lifecycle.py",
+              "title": "Declarative, deterministic lifecycle for Day 15.",
+              "file": "task_lifecycle.py",
+              "section": "class LifecycleContract",
+              "strategy": "fixed",
+              "chunk_index": 2,
+              "start_char": 2000,
+              "end_char": 3200,
+              "char_count": 1200,
+              "text": "sitions\", {}).items():\n                target = str(spec.get(\"target\", \"\"))\n                artifact = str(spec.get(\"artifact\", \"\"))\n                if target not in known or not action or not artifact:\n                    raise ValueError(f\"Некорректный переход {state_id}.{action}\")\n                transitions[state_id][action] = TransitionRule(action, state_id, target, artifact)\n        if any(transitions[state] for state in terminals):\n            raise ValueError(\"Терминальное состояние не может иметь переходы\")\n        return cls(int(raw.get(\"version\", 1)), initial, terminals, titles, descriptions, transitions)\n\n    def allowed_actions(self, state: str) -> tuple[str, ...]:\n        return tuple(self.transitions[state])\n\n    def public_dict(self) -> dict:\n        return {\n            \"version\": self.version,\n            \"initial_state\": self.initial_state,\n            \"terminal_states\": sorted(self.terminal_states),\n            \"states\": [\n                {\"id\": state, \"title\": self.titles[state], \"description\": self.descriptions[state],\n                 \"actions\": [{\"id\": rule.action, \"target\": rule.target, \"artifact\": rule.artifact}\n                             for rule in sel",
+              "score": 0.832046
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.844336,
+          "top": [
+            {
+              "chunk_id": "structure:19b33c3ba83a0353d878",
+              "source": "day15-controlled-transitions/task_lifecycle.py",
+              "title": "Declarative, deterministic lifecycle for Day 15.",
+              "file": "task_lifecycle.py",
+              "section": "class LifecycleContract",
+              "strategy": "structure",
+              "chunk_index": 4,
+              "start_char": 1613,
+              "end_char": 2786,
+              "char_count": 1166,
+              "text": "titles, descriptions, transitions = {}, {}, {}\n        for item in states:\n            state_id = str(item[\"id\"])\n            titles[state_id] = required(\"title\", str(item.get(\"title\", \"\")), 100)\n            descriptions[state_id] = required(\"description\", str(item.get(\"description\", \"\")), 300)\n            transitions[state_id] = {}\n            for action, spec in item.get(\"transitions\", {}).items():\n                target = str(spec.get(\"target\", \"\"))\n                artifact = str(spec.get(\"artifact\", \"\"))\n                if target not in known or not action or not artifact:\n                    raise ValueError(f\"Некорректный переход {state_id}.{action}\")\n                transitions[state_id][action] = TransitionRule(action, state_id, target, artifact)\n        if any(transitions[state] for state in terminals):\n            raise ValueError(\"Терминальное состояние не может иметь переходы\")\n        return cls(int(raw.get(\"version\", 1)), initial, terminals, titles, descriptions, transitions)\n\n    def allowed_actions(self, state: str) -> tuple[str, ...]:\n        return tuple(self.transitions[state])\n\n    def public_dict(self) -> dict:\n        return {",
+              "score": 0.844336
+            },
+            {
+              "chunk_id": "structure:16e658557109eaca7512",
+              "source": "day15-controlled-transitions/PLAN.md",
+              "title": "План реализации — День 15",
+              "file": "PLAN.md",
+              "section": "План реализации — День 15 > Критерии готовности",
+              "strategy": "structure",
+              "chunk_index": 4,
+              "start_char": 1411,
+              "end_char": 1888,
+              "char_count": 476,
+              "text": "## Критерии готовности\n\n- Нельзя начать реализацию до `approve_plan`.\n- Нельзя перейти в `completed` без `approve_validation` и отчёта проверки.\n- Любой отказ оставляет состояние, версию и артефакты без изменений.\n- Отказ записывается в аудит и сообщает допустимые действия.\n- Во время паузы переходы запрещены.\n- После перезапуска достаточно `task_id` для продолжения.\n- Ответы моделей не могут обойти `TransitionGuard`.\n- Готово проверяемое MP4-видео с основными сценариями.",
+              "score": 0.842855
+            },
+            {
+              "chunk_id": "structure:0779d3eab142dacd5c82",
+              "source": "day15-controlled-transitions/README.md",
+              "title": "День 15. Контролируемые переходы состояний",
+              "file": "README.md",
+              "section": "День 15. Контролируемые переходы состояний",
+              "strategy": "structure",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 573,
+              "char_count": 571,
+              "text": "# День 15. Контролируемые переходы состояний\n\n**Видео-демо:** [day15-demo.mp4 на Яндекс.Диске](https://yadi.sk/d/K4aXX36VdDiK2w) — отказ на попытке реализовать задачу до утверждения плана и завершить её без валидации, возврат плана и реализации на доработку, сравнение DeepSeek V4 Flash и Qwen3.8-27B на одном снимке, пауза с восстановлением только по `task_id` и полный журнал разрешённых и отклонённых переходов.\n\nАссистент работает через явный жизненный цикл. Модели могут предложить действие, но изменить состояние способен только детерминированный `TransitionGuard`.",
+              "score": 0.838949
+            }
+          ]
+        }
+      }
+    },
+    {
+      "query": "Где сохраняется история переходов задачи?",
+      "relevant_sources": [
+        "day15-controlled-transitions/task_store.py",
+        "day15-controlled-transitions/lifecycle_assistant.py",
+        "day15-controlled-transitions/README.md"
+      ],
+      "results": {
+        "fixed": {
+          "rank": 1,
+          "score": 0.835684,
+          "top": [
+            {
+              "chunk_id": "fixed:0b29117da9080e4aef2b",
+              "source": "day15-controlled-transitions/lifecycle_assistant.py",
+              "title": "Assistant facade: models may suggest, only the guard may transition.",
+              "file": "lifecycle_assistant.py",
+              "section": "class LifecycleAssistant",
+              "strategy": "fixed",
+              "chunk_index": 3,
+              "start_char": 3000,
+              "end_char": 4129,
+              "char_count": 1127,
+              "text": "паузу; этап и артефакты сохранены.\")\n\n    def resume(self, task_id: str) -> dict:\n        state = self.store.get(task_id)\n        if not state.paused:\n            raise ValueError(\"Задача не находится на паузе\")\n        updated = TaskState(**{**state.to_dict(), \"paused\": False, \"pause_reason\": None,\n                               \"version\": state.version + 1})\n        self.store.save(updated, state.version, event=\"resumed\", from_state=state.state,\n                        action=\"resume\", code=\"resumed\", details=\"\")\n        return self._response(updated, \"Продолжаю с сохранённого этапа; повторять задачу не нужно.\")\n\n    def _response(self, state: TaskState, message: str, *, allowed: bool = True,\n                  code: str = \"ok\", override_actions=None) -> dict:\n        actions = tuple(override_actions) if override_actions is not None else self.contract.allowed_actions(state.state)\n        return {\"allowed\": allowed, \"code\": code, \"message\": message, \"state_changed\": allowed,\n                \"allowed_actions\": list(actions), \"state\": state.to_dict(),\n                \"history\": self.store.history(state.task_id)}",
+              "score": 0.835684
+            },
+            {
+              "chunk_id": "fixed:35fe4bdd365528508558",
+              "source": "day15-controlled-transitions/lifecycle_assistant.py",
+              "title": "Assistant facade: models may suggest, only the guard may transition.",
+              "file": "lifecycle_assistant.py",
+              "section": "class LifecycleAssistant",
+              "strategy": "fixed",
+              "chunk_index": 2,
+              "start_char": 2000,
+              "end_char": 3200,
+              "char_count": 1200,
+              "text": "ed = self.store.save(updated, state.version, event=\"transition\", from_state=state.state,\n                                  action=action, code=\"transition_applied\", details=result)\n        return self._response(updated, f\"Переход {state.state} → {rule.target} выполнен.\")\n\n    def pause(self, task_id: str, reason: str) -> dict:\n        state = self.store.get(task_id)\n        if state.state in self.contract.terminal_states:\n            raise ValueError(\"Завершённую задачу нельзя поставить на паузу\")\n        if state.paused:\n            raise ValueError(\"Задача уже на паузе\")\n        reason = required(\"reason\", reason, 500)\n        updated = TaskState(**{**state.to_dict(), \"paused\": True, \"pause_reason\": reason,\n                               \"version\": state.version + 1})\n        self.store.save(updated, state.version, event=\"paused\", from_state=state.state,\n                        action=\"pause\", code=\"paused\", details=reason)\n        return self._response(updated, \"Задача поставлена на паузу; этап и артефакты сохранены.\")\n\n    def resume(self, task_id: str) -> dict:\n        state = self.store.get(task_id)\n        if not state.paused:\n            raise ValueError(\"Задача не находитс",
+              "score": 0.832242
+            },
+            {
+              "chunk_id": "fixed:abf771b582a5da6f6fdc",
+              "source": "day15-controlled-transitions/task_lifecycle.py",
+              "title": "Declarative, deterministic lifecycle for Day 15.",
+              "file": "task_lifecycle.py",
+              "section": "class LifecycleContract",
+              "strategy": "fixed",
+              "chunk_index": 2,
+              "start_char": 2000,
+              "end_char": 3200,
+              "char_count": 1200,
+              "text": "sitions\", {}).items():\n                target = str(spec.get(\"target\", \"\"))\n                artifact = str(spec.get(\"artifact\", \"\"))\n                if target not in known or not action or not artifact:\n                    raise ValueError(f\"Некорректный переход {state_id}.{action}\")\n                transitions[state_id][action] = TransitionRule(action, state_id, target, artifact)\n        if any(transitions[state] for state in terminals):\n            raise ValueError(\"Терминальное состояние не может иметь переходы\")\n        return cls(int(raw.get(\"version\", 1)), initial, terminals, titles, descriptions, transitions)\n\n    def allowed_actions(self, state: str) -> tuple[str, ...]:\n        return tuple(self.transitions[state])\n\n    def public_dict(self) -> dict:\n        return {\n            \"version\": self.version,\n            \"initial_state\": self.initial_state,\n            \"terminal_states\": sorted(self.terminal_states),\n            \"states\": [\n                {\"id\": state, \"title\": self.titles[state], \"description\": self.descriptions[state],\n                 \"actions\": [{\"id\": rule.action, \"target\": rule.target, \"artifact\": rule.artifact}\n                             for rule in sel",
+              "score": 0.829857
+            }
+          ]
+        },
+        "structure": {
+          "rank": 1,
+          "score": 0.835714,
+          "top": [
+            {
+              "chunk_id": "structure:c66c5b7fb1b269bd2920",
+              "source": "day15-controlled-transitions/lifecycle_assistant.py",
+              "title": "Assistant facade: models may suggest, only the guard may transition.",
+              "file": "lifecycle_assistant.py",
+              "section": "class LifecycleAssistant",
+              "strategy": "structure",
+              "chunk_index": 4,
+              "start_char": 3333,
+              "end_char": 4129,
+              "char_count": 795,
+              "text": "\"version\": state.version + 1})\n        self.store.save(updated, state.version, event=\"resumed\", from_state=state.state,\n                        action=\"resume\", code=\"resumed\", details=\"\")\n        return self._response(updated, \"Продолжаю с сохранённого этапа; повторять задачу не нужно.\")\n\n    def _response(self, state: TaskState, message: str, *, allowed: bool = True,\n                  code: str = \"ok\", override_actions=None) -> dict:\n        actions = tuple(override_actions) if override_actions is not None else self.contract.allowed_actions(state.state)\n        return {\"allowed\": allowed, \"code\": code, \"message\": message, \"state_changed\": allowed,\n                \"allowed_actions\": list(actions), \"state\": state.to_dict(),\n                \"history\": self.store.history(state.task_id)}",
+              "score": 0.835714
+            },
+            {
+              "chunk_id": "structure:19b33c3ba83a0353d878",
+              "source": "day15-controlled-transitions/task_lifecycle.py",
+              "title": "Declarative, deterministic lifecycle for Day 15.",
+              "file": "task_lifecycle.py",
+              "section": "class LifecycleContract",
+              "strategy": "structure",
+              "chunk_index": 4,
+              "start_char": 1613,
+              "end_char": 2786,
+              "char_count": 1166,
+              "text": "titles, descriptions, transitions = {}, {}, {}\n        for item in states:\n            state_id = str(item[\"id\"])\n            titles[state_id] = required(\"title\", str(item.get(\"title\", \"\")), 100)\n            descriptions[state_id] = required(\"description\", str(item.get(\"description\", \"\")), 300)\n            transitions[state_id] = {}\n            for action, spec in item.get(\"transitions\", {}).items():\n                target = str(spec.get(\"target\", \"\"))\n                artifact = str(spec.get(\"artifact\", \"\"))\n                if target not in known or not action or not artifact:\n                    raise ValueError(f\"Некорректный переход {state_id}.{action}\")\n                transitions[state_id][action] = TransitionRule(action, state_id, target, artifact)\n        if any(transitions[state] for state in terminals):\n            raise ValueError(\"Терминальное состояние не может иметь переходы\")\n        return cls(int(raw.get(\"version\", 1)), initial, terminals, titles, descriptions, transitions)\n\n    def allowed_actions(self, state: str) -> tuple[str, ...]:\n        return tuple(self.transitions[state])\n\n    def public_dict(self) -> dict:\n        return {",
+              "score": 0.835026
+            },
+            {
+              "chunk_id": "structure:0779d3eab142dacd5c82",
+              "source": "day15-controlled-transitions/README.md",
+              "title": "День 15. Контролируемые переходы состояний",
+              "file": "README.md",
+              "section": "День 15. Контролируемые переходы состояний",
+              "strategy": "structure",
+              "chunk_index": 0,
+              "start_char": 0,
+              "end_char": 573,
+              "char_count": 571,
+              "text": "# День 15. Контролируемые переходы состояний\n\n**Видео-демо:** [day15-demo.mp4 на Яндекс.Диске](https://yadi.sk/d/K4aXX36VdDiK2w) — отказ на попытке реализовать задачу до утверждения плана и завершить её без валидации, возврат плана и реализации на доработку, сравнение DeepSeek V4 Flash и Qwen3.8-27B на одном снимке, пауза с восстановлением только по `task_id` и полный журнал разрешённых и отклонённых переходов.\n\nАссистент работает через явный жизненный цикл. Модели могут предложить действие, но изменить состояние способен только детерминированный `TransitionGuard`.",
+              "score": 0.828274
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

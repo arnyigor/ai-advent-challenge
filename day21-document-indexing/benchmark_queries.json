@@ -1,0 +1,15 @@
+[
+  {"query":"Какой аварийный код у проекта Atlas?","relevant_sources":["day21-document-indexing/corpus/atlas-handbook.md"]},
+  {"query":"Как клиент получает все страницы каталога tools/list?","relevant_sources":["day16-mcp-connection/mcp_client.py","day16-mcp-connection/README.md"]},
+  {"query":"Как подключается Jarvis MCP через переменную окружения?","relevant_sources":["day16-mcp-connection/README.md","day16-mcp-connection/web_server.py"]},
+  {"query":"Как инструмент Git показывает staged diff?","relevant_sources":["day17-first-mcp-tool/git_mcp_server.py","day17-first-mcp-tool/PLAN.md"]},
+  {"query":"Как ограничивается путь к разрешённому Git-репозиторию?","relevant_sources":["day17-first-mcp-tool/git_mcp_server.py","day17-first-mcp-tool/PLAN.md"]},
+  {"query":"Как RSS worker предотвращает повторную обработку записей?","relevant_sources":["day18-rss-scheduler/worker.py","day18-rss-scheduler/feed_store.py","day18-rss-scheduler/README.md"]},
+  {"query":"Как планировщик запускает сбор RSS по расписанию?","relevant_sources":["day18-rss-scheduler/scheduler.py","day18-rss-scheduler/README.md"]},
+  {"query":"Как результаты MCP-инструментов передаются следующему шагу pipeline?","relevant_sources":["day19-mcp-composition/pipeline.py","day19-mcp-composition/PLAN.md","day19-mcp-composition/README.md"]},
+  {"query":"Какие инструменты композиции публикует MCP server?","relevant_sources":["day19-mcp-composition/mcp_server.py","day19-mcp-composition/PLAN.md","day19-mcp-composition/README.md"]},
+  {"query":"Почему storage.save разрешён только после analysis.verify?","relevant_sources":["day20-mcp-orchestration/orchestrator.py","day20-mcp-orchestration/PLAN.md"]},
+  {"query":"Как роутер различает одинаковые имена инструментов разных серверов?","relevant_sources":["day20-mcp-orchestration/orchestrator.py","day20-mcp-orchestration/PLAN.md"]},
+  {"query":"Как проверяются допустимые переходы состояния задачи?","relevant_sources":["day15-controlled-transitions/task_lifecycle.py","day15-controlled-transitions/PLAN.md","day15-controlled-transitions/README.md"]},
+  {"query":"Где сохраняется история переходов задачи?","relevant_sources":["day15-controlled-transitions/task_store.py","day15-controlled-transitions/lifecycle_assistant.py","day15-controlled-transitions/README.md"]}
+]

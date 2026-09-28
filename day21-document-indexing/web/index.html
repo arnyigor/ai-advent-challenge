@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>День 21 · Индексация документов</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div><span class="eyebrow">AI ADVENT · ДЕНЬ 21</span><h1>Индексация документов</h1></div>
+    <div id="status" class="status">Загрузка…</div>
+  </header>
+  <main>
+    <section class="hero panel">
+      <div><span>ЛОКАЛЬНЫЙ КОРПУС</span><strong id="corpus-files">—</strong><small>файлов</small></div>
+      <div><span>ОБЪЁМ</span><strong id="corpus-pages">—</strong><small>страниц текста</small></div>
+      <div><span>ЭМБЕДДИНГИ</span><strong id="embedding-dim">—</strong><small>измерений</small></div>
+      <button id="build">Перестроить индексы</button>
+    </section>
+
+    <section class="panel pipeline-demo" id="pipeline-demo">
+      <div class="section-title">
+        <div><span class="eyebrow">LIVE PIPELINE</span><h2>Как документ попадает в индекс</h2></div>
+        <button id="demo-run">Проиндексировать документ</button>
+      </div>
+      <div class="pipeline-flow">
+        <article class="flow-step source-step" data-step="1"><span>01 · DOCUMENT</span><b>atlas-handbook.md</b><small id="demo-document-size">загрузка…</small></article>
+        <i>→</i>
+        <article class="flow-step" data-step="2"><span>02 · CHUNKING</span><b><em id="demo-fixed-count">—</em> fixed / <em id="demo-structure-count">—</em> structure</b><small>один текст, две стратегии</small></article>
+        <i>→</i>
+        <article class="flow-step" data-step="3"><span>03 · EMBEDDINGS</span><b>384 dimensions</b><small>multilingual-e5-small</small></article>
+        <i>→</i>
+        <article class="flow-step" data-step="4"><span>04 · SQLITE</span><b>2 local indexes</b><small>текст + metadata + vectors</small></article>
+      </div>
+      <div class="document-stage">
+        <div><span class="stage-label">ИСХОДНЫЙ ДОКУМЕНТ</span><pre id="demo-source">Нажмите «Проиндексировать документ»</pre></div>
+        <div><span class="stage-label">СОБЫТИЯ PIPELINE</span><ol id="demo-log"><li>Ожидание запуска</li></ol></div>
+      </div>
+    </section>
+
+    <section class="strategy-grid">
+      <article class="panel strategy fixed"><div class="tag">01 · FIXED-SIZE</div><h2>Фиксированные окна</h2><div class="numbers" id="fixed-stats"></div></article>
+      <article class="panel strategy structure"><div class="tag">02 · STRUCTURE-AWARE</div><h2>Заголовки и символы кода</h2><div class="numbers" id="structure-stats"></div></article>
+    </section>
+
+    <section class="panel quality">
+      <div class="section-title"><div><span class="eyebrow">BENCHMARK</span><h2>Качество retrieval</h2></div><p><span id="query-count">—</span> вопросов · один корпус · одна модель</p></div>
+      <div id="metrics" class="metrics empty">Сначала постройте индексы</div>
+    </section>
+
+    <section class="panel explorer">
+      <div class="section-title"><div><span class="eyebrow">CHUNK EXPLORER</span><h2>Один файл — два разбиения</h2></div>
+        <select id="source"><option>Нет индекса</option></select>
+      </div>
+      <div class="chunk-grid">
+        <div><h3>Fixed-size</h3><div id="fixed-chunks" class="chunks"></div></div>
+        <div><h3>Structure-aware</h3><div id="structure-chunks" class="chunks"></div></div>
+      </div>
+    </section>
+
+    <section class="panel search-panel">
+      <div class="section-title"><div><span class="eyebrow">VECTOR SEARCH</span><h2>Сравнить выдачу</h2></div></div>
+      <form id="search-form"><input id="query" value="Какой аварийный код у проекта Atlas?" maxlength="500"><button>Найти</button></form>
+      <div class="chunk-grid results"><div><h3>Fixed-size</h3><div id="fixed-results"></div></div><div><h3>Structure-aware</h3><div id="structure-results"></div></div></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
