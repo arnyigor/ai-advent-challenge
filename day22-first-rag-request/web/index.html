@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>День 22 · Первый RAG-запрос</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body><main>
+  <header>
+    <span class="kicker">AI ADVENT · ДЕНЬ 22</span>
+    <h1>Один вопрос. Одна модель.<br><em>Контекст меняет ответ.</em></h1>
+    <p>Сравниваем ответ LLM из собственных знаний и ответ после поиска по 224 чанкам локальной базы.</p>
+    <div class="pipeline"><span>вопрос</span><b>→</b><span>vector search</span><b>→</b><span>top-4 чанка</span><b>→</b><span>вопрос + контекст</span><b>→</b><span>LLM</span></div>
+  </header>
+
+  <section class="ask">
+    <label for="question">Контрольный вопрос</label>
+    <div class="controls">
+      <select id="preset"></select>
+      <button id="run">Сравнить два режима</button>
+    </div>
+    <textarea id="question" maxlength="1000" rows="3"></textarea>
+    <p id="status" role="status">Готово к запуску</p>
+  </section>
+
+  <section class="comparison">
+    <article class="answer plain">
+      <div class="answer-head"><span>БЕЗ RAG</span><small id="plain-meta">только вопрос → LLM</small></div>
+      <div id="plain-answer" class="answer-text">Ответ модели появится здесь.</div>
+    </article>
+    <article class="answer rag">
+      <div class="answer-head"><span>С RAG</span><small id="rag-meta">поиск → контекст → LLM</small></div>
+      <div id="rag-answer" class="answer-text">Ответ модели с источниками появится здесь.</div>
+    </article>
+  </section>
+
+  <section id="retrieval" class="retrieval">
+    <div class="section-head"><div><span class="kicker">RETRIEVAL TRACE</span><h2>Какие чанки попали в prompt</h2></div><strong id="embedding">—</strong></div>
+    <div id="chunks" class="chunks"><p class="muted">После запуска здесь будут score, source, section и текст каждого найденного чанка.</p></div>
+  </section>
+
+  <section class="benchmark">
+    <div class="section-head"><div><span class="kicker">КОНТРОЛЬНЫЙ НАБОР</span><h2>10 вопросов: ожидания и источники</h2></div><div id="score" class="score">нет отчёта</div></div>
+    <div id="questions" class="questions"></div>
+  </section>
+</main><script src="app.js"></script></body>
+</html>

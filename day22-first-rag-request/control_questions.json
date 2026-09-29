@@ -1,0 +1,72 @@
+[
+  {
+    "id": "atlas-code",
+    "question": "Какой аварийный код у проекта Atlas и когда его разрешено использовать?",
+    "expectation": "Должны быть названы ORBIT-47 и условие: только после подтверждения оператора.",
+    "required_terms": ["ORBIT-47", "подтвержден"],
+    "expected_sources": ["day21-document-indexing/corpus/atlas-handbook.md"]
+  },
+  {
+    "id": "atlas-index",
+    "question": "Какие метаданные получает каждый чанк Atlas и как хранится embedding?",
+    "expectation": "source, title, section, стабильный chunk_id; нормализованный embedding хранится в SQLite как float32 BLOB.",
+    "required_terms": ["source", "title", "section", "chunk_id", "SQLite", "float32", "BLOB"],
+    "expected_sources": ["day21-document-indexing/corpus/atlas-handbook.md"]
+  },
+  {
+    "id": "mcp-pagination",
+    "question": "Как клиент Дня 16 получает все страницы каталога tools/list?",
+    "expectation": "Клиент повторяет tools/list с nextCursor, пока сервер не перестанет возвращать курсор.",
+    "required_terms": ["tools/list", "nextCursor"],
+    "expected_sources": ["day16-mcp-connection/mcp_client.py", "day16-mcp-connection/README.md"]
+  },
+  {
+    "id": "jarvis-env",
+    "question": "Как указать нестандартный путь к Jarvis MCP в Дне 16?",
+    "expectation": "Задать переменную окружения JARVIS_MCP_ROOT.",
+    "required_terms": ["JARVIS_MCP_ROOT"],
+    "expected_sources": ["day16-mcp-connection/README.md", "day16-mcp-connection/web_server.py"]
+  },
+  {
+    "id": "git-safety",
+    "question": "Как MCP-инструмент Дня 17 ограничивает доступ к Git-репозиторию?",
+    "expectation": "Путь берётся из настроенного DAY17_REPO_ROOT, разрешается и проверяется как Git-репозиторий; клиент не передаёт произвольный путь.",
+    "required_terms": ["DAY17_REPO_ROOT", "путь"],
+    "expected_sources": ["day17-first-mcp-tool/git_mcp_server.py", "day17-first-mcp-tool/README.md"]
+  },
+  {
+    "id": "rss-dedup",
+    "question": "Как RSS worker Дня 18 предотвращает повторную обработку записей?",
+    "expectation": "Записи имеют стабильный идентификатор/ключ в SQLite; повторная вставка игнорируется, а digest строится только по новым материалам.",
+    "required_terms": ["SQLite", "нов"],
+    "expected_sources": ["day18-rss-scheduler/worker.py", "day18-rss-scheduler/feed_store.py"]
+  },
+  {
+    "id": "rss-schedule",
+    "question": "Чем запускаются сбор RSS и создание сводки на VPS в Дне 18?",
+    "expectation": "Двумя systemd oneshot services и timers; Persistent=true выполняет пропущенное задание после перезагрузки.",
+    "required_terms": ["systemd", "timer", "Persistent"],
+    "expected_sources": ["day18-rss-scheduler/README.md", "day18-rss-scheduler/scheduler.py"]
+  },
+  {
+    "id": "composition-flow",
+    "question": "Как данные проходят через три MCP-инструмента Дня 19?",
+    "expectation": "search возвращает материалы, они передаются в summarize, а полученная сводка передаётся в saveToFile.",
+    "required_terms": ["search", "summarize", "saveToFile"],
+    "expected_sources": ["day19-mcp-composition/pipeline.py", "day19-mcp-composition/README.md"]
+  },
+  {
+    "id": "orchestration-guard",
+    "question": "Почему в Дне 20 storage.save нельзя вызвать до analysis.verify?",
+    "expectation": "Маршрутизатор хранит состояние и разрешает сохранение только после успешной проверки сводки.",
+    "required_terms": ["storage.save", "analysis.verify", "провер"],
+    "expected_sources": ["day20-mcp-orchestration/orchestrator.py", "day20-mcp-orchestration/README.md"]
+  },
+  {
+    "id": "orchestration-routing",
+    "question": "Как роутер Дня 20 различает knowledge.read и storage.read?",
+    "expectation": "Он использует полное имя server.tool и хранит соответствие имени с конкретной MCP-сессией.",
+    "required_terms": ["knowledge.read", "storage.read", "сесси"],
+    "expected_sources": ["day20-mcp-orchestration/orchestrator.py", "day20-mcp-orchestration/README.md"]
+  }
+]

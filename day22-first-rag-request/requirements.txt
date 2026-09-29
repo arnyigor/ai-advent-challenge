@@ -1,0 +1,2 @@
+-r ../day21-document-indexing/requirements.txt
+requests>=2.31,<3

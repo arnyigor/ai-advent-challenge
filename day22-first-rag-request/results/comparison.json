@@ -1,0 +1,924 @@
+{
+  "created_at": "2026-09-29T12:30:21.946752+00:00",
+  "model": "deepseek:deepseek-v4-flash",
+  "embedding_model": "intfloat/multilingual-e5-small",
+  "questions": 10,
+  "summary": {
+    "plain_answer_score": 0.31,
+    "rag_answer_score": 0.95,
+    "rag_source_recall": 0.6,
+    "rag_wins": 8,
+    "ties": 1,
+    "plain_wins": 1
+  },
+  "items": [
+    {
+      "id": "atlas-code",
+      "question": "Какой аварийный код у проекта Atlas и когда его разрешено использовать?",
+      "expectation": "Должны быть названы ORBIT-47 и условие: только после подтверждения оператора.",
+      "required_terms": [
+        "ORBIT-47",
+        "подтвержден"
+      ],
+      "expected_sources": [
+        "day21-document-indexing/corpus/atlas-handbook.md"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Какой аварийный код у проекта Atlas и когда его разрешено использовать?",
+        "answer": "В проекте AI Advent нет сущности «Atlas» и, соответственно, аварийного кода для него. Проверьте название — возможно, имеется в виду другой проект или компонент.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 71,
+        "elapsed_sec": 1.166,
+        "term_hits": [],
+        "term_total": 2,
+        "answer_score": 0.0
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Какой аварийный код у проекта Atlas и когда его разрешено использовать?",
+        "answer": "Аварийный код проекта Atlas — **ORBIT-47**. Его разрешено использовать только после подтверждения оператора.\n\nИсточники: [1]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:c9dc1cf27997e8ca42a8",
+            "source": "day21-document-indexing/corpus/atlas-handbook.md",
+            "title": "Руководство проекта Atlas",
+            "section": "Руководство проекта Atlas > Безопасность",
+            "score": 0.899546,
+            "text": "## Безопасность\n\nПеред выполнением операции клиент обязан проверить цифровую подпись ответа.\nСекреты не записываются в журнал и не добавляются в metadata чанка. Аварийный\nкод проекта Atlas — **ORBIT-47**. Код разрешено использовать только после\nподтверждения оператора."
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:cd58ad3c185f181ed7c8",
+            "source": "day21-document-indexing/corpus/atlas-handbook.md",
+            "title": "Руководство проекта Atlas",
+            "section": "Руководство проекта Atlas",
+            "score": 0.844673,
+            "text": "# Руководство проекта Atlas\n\nЭтот документ описывает локальный сервис Atlas и используется как наглядный\nпример прохождения одного файла через pipeline индексации."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:16e658557109eaca7512",
+            "source": "day15-controlled-transitions/PLAN.md",
+            "title": "План реализации — День 15",
+            "section": "План реализации — День 15 > Критерии готовности",
+            "score": 0.822745,
+            "text": "## Критерии готовности\n\n- Нельзя начать реализацию до `approve_plan`.\n- Нельзя перейти в `completed` без `approve_validation` и отчёта проверки.\n- Любой отказ оставляет состояние, версию и артефакты без изменений.\n- Отказ записывается в аудит и сообщает допустимые действия.\n- Во время паузы переходы запрещены.\n- После перезапуска достаточно `task_id` для продолжения.\n- Ответы моделей не могут обойти `TransitionGuard`.\n- Готово проверяемое MP4-видео с основными сценариями."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:a31a6cfbb702ed47babe",
+            "source": "day21-document-indexing/corpus/atlas-handbook.md",
+            "title": "Руководство проекта Atlas",
+            "section": "Руководство проекта Atlas > Подключение",
+            "score": 0.819134,
+            "text": "## Подключение\n\nСервис запускается только в локальной сети. Клиент открывает соединение с\nузлом `atlas.local`, выполняет handshake и получает каталог доступных команд.\nДля повторного подключения используется тот же идентификатор проекта."
+          }
+        ],
+        "prompt_chars": 1800,
+        "elapsed_sec": 1.382,
+        "term_hits": [
+          "ORBIT-47",
+          "подтвержден"
+        ],
+        "term_total": 2,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day21-document-indexing/corpus/atlas-handbook.md",
+          "day15-controlled-transitions/PLAN.md"
+        ],
+        "source_hits": [
+          "day21-document-indexing/corpus/atlas-handbook.md"
+        ],
+        "source_total": 1,
+        "source_recall": 1.0
+      }
+    },
+    {
+      "id": "atlas-index",
+      "question": "Какие метаданные получает каждый чанк Atlas и как хранится embedding?",
+      "expectation": "source, title, section, стабильный chunk_id; нормализованный embedding хранится в SQLite как float32 BLOB.",
+      "required_terms": [
+        "source",
+        "title",
+        "section",
+        "chunk_id",
+        "SQLite",
+        "float32",
+        "BLOB"
+      ],
+      "expected_sources": [
+        "day21-document-indexing/corpus/atlas-handbook.md"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Какие метаданные получает каждый чанк Atlas и как хранится embedding?",
+        "answer": "В локальном учебном проекте AI Advent чанки Atlas получают метаданные вида: `source` (путь/имя файла), `chunk_index`, `text` (сам фрагмент) и, при наличии, `title`/`section`. Embedding хранится как вектор чисел (обычно список float) в той же записи чанка — в JSON-файле индекса или в векторной БД (например, Chroma/FAISS), отдельно от текста, но с привязкой по id чанка.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 69,
+        "elapsed_sec": 1.864,
+        "term_hits": [
+          "source",
+          "title",
+          "section"
+        ],
+        "term_total": 7,
+        "answer_score": 0.429
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Какие метаданные получает каждый чанк Atlas и как хранится embedding?",
+        "answer": "Согласно фрагменту [1], каждый чанк получает `source`, `title`, `section` и стабильный `chunk_id`. Нормализованный embedding сохраняется в SQLite как float32 BLOB; при этом исходный документ остаётся доступен для проверки найденного контекста.\n\nИсточники: [1]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:6e62e7e9f6924b510f44",
+            "source": "day21-document-indexing/corpus/atlas-handbook.md",
+            "title": "Руководство проекта Atlas",
+            "section": "Руководство проекта Atlas > Хранение индекса",
+            "score": 0.876841,
+            "text": "## Хранение индекса\n\nКаждый чанк получает `source`, `title`, `section` и стабильный `chunk_id`.\nНормализованный embedding сохраняется в SQLite как float32 BLOB. Исходный\nдокумент остаётся доступен для проверки найденного контекста."
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:c9dc1cf27997e8ca42a8",
+            "source": "day21-document-indexing/corpus/atlas-handbook.md",
+            "title": "Руководство проекта Atlas",
+            "section": "Руководство проекта Atlas > Безопасность",
+            "score": 0.846285,
+            "text": "## Безопасность\n\nПеред выполнением операции клиент обязан проверить цифровую подпись ответа.\nСекреты не записываются в журнал и не добавляются в metadata чанка. Аварийный\nкод проекта Atlas — **ORBIT-47**. Код разрешено использовать только после\nподтверждения оператора."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:feff2fc5ca08206f3ada",
+            "source": "day20-mcp-orchestration/PLAN.md",
+            "title": "День 20: план и контракт",
+            "section": "День 20: план и контракт > Контракты",
+            "score": 0.831179,
+            "text": "## Контракты\n\n- knowledge.search(query) → ids; knowledge.read(id) → документ.\n- analysis.summarize(items) → {summary,source_ids}; analysis.verify(items,summary,source_ids) → {valid}.\n- storage.save(content) → {id,path}; storage.read(id) → {content,path}.\n- `knowledge.read` и `storage.read` имеют одинаковое локальное имя, поэтому модель видит полные имена, а маршрутизатор использует разные сессии.\n- Корпус импортируется из дня 19; сервер хранения принимает только сгенерированные ID."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:cd58ad3c185f181ed7c8",
+            "source": "day21-document-indexing/corpus/atlas-handbook.md",
+            "title": "Руководство проекта Atlas",
+            "section": "Руководство проекта Atlas",
+            "score": 0.831159,
+            "text": "# Руководство проекта Atlas\n\nЭтот документ описывает локальный сервис Atlas и используется как наглядный\nпример прохождения одного файла через pipeline индексации."
+          }
+        ],
+        "prompt_chars": 1790,
+        "elapsed_sec": 1.239,
+        "term_hits": [
+          "source",
+          "title",
+          "section",
+          "chunk_id",
+          "SQLite",
+          "float32",
+          "BLOB"
+        ],
+        "term_total": 7,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day21-document-indexing/corpus/atlas-handbook.md",
+          "day20-mcp-orchestration/PLAN.md"
+        ],
+        "source_hits": [
+          "day21-document-indexing/corpus/atlas-handbook.md"
+        ],
+        "source_total": 1,
+        "source_recall": 1.0
+      }
+    },
+    {
+      "id": "mcp-pagination",
+      "question": "Как клиент Дня 16 получает все страницы каталога tools/list?",
+      "expectation": "Клиент повторяет tools/list с nextCursor, пока сервер не перестанет возвращать курсор.",
+      "required_terms": [
+        "tools/list",
+        "nextCursor"
+      ],
+      "expected_sources": [
+        "day16-mcp-connection/mcp_client.py",
+        "day16-mcp-connection/README.md"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Как клиент Дня 16 получает все страницы каталога tools/list?",
+        "answer": "В Дне 16 клиент получает все страницы `tools/list` через **пагинацию по курсору**: сервер возвращает `nextCursor`, и клиент повторяет запрос `tools/list`, передавая этот курсор, пока `nextCursor` не станет пустым/отсутствующим.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 60,
+        "elapsed_sec": 0.938,
+        "term_hits": [
+          "tools/list",
+          "nextCursor"
+        ],
+        "term_total": 2,
+        "answer_score": 1.0
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Как клиент Дня 16 получает все страницы каталога tools/list?",
+        "answer": "В предоставленном контексте нет сведений о том, как клиент Дня 16 получает **все страницы** каталога `tools/list`. Фрагменты описывают только получение каталога инструментов в целом:\n\n- [1] упоминает, что клиент «выполняет initialize и получает каталог инструментов через tools/list».\n- [2] описывает UI: выбор сервера, подключение, проверку имени ответившего сервера и числа инструментов, поиск инструмента, просмотр описания и параметров, а также то, что получение каталога завершается закрытием MCP-сессии, а «Обновить каталог» создаёт новое соединение.\n- [3] упоминает получение 31 инструмента и поиск по каталогу.\n\nО пагинации или постраничном получении `tools/list` в этих фрагментах ничего не сказано.\n\nИсточники: [1], [2], [3]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:f5d60a7164884dd8a8a0",
+            "source": "day19-mcp-composition/mcp_server.py",
+            "title": "One stdio MCP server with three composable tools.",
+            "section": "module",
+            "score": 0.853811,
+            "text": "\"\"\"One stdio MCP server with three composable tools.\"\"\"\n\nimport os\nfrom pathlib import Path\nfrom uuid import uuid4\nimport sys\n\nfrom mcp.server import MCPServer\n\n\nmcp = MCPServer(\"day19-composition\", version=\"1.0.0\", log_level=\"WARNING\")\nCORPUS = [\n    {\"id\": \"d16\", \"title\": \"День 16: подключение MCP\", \"text\": \"Клиент устанавливает соединение, выполняет initialize и получает каталог инструментов через tools/list.\", \"source\": \"day16-mcp-connection\"},\n    {\"id\": \"d17\", \"title\": \"День 17: первый MCP-инструмент\", \"text\": \"Локальный MCP-сервер объявляет инструмент get_git_snapshot. Клиент вызывает его через tools/call и использует результат.\", \"source\": \"day17-first-mcp-tool\"},\n    {\"id\": \"d18\", \"title\": \"День 18: RSS и MCP\", \"text\": \"Сборщик сохраняет RSS-материалы, а MCP-инструмент get_habr_digest отдаёт последнюю сводку.\", \"source\": \"day18-rss-scheduler\"},\n]\nOUTPUT_DIR = Path(os.environ.get(\"DAY19_OUTPUT_DIR\", Path(__file__).resolve().parent / \"output\")).resolve()\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"day18-rss-scheduler\"))\nfrom day18_providers import GEMINI_MODELS, generate\n\nMODEL = os.environ.get(\"DAY19_MODEL\", GEMINI_MODELS[1])"
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:230c20ac4c2b2e02ec7f",
+            "source": "day16-mcp-connection/README.md",
+            "title": "День 16. Подключение MCP",
+            "section": "День 16. Подключение MCP > Интерфейс на основе дня 15",
+            "score": 0.848929,
+            "text": "## Интерфейс на основе дня 15\n\n```powershell\ncd day16-mcp-connection\npython -m pip install -r requirements.txt\npython web_server.py\n```\n\nОткройте адрес, напечатанный сервером. Порт выбирается автоматически.\nВ корневом окружении проекта можно запускать из корня:\n\n```powershell\n.\\.venv\\Scripts\\python.exe day16-mcp-connection/web_server.py\n```\n\n1. Выберите **Jarvis** или **Учебный сервер** и нажмите **Подключиться**.\n2. Проверьте имя ответившего сервера и число инструментов.\n3. Найдите инструмент через поиск и выберите его в списке.\n4. Справа появятся описание, типы параметров и отметки обязательности.\n5. Исходная JSON-схема раскрывается отдельно; ниже расположен журнал подключения.\n\nПолучение каталога завершается закрытием MCP-сессии. UI явно показывает это:\nкаталог остаётся доступен как снимок; **Обновить каталог** создаёт новое соединение.\nПри смене сервера старый результат очищается. Вызов инструментов не выполняется.\n\nПо умолчанию Jarvis ищется в соседнем с репозиторием каталоге `MCPs/McpServer`.\nЕсли сервер находится в другом месте, задайте `JARVIS_MCP_ROOT` перед запуском.\nИспользуется собственный `.venv` Jarvis. Если он не найден, профиль недоступен,"
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:e3f2b98dc375a3d8890c",
+            "source": "day16-mcp-connection/README.md",
+            "title": "День 16. Подключение MCP",
+            "section": "День 16. Подключение MCP",
+            "score": 0.847638,
+            "text": "# День 16. Подключение MCP\n\n**Видео-демо:** [day16-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/1MsrK6XwBPMpRg) — подключение учебного MCP и вашего Jarvis через UI предыдущих дней, получение 31 инструмента, поиск по каталогу, просмотр параметров и журнал соединения."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:f179ba9f9f12bb011baf",
+            "source": "day19-mcp-composition/mcp_server.py",
+            "title": "One stdio MCP server with three composable tools.",
+            "section": "module",
+            "score": 0.844639,
+            "text": "duler\"))\nfrom day18_providers import GEMINI_MODELS, generate\n\nMODEL = os.environ.get(\"DAY19_MODEL\", GEMINI_MODELS[1])\n\n\n@mcp.tool(description=\"Найти материалы во встроенном корпусе дней 16–18. Возвращает элементы с идентификаторами и источниками.\")"
+          }
+        ],
+        "prompt_chars": 3433,
+        "elapsed_sec": 1.897,
+        "term_hits": [
+          "tools/list"
+        ],
+        "term_total": 2,
+        "answer_score": 0.5,
+        "retrieved_sources": [
+          "day19-mcp-composition/mcp_server.py",
+          "day16-mcp-connection/README.md"
+        ],
+        "source_hits": [
+          "day16-mcp-connection/README.md"
+        ],
+        "source_total": 2,
+        "source_recall": 0.5
+      }
+    },
+    {
+      "id": "jarvis-env",
+      "question": "Как указать нестандартный путь к Jarvis MCP в Дне 16?",
+      "expectation": "Задать переменную окружения JARVIS_MCP_ROOT.",
+      "required_terms": [
+        "JARVIS_MCP_ROOT"
+      ],
+      "expected_sources": [
+        "day16-mcp-connection/README.md",
+        "day16-mcp-connection/web_server.py"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Как указать нестандартный путь к Jarvis MCP в Дне 16?",
+        "answer": "В Дне 16 путь к Jarvis MCP задаётся в конфиге MCP-сервера — обычно через параметр `command`/`args` (или `cwd`) в JSON-описании сервера. Укажи там абсолютный путь к исполняемому файлу/скрипту Jarvis MCP вместо стандартного.\n\nТочный синтаксис зависит от того, как в проекте оформлен конфиг (Claude Desktop, Cursor и т.п.) — сверься с файлом конфигурации из материалов Дня 16.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 53,
+        "elapsed_sec": 1.599,
+        "term_hits": [],
+        "term_total": 1,
+        "answer_score": 0.0
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Как указать нестандартный путь к Jarvis MCP в Дне 16?",
+        "answer": "В Дне 16 путь к Jarvis MCP по умолчанию ищется в соседнем с репозиторием каталоге `MCPs/McpServer`. Если сервер находится в другом месте, нужно задать переменную окружения `JARVIS_MCP_ROOT` перед запуском.\n\nИсточники: [2]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:e3f2b98dc375a3d8890c",
+            "source": "day16-mcp-connection/README.md",
+            "title": "День 16. Подключение MCP",
+            "section": "День 16. Подключение MCP",
+            "score": 0.906994,
+            "text": "# День 16. Подключение MCP\n\n**Видео-демо:** [day16-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/1MsrK6XwBPMpRg) — подключение учебного MCP и вашего Jarvis через UI предыдущих дней, получение 31 инструмента, поиск по каталогу, просмотр параметров и журнал соединения."
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:230c20ac4c2b2e02ec7f",
+            "source": "day16-mcp-connection/README.md",
+            "title": "День 16. Подключение MCP",
+            "section": "День 16. Подключение MCP > Интерфейс на основе дня 15",
+            "score": 0.899425,
+            "text": "## Интерфейс на основе дня 15\n\n```powershell\ncd day16-mcp-connection\npython -m pip install -r requirements.txt\npython web_server.py\n```\n\nОткройте адрес, напечатанный сервером. Порт выбирается автоматически.\nВ корневом окружении проекта можно запускать из корня:\n\n```powershell\n.\\.venv\\Scripts\\python.exe day16-mcp-connection/web_server.py\n```\n\n1. Выберите **Jarvis** или **Учебный сервер** и нажмите **Подключиться**.\n2. Проверьте имя ответившего сервера и число инструментов.\n3. Найдите инструмент через поиск и выберите его в списке.\n4. Справа появятся описание, типы параметров и отметки обязательности.\n5. Исходная JSON-схема раскрывается отдельно; ниже расположен журнал подключения.\n\nПолучение каталога завершается закрытием MCP-сессии. UI явно показывает это:\nкаталог остаётся доступен как снимок; **Обновить каталог** создаёт новое соединение.\nПри смене сервера старый результат очищается. Вызов инструментов не выполняется.\n\nПо умолчанию Jarvis ищется в соседнем с репозиторием каталоге `MCPs/McpServer`.\nЕсли сервер находится в другом месте, задайте `JARVIS_MCP_ROOT` перед запуском.\nИспользуется собственный `.venv` Jarvis. Если он не найден, профиль недоступен,"
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:a25eab39b7105b829f05",
+            "source": "day16-mcp-connection/VIDEO_SCRIPT.md",
+            "title": "Сценарий видео — День 16",
+            "section": "Сценарий видео — День 16 > Предыдущая техническая версия",
+            "score": 0.887561,
+            "text": "## Предыдущая техническая версия\n\n1. Показать последовательность initialize → tools/list → закрытие сессии.\n2. Показать реальный фрагмент mcp_client.py с ClientSession.\n3. Запустить CLI с командой существующего Jarvis MCP Server.\n4. Показать фактический handshake, сервер, версию протокола и число инструментов.\n5. Показать весь полученный список инструментов на нескольких экранах.\n6. Показать JSON Schema list_directory: обязательный path, типы и значения по умолчанию.\n7. Запустить интеграционные pytest-тесты и показать итог.\n\nРусские подписи, без озвучки. Данные получаются заново при записи.\nПри отсутствии MCP_DEMO_COMMAND тот же сценарий использует локальный demo_server.py.\nРезультат: ChallengeVideos/day16-cli-demo.mp4; формат H.264/yuv420p, 1440×1000."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:8a70c3a9ec1c39490247",
+            "source": "day16-mcp-connection/PLAN.md",
+            "title": "День 16 — план до разработки",
+            "section": "День 16 — план до разработки > Переделка UI по запросу пользователя",
+            "score": 0.880076,
+            "text": "## Переделка UI по запросу пользователя\n\n1. Переиспользовать визуальные паттерны дня 15: панели, палитру, этапы и журнал.\n2. Добавить web_server.py с GET /api/servers и POST /api/discover {server_id}.\n   Запускать только заранее настроенные профили Jarvis и demo; использовать\n   существующую discover(), не дублировать MCP-клиент.\n3. Показывать выбор сервера, реальный результат handshake, каталог с поиском,\n   описания и таблицу параметров. Отдельно обозначать закрытие MCP-сессии:\n   полученный каталог — снимок, а не постоянное подключение.\n4. Проверить API, действия в браузере и запись через настоящий интерфейс.\n5. Обновить README и записать day16-ui-demo.mp4 в совместимом формате."
+          }
+        ],
+        "prompt_chars": 3520,
+        "elapsed_sec": 1.218,
+        "term_hits": [
+          "JARVIS_MCP_ROOT"
+        ],
+        "term_total": 1,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day16-mcp-connection/README.md",
+          "day16-mcp-connection/VIDEO_SCRIPT.md",
+          "day16-mcp-connection/PLAN.md"
+        ],
+        "source_hits": [
+          "day16-mcp-connection/README.md"
+        ],
+        "source_total": 2,
+        "source_recall": 0.5
+      }
+    },
+    {
+      "id": "git-safety",
+      "question": "Как MCP-инструмент Дня 17 ограничивает доступ к Git-репозиторию?",
+      "expectation": "Путь берётся из настроенного DAY17_REPO_ROOT, разрешается и проверяется как Git-репозиторий; клиент не передаёт произвольный путь.",
+      "required_terms": [
+        "DAY17_REPO_ROOT",
+        "путь"
+      ],
+      "expected_sources": [
+        "day17-first-mcp-tool/git_mcp_server.py",
+        "day17-first-mcp-tool/README.md"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Как MCP-инструмент Дня 17 ограничивает доступ к Git-репозиторию?",
+        "answer": "В материалах Дня 17 (MCP) обычно описывается ограничение доступа к Git-репозиторию через **allowlist путей и операций**: MCP-инструмент предоставляет модели только заранее разрешённые команды/директории, а не полный доступ к файловой системе или произвольный `git`.\n\nТочные детали (какие именно пути, команды и параметры разрешены) в вопросе не указаны — уточните формулировку задания или приведите текст из Дня 17, тогда отвечу конкретнее.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 64,
+        "elapsed_sec": 1.649,
+        "term_hits": [],
+        "term_total": 2,
+        "answer_score": 0.0
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Как MCP-инструмент Дня 17 ограничивает доступ к Git-репозиторию?",
+        "answer": "MCP-инструмент Дня 17 ограничивает доступ к Git-репозиторию так:\n\n- Собственный MCP-сервер оборачивает локальный Git только через безопасные команды **только для чтения** и не изменяет репозиторий [1][2].\n- Git-корень берётся из расположения проекта или переменной `DAY17_REPO_ROOT`; произвольный путь из веб-запроса не принимается [1].\n- Веб-запрос принимает только один из двух сценариев и не принимает путь или команду Git [3].\n- Инструмент `get_git_snapshot(scope: Literal[\"summary\", \"latest_commit\"])` имеет обязательный параметр `scope` с двумя допустимыми значениями: `summary` читает ветку и число изменённых отслеживаемых файлов; `latest_commit` читает хеш, заголовок, автора и дату последнего коммита [1][2].\n\nИсточники: [1], [2], [3]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:4cab96223709f49a0b6d",
+            "source": "day17-first-mcp-tool/PLAN.md",
+            "title": "День 17 — план до разработки",
+            "section": "День 17 — план до разработки > Контракт",
+            "score": 0.886183,
+            "text": "## Контракт\n\n- Продолжить день 16: Python, официальный MCP SDK 2.2.0, stdio и локальный веб-интерфейс.\n- Собственный MCP-сервер оборачивает локальный Git через безопасные команды только для чтения.\n- Инструмент `get_git_snapshot(scope: Literal[\"summary\", \"latest_commit\"])` объявляет имя, описание и схему аргументов через SDK. Он возвращает данные о текущем репозитории в JSON.\n- Агент получает каталог по MCP, выбирает инструмент для одного из двух запросов, вызывает `tools/call`, читает ответ и формирует ответ пользователю из полученных данных.\n- Веб-приложение показывает вопрос, имя и аргументы вызова, сырой результат MCP и ответ агента. CLI запускает тот же агентный код.\n- Git-корень берётся из расположения проекта или `DAY17_REPO_ROOT`; произвольный путь из веб-запроса не принимается."
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:a0a717b1d5e7fae383b1",
+            "source": "day17-first-mcp-tool/README.md",
+            "title": "День 17. Первый MCP-инструмент",
+            "section": "День 17. Первый MCP-инструмент",
+            "score": 0.883852,
+            "text": "# День 17. Первый MCP-инструмент\n\n**Видео-демо:** [day17-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/FUsxRxn2imiegA) — два реальных вызова MCP-инструмента из приложения, входная схема, результаты Git и ответы агента.\n\nСвой MCP-сервер `git_mcp_server.py` оборачивает локальный Git и регистрирует `get_git_snapshot`. Параметр `scope` обязателен: `summary` читает ветку и число изменённых отслеживаемых файлов; `latest_commit` читает хеш, заголовок, автора и дату последнего коммита. Сервер не изменяет репозиторий.\n\n`git_agent.py` запускает сервер по stdio, выполняет `initialize`, получает описание инструмента через `tools/list`, вызывает его через `tools/call` и формирует ответ из полученного результата. Агент детерминированный: это позволяет запустить демонстрацию без API-ключа. Веб-приложение использует тот же код агента."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:48276c1459d1ddc564a3",
+            "source": "day17-first-mcp-tool/README.md",
+            "title": "День 17. Первый MCP-инструмент",
+            "section": "День 17. Первый MCP-инструмент > Запуск",
+            "score": 0.881633,
+            "text": "## Запуск\n\nPython 3.11+, Git в `PATH`. Из корня репозитория:\n\n```powershell\npython -m pip install -r day17-first-mcp-tool/requirements.txt\npython day17-first-mcp-tool/web_server.py\n```\n\nОткройте адрес из консоли. Порт выбирается автоматически. Выберите вопрос и нажмите «Спросить агента». Интерфейс показывает объявленную сервером схему, аргументы `tools/call`, сырой результат и ответ агента.\n\nCLI:\n\n```powershell\npython day17-first-mcp-tool/git_agent.py\npython day17-first-mcp-tool/git_agent.py latest_commit --json\n```\n\nПо умолчанию читается Git-репозиторий проекта. Для другого локального репозитория задайте `DAY17_REPO_ROOT` перед запуском. Веб-запрос принимает только один из двух сценариев и не принимает путь или команду Git."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:490c784df61811449936",
+            "source": "day19-mcp-composition/PLAN.md",
+            "title": "День 19 — композиция MCP-инструментов: план до разработки",
+            "section": "День 19 — композиция MCP-инструментов: план до разработки > Связь с предыдущими днями",
+            "score": 0.875766,
+            "text": "## Связь с предыдущими днями\n\n- День 16: оставить официальный Python MCP SDK, `initialize`, `tools/list`, stdio и проверку схем через настоящее соединение.\n- День 17: взять структуру небольшого MCP-сервера, детерминированного клиента, локального веб-интерфейса и запись видео через Chrome/ffmpeg. Не копировать его Git-специфику.\n- День 18: можно использовать локально сохранённые материалы как источник, но не связывать работоспособность дня 19 с RSS, планировщиком, SQLite или VPS. Для воспроизводимого демо нужен небольшой фиксированный набор данных, включённый в код дня 19."
+          }
+        ],
+        "prompt_chars": 3609,
+        "elapsed_sec": 1.838,
+        "term_hits": [
+          "DAY17_REPO_ROOT",
+          "путь"
+        ],
+        "term_total": 2,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day17-first-mcp-tool/PLAN.md",
+          "day17-first-mcp-tool/README.md",
+          "day19-mcp-composition/PLAN.md"
+        ],
+        "source_hits": [
+          "day17-first-mcp-tool/README.md"
+        ],
+        "source_total": 2,
+        "source_recall": 0.5
+      }
+    },
+    {
+      "id": "rss-dedup",
+      "question": "Как RSS worker Дня 18 предотвращает повторную обработку записей?",
+      "expectation": "Записи имеют стабильный идентификатор/ключ в SQLite; повторная вставка игнорируется, а digest строится только по новым материалам.",
+      "required_terms": [
+        "SQLite",
+        "нов"
+      ],
+      "expected_sources": [
+        "day18-rss-scheduler/worker.py",
+        "day18-rss-scheduler/feed_store.py"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Как RSS worker Дня 18 предотвращает повторную обработку записей?",
+        "answer": "В материалах Дня 18 про RSS worker нет деталей о механизме защиты от повторной обработки записей. Чтобы не придумывать, лучше уточнить это в самом задании/коде Дня 18.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 64,
+        "elapsed_sec": 1.335,
+        "term_hits": [],
+        "term_total": 2,
+        "answer_score": 0.0
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Как RSS worker Дня 18 предотвращает повторную обработку записей?",
+        "answer": "В предоставленном контексте нет сведений о том, как RSS worker Дня 18 предотвращает повторную обработку записей. Упоминается только, что сборщик «сохраняет новые публикации в SQLite» [3], а панель показывает «число новых записей» [1][2], но конкретный механизм дедупликации не описан.\n\nИсточники: [1], [2], [3]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:450ef2f3074fc20ae1f8",
+            "source": "day18-rss-scheduler/README.md",
+            "title": "День 18 — Habr RSS по расписанию",
+            "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+            "score": 0.869487,
+            "text": "tests/test_day18_rss_scheduler.py -q`. Она подменяет ответы провайдеров и проверяет порядок переходов без расхода квоты. Реальные вызовы проверяются отдельно. Перед сдачей `python -m pytest tests -q`: **296 passed**.\n\nЛокальная панель без фоновых запусков: `python day18-rss-scheduler/web_server.py`. Для **короткого расписания демо**:\n\n```powershell\npython day18-rss-scheduler/web_server.py --demo-schedule --collect-seconds 6 --digest-seconds 45\n```\n\nПока этот процесс запущен, он сам собирает RSS каждые 6 секунд и пытается создать новую сводку каждые 45 секунд. Панель показывает время следующего запуска и исход предыдущего. Если с прошлой сводки новых публикаций нет, генерация пропускается. Для отдельного фонового процесса без панели: `python day18-rss-scheduler/scheduler.py --collect-seconds 6 --digest-seconds 45`. Закрытие локального процесса останавливает расписание.\n\nКнопка **«Сбросить демо»** очищает только локальную базу дня 18: статьи, журнал загрузок и сводки. Параметры активного расписания сохраняются, и следующий плановый сбор заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок."
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:93de70a84deac22f0754",
+            "source": "day18-rss-scheduler/README.md",
+            "title": "День 18 — Habr RSS по расписанию",
+            "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+            "score": 0.86144,
+            "text": "заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок. Локальная база проекта была сброшена после добавления этой функции; при запуске без расписания она пуста до нажатия «Собрать RSS».\n\nЛокальное видео: `node day18-rss-scheduler/record-video.mjs`; нужны Node.js 22+, Chrome и ffmpeg. Без дополнительных настроек ролик использует реальный RSS и эмулированные отказы моделей, явно обозначенные в панели. Для записи с ранее сохранённой **реальной** модельной сводкой укажите путь к её SQLite в `DAY18_VIDEO_SEED_DB`. Эта запись показывает два автоматических сбора, расписание следующей сводки и реальный сохранённый ответ Gemini 3.5. Золотая рамка выделяет текущий элемент интерфейса. MP4 сохраняется в `ChallengeVideos/day18-local-schedule-demo.mp4` и исключён из Git.\n\nОтдельное видео загрузки и сброса с пустой базой: установите `DAY18_VIDEO_MODE=reset` перед запуском `record-video.mjs`. Оно создаёт `ChallengeVideos/day18-reset-demo.mp4` (около 27 секунд): 0 статей → 40 получено и 40 новых → сброс → повторная загрузка."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:19f371bb25cb1c58cb56",
+            "source": "day18-rss-scheduler/README.md",
+            "title": "День 18 — Habr RSS по расписанию",
+            "section": "День 18 — Habr RSS по расписанию",
+            "score": 0.860895,
+            "text": "# День 18 — Habr RSS по расписанию\n\n**Видео-демо:** [day18-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/LWiKXs55n0xgCA) — публичный URL работающей капсулы, сохранённые статьи и сводка, расписание и скачивание TXT.\n\nСборщик читает RSS хаба «Искусственный интеллект», сохраняет новые публикации в SQLite и формирует сводку. MCP-инструмент `get_habr_digest` отдаёт последнюю сохранённую сводку и состояние сборщика. Сборщик и генератор — короткие одноразовые процессы; на VPS их запускают таймеры."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:11857d62d0c39cc16454",
+            "source": "day18-rss-scheduler/README.md",
+            "title": "День 18 — Habr RSS по расписанию",
+            "section": "День 18 — Habr RSS по расписанию > Публичная проверка работающей капсулы",
+            "score": 0.857387,
+            "text": "броса.\n\nВидео публичной проверки: `node day18-rss-scheduler/record-public-video.mjs` → `ChallengeVideos/day18-demo.mp4`. В нём показываются настоящий URL, состояние базы, расписание, сводка, журнал и клик по скачиванию TXT. При смене адреса задайте `DAY18_PUBLIC_URL` перед запуском скрипта. Запись сохраняется локально; публикация на Яндекс.Диске выполняется отдельно."
+          }
+        ],
+        "prompt_chars": 3787,
+        "elapsed_sec": 1.449,
+        "term_hits": [
+          "SQLite",
+          "нов"
+        ],
+        "term_total": 2,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day18-rss-scheduler/README.md"
+        ],
+        "source_hits": [],
+        "source_total": 2,
+        "source_recall": 0.0
+      }
+    },
+    {
+      "id": "rss-schedule",
+      "question": "Чем запускаются сбор RSS и создание сводки на VPS в Дне 18?",
+      "expectation": "Двумя systemd oneshot services и timers; Persistent=true выполняет пропущенное задание после перезагрузки.",
+      "required_terms": [
+        "systemd",
+        "timer",
+        "Persistent"
+      ],
+      "expected_sources": [
+        "day18-rss-scheduler/README.md",
+        "day18-rss-scheduler/scheduler.py"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Чем запускаются сбор RSS и создание сводки на VPS в Дне 18?",
+        "answer": "В Дне 18 сбор RSS и создание сводки на VPS запускаются через **cron** — по расписанию.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 59,
+        "elapsed_sec": 1.201,
+        "term_hits": [],
+        "term_total": 3,
+        "answer_score": 0.0
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Чем запускаются сбор RSS и создание сводки на VPS в Дне 18?",
+        "answer": "На VPS сбор RSS и создание сводки запускаются двумя `systemd`-таймерами (два `systemd` oneshot service и timer): сбор — каждые два часа, сводка без модели — ежедневно в 09:00 по Екатеринбургу. Оба таймера запускают `worker.py` с абсолютным путём к Python в виртуальном окружении и общей `DAY18_DB_PATH`; `Persistent=true` выполняет пропущенное задание после перезагрузки.\n\nИсточники: [3]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:19f371bb25cb1c58cb56",
+            "source": "day18-rss-scheduler/README.md",
+            "title": "День 18 — Habr RSS по расписанию",
+            "section": "День 18 — Habr RSS по расписанию",
+            "score": 0.891484,
+            "text": "# День 18 — Habr RSS по расписанию\n\n**Видео-демо:** [day18-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/LWiKXs55n0xgCA) — публичный URL работающей капсулы, сохранённые статьи и сводка, расписание и скачивание TXT.\n\nСборщик читает RSS хаба «Искусственный интеллект», сохраняет новые публикации в SQLite и формирует сводку. MCP-инструмент `get_habr_digest` отдаёт последнюю сохранённую сводку и состояние сборщика. Сборщик и генератор — короткие одноразовые процессы; на VPS их запускают таймеры."
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:450ef2f3074fc20ae1f8",
+            "source": "day18-rss-scheduler/README.md",
+            "title": "День 18 — Habr RSS по расписанию",
+            "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+            "score": 0.876258,
+            "text": "tests/test_day18_rss_scheduler.py -q`. Она подменяет ответы провайдеров и проверяет порядок переходов без расхода квоты. Реальные вызовы проверяются отдельно. Перед сдачей `python -m pytest tests -q`: **296 passed**.\n\nЛокальная панель без фоновых запусков: `python day18-rss-scheduler/web_server.py`. Для **короткого расписания демо**:\n\n```powershell\npython day18-rss-scheduler/web_server.py --demo-schedule --collect-seconds 6 --digest-seconds 45\n```\n\nПока этот процесс запущен, он сам собирает RSS каждые 6 секунд и пытается создать новую сводку каждые 45 секунд. Панель показывает время следующего запуска и исход предыдущего. Если с прошлой сводки новых публикаций нет, генерация пропускается. Для отдельного фонового процесса без панели: `python day18-rss-scheduler/scheduler.py --collect-seconds 6 --digest-seconds 45`. Закрытие локального процесса останавливает расписание.\n\nКнопка **«Сбросить демо»** очищает только локальную базу дня 18: статьи, журнал загрузок и сводки. Параметры активного расписания сохраняются, и следующий плановый сбор заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:7235a9105fa754bf09b5",
+            "source": "day18-rss-scheduler/README.md",
+            "title": "День 18 — Habr RSS по расписанию",
+            "section": "День 18 — Habr RSS по расписанию > Работающая капсула Ubuntu 24.04 LTS",
+            "score": 0.872795,
+            "text": "## Работающая капсула Ubuntu 24.04 LTS\n\nДанные подключения, команды проверки и схема файлов: [VPS_SETUP.md](VPS_SETUP.md). На капсуле работают два `systemd`-таймера: сбор каждые два часа и сводка без модели ежедневно в 09:00 по Екатеринбургу. Первый запуск сохранил 40 RSS-публикаций и сводку из 10 материалов. Вызов `get_habr_digest` через SSH-процесс проверен: он вернул сохранённую сводку.\n\nНа VPS установлены два `systemd` oneshot service и timer. Оба запускают `worker.py` с абсолютным путём к Python в виртуальном окружении и общей `DAY18_DB_PATH`. `Persistent=true` выполняет пропущенное задание после перезагрузки. MCP-сервер можно запускать через SSH и stdio из клиента; открытый публичный HTTP-порт не требуется."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:93de70a84deac22f0754",
+            "source": "day18-rss-scheduler/README.md",
+            "title": "День 18 — Habr RSS по расписанию",
+            "section": "День 18 — Habr RSS по расписанию > Локальный запуск",
+            "score": 0.868039,
+            "text": "заполнит базу снова. Панель показывает число полученных RSS-элементов, число новых записей и журнал последних загрузок. Локальная база проекта была сброшена после добавления этой функции; при запуске без расписания она пуста до нажатия «Собрать RSS».\n\nЛокальное видео: `node day18-rss-scheduler/record-video.mjs`; нужны Node.js 22+, Chrome и ffmpeg. Без дополнительных настроек ролик использует реальный RSS и эмулированные отказы моделей, явно обозначенные в панели. Для записи с ранее сохранённой **реальной** модельной сводкой укажите путь к её SQLite в `DAY18_VIDEO_SEED_DB`. Эта запись показывает два автоматических сбора, расписание следующей сводки и реальный сохранённый ответ Gemini 3.5. Золотая рамка выделяет текущий элемент интерфейса. MP4 сохраняется в `ChallengeVideos/day18-local-schedule-demo.mp4` и исключён из Git.\n\nОтдельное видео загрузки и сброса с пустой базой: установите `DAY18_VIDEO_MODE=reset` перед запуском `record-video.mjs`. Оно создаёт `ChallengeVideos/day18-reset-demo.mp4` (около 27 секунд): 0 статей → 40 получено и 40 новых → сброс → повторная загрузка."
+          }
+        ],
+        "prompt_chars": 4133,
+        "elapsed_sec": 1.709,
+        "term_hits": [
+          "systemd",
+          "timer",
+          "Persistent"
+        ],
+        "term_total": 3,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day18-rss-scheduler/README.md"
+        ],
+        "source_hits": [
+          "day18-rss-scheduler/README.md"
+        ],
+        "source_total": 2,
+        "source_recall": 0.5
+      }
+    },
+    {
+      "id": "composition-flow",
+      "question": "Как данные проходят через три MCP-инструмента Дня 19?",
+      "expectation": "search возвращает материалы, они передаются в summarize, а полученная сводка передаётся в saveToFile.",
+      "required_terms": [
+        "search",
+        "summarize",
+        "saveToFile"
+      ],
+      "expected_sources": [
+        "day19-mcp-composition/pipeline.py",
+        "day19-mcp-composition/README.md"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Как данные проходят через три MCP-инструмента Дня 19?",
+        "answer": "В материалах проекта AI Advent за День 19 нет описания «трёх MCP-инструментов» и схемы прохождения данных через них. Я не могу подтвердить эту деталь и не буду её выдумывать.\n\nУточните, пожалуйста, о каких именно инструментах и каком дне идёт речь — тогда смогу ответить по существу.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 53,
+        "elapsed_sec": 1.308,
+        "term_hits": [],
+        "term_total": 3,
+        "answer_score": 0.0
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Как данные проходят через три MCP-инструмента Дня 19?",
+        "answer": "Данные проходят так: один локальный MCP-сервер объявляет три инструмента — `search`, `summarize` и `saveToFile`. Клиент открывает одну stdio-сессию и автоматически вызывает все три метода. Данные из `search` передаются в `summarize`, а его сводка — в `saveToFile`. Источник — небольшой встроенный корпус о днях 16–18.\n\nИсточники: [4]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:6febb2c739fb3ab819d8",
+            "source": "day19-mcp-composition/PLAN.md",
+            "title": "День 19 — композиция MCP-инструментов: план до разработки",
+            "section": "День 19 — композиция MCP-инструментов: план до разработки",
+            "score": 0.888892,
+            "text": "# День 19 — композиция MCP-инструментов: план до разработки"
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:187efd7fa4bf043f77fb",
+            "source": "day19-mcp-composition/PLAN.md",
+            "title": "День 19 — композиция MCP-инструментов: план до разработки",
+            "section": "День 19 — композиция MCP-инструментов: план до разработки > Артефакты и критерии готовности",
+            "score": 0.882842,
+            "text": "## Артефакты и критерии готовности\n\n- Код сервера, клиента, веб-интерфейса и скрипта записи — в `day19-mcp-composition/`.\n- Проверки — в `tests/test_day19_mcp_composition.py`.\n- Видео — `ChallengeVideos/day19-demo.mp4` (как у предыдущих дней, локальный файл может быть исключён из Git).\n- Одна команда/кнопка запускает всю цепочку без ручного переноса данных; сервер объявляет три отдельных инструмента; итоговый файл содержит сводку именно тех данных, которые вернул `search`."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:da0e1119c1d8585988ac",
+            "source": "day19-mcp-composition/README.md",
+            "title": "День 19. Композиция MCP-инструментов",
+            "section": "День 19. Композиция MCP-инструментов > Запуск",
+            "score": 0.874061,
+            "text": "## Запуск\n\nИз корня проекта, Python 3.11+:\n\n```powershell\npython -m pip install -r day19-mcp-composition/requirements.txt\npython day19-mcp-composition/pipeline.py\npython day19-mcp-composition/web_server.py\n```\n\nПоследняя команда напечатает локальный URL. В браузере достаточно нажать **«Запустить цепочку»**. Страница показывает каталог инструментов, аргументы и результаты каждого реального `tools/call`, путь и содержимое сохранённого TXT. Для другого запроса: `python day19-mcp-composition/pipeline.py \"RSS\" --json`.\n\nФайлы сохраняются в `day19-mcp-composition/output/`. Для отдельного каталога задайте `DAY19_OUTPUT_DIR`. Имя генерируется по `run_id`; произвольный путь клиенту не доступен. Для гарантированного запуска без модели задайте `DAY19_SUMMARY_MODE=plain`."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:8ae94d914e57a8eb9a42",
+            "source": "day19-mcp-composition/README.md",
+            "title": "День 19. Композиция MCP-инструментов",
+            "section": "День 19. Композиция MCP-инструментов",
+            "score": 0.873503,
+            "text": "# День 19. Композиция MCP-инструментов\n\n**Видео-демо:** [day19-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/A2PEbrR45JCm_g) — один запуск трёх MCP-методов, передача данных между ними, реальный ответ `gemini-3.5-flash` и сохранение TXT.\n\nОдин локальный MCP-сервер объявляет `search`, `summarize` и `saveToFile`. Клиент открывает одну stdio-сессию и автоматически вызывает все три метода. Данные из `search` передаются в `summarize`, а его сводка — в `saveToFile`. Источник — небольшой встроенный корпус о днях 16–18. Если доступен `GEMINI_API_KEY`, `summarize` вызывает **Gemini 3.5 Flash** (переопределение: `DAY19_MODEL`, одна из моделей `GEMINI_MODELS` дня 18). В ответе инструмента, интерфейсе и TXT указан фактически использованный режим и модель. Если ключа нет или вызов не удался, результат честно отмечен как локальная сводка без модели. VPS не нужен."
+          }
+        ],
+        "prompt_chars": 2905,
+        "elapsed_sec": 1.446,
+        "term_hits": [
+          "search",
+          "summarize",
+          "saveToFile"
+        ],
+        "term_total": 3,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day19-mcp-composition/PLAN.md",
+          "day19-mcp-composition/README.md"
+        ],
+        "source_hits": [
+          "day19-mcp-composition/README.md"
+        ],
+        "source_total": 2,
+        "source_recall": 0.5
+      }
+    },
+    {
+      "id": "orchestration-guard",
+      "question": "Почему в Дне 20 storage.save нельзя вызвать до analysis.verify?",
+      "expectation": "Маршрутизатор хранит состояние и разрешает сохранение только после успешной проверки сводки.",
+      "required_terms": [
+        "storage.save",
+        "analysis.verify",
+        "провер"
+      ],
+      "expected_sources": [
+        "day20-mcp-orchestration/orchestrator.py",
+        "day20-mcp-orchestration/README.md"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Почему в Дне 20 storage.save нельзя вызвать до analysis.verify?",
+        "answer": "В Дне 20 `storage.save` нельзя вызывать до `analysis.verify`, потому что сохранение результата допускается только после успешной верификации анализа. Если вызвать `save` раньше, результат ещё не проверен, и в хранилище может попасть некорректный/невалидный анализ. Поэтому порядок жёстко зафиксирован: сначала `analysis.verify`, и только при успешной проверке — `storage.save`.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 63,
+        "elapsed_sec": 1.37,
+        "term_hits": [
+          "storage.save",
+          "analysis.verify",
+          "провер"
+        ],
+        "term_total": 3,
+        "answer_score": 1.0
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Почему в Дне 20 storage.save нельзя вызвать до analysis.verify?",
+        "answer": "В Дне 20 вызов `storage.save` ограничен проверкой в коде маршрутизатора: перед сохранением он ищет в трассе шаг `analysis.verify` с результатом `valid`, а также шаги `analysis.summarize`, и требует, чтобы сохраняемый `content` совпадал с последней полученной сводкой. Если проверенной сводки или дайджестов нет (либо контент не совпадает), выбрасывается ошибка «Сохранение разрешено только для проверенной сводки» [1].\n\nДополнительно в `run` есть финальная проверка: если `storage.save` был выполнен, то прочитанный через `storage.read` контент должен совпадать со сводкой, иначе — «Записанный отчёт не был проверен чтением»; а если есть сводка, но `analysis.verify` не вернул `valid`, выбрасывается «Сводка не прошла проверку» [4].\n\nИсточники: [1], [4]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:28fdb663a01a55a9e5cd",
+            "source": "day20-mcp-orchestration/orchestrator.py",
+            "title": "Gemini selects tools; this client routes them across three real MCP sessions.",
+            "section": "class Router",
+            "score": 0.868455,
+            "text": ".routes:\n                    raise RuntimeError(\"Повтор маршрута\")\n                self.routes[route] = (session, tool)\n                self.catalog.append({\"name\": route, \"server\": name, \"description\": tool.description, \"inputSchema\": tool.input_schema})\n\n    async def call(self, route, arguments, reason):\n        if route not in self.routes:\n            raise ValueError(f\"Неизвестный маршрут: {route}\")\n        session, tool = self.routes[route]\n        validate(arguments, tool.input_schema)\n        if route == \"storage.save\":\n            verified = [step for step in self.trace if step[\"tool\"] == \"analysis.verify\" and step[\"result\"].get(\"valid\")]\n            digests = [step for step in self.trace if step[\"tool\"] == \"analysis.summarize\"]\n            if not verified or not digests or arguments[\"content\"] != digests[-1][\"result\"][\"summary\"]:\n                raise RuntimeError(\"Сохранение разрешено только для проверенной сводки\")\n        step = {\"server\": route.split('.')[0], \"tool\": route, \"reason\": reason, \"arguments\": arguments}\n        self.trace.append(step)\n        try:\n            step[\"result\"] = payload(await session.call_tool(tool.name, arguments=arguments))"
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:feff2fc5ca08206f3ada",
+            "source": "day20-mcp-orchestration/PLAN.md",
+            "title": "День 20: план и контракт",
+            "section": "День 20: план и контракт > Контракты",
+            "score": 0.865517,
+            "text": "## Контракты\n\n- knowledge.search(query) → ids; knowledge.read(id) → документ.\n- analysis.summarize(items) → {summary,source_ids}; analysis.verify(items,summary,source_ids) → {valid}.\n- storage.save(content) → {id,path}; storage.read(id) → {content,path}.\n- `knowledge.read` и `storage.read` имеют одинаковое локальное имя, поэтому модель видит полные имена, а маршрутизатор использует разные сессии.\n- Корпус импортируется из дня 19; сервер хранения принимает только сгенерированные ID."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:0779d3eab142dacd5c82",
+            "source": "day15-controlled-transitions/README.md",
+            "title": "День 15. Контролируемые переходы состояний",
+            "section": "День 15. Контролируемые переходы состояний",
+            "score": 0.864136,
+            "text": "# День 15. Контролируемые переходы состояний\n\n**Видео-демо:** [day15-demo.mp4 на Яндекс.Диске](https://yadi.sk/d/K4aXX36VdDiK2w) — отказ на попытке реализовать задачу до утверждения плана и завершить её без валидации, возврат плана и реализации на доработку, сравнение DeepSeek V4 Flash и Qwen3.8-27B на одном снимке, пауза с восстановлением только по `task_id` и полный журнал разрешённых и отклонённых переходов.\n\nАссистент работает через явный жизненный цикл. Модели могут предложить действие, но изменить состояние способен только детерминированный `TransitionGuard`."
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:577e9d7e7db0d18cfbdc",
+            "source": "day20-mcp-orchestration/orchestrator.py",
+            "title": "Gemini selects tools; this client routes them across three real MCP sessions.",
+            "section": "function run",
+            "score": 0.86274,
+            "text": "raise RuntimeError(\"Модель не завершила задачу\")\n    results = {step[\"tool\"]: step[\"result\"] for step in router.trace}\n    saved = results.get(\"storage.read\", {})\n    digest = results.get(\"analysis.summarize\", {})\n    if \"storage.save\" in results:\n        if not saved or saved[\"content\"] != digest.get(\"summary\"):\n            raise RuntimeError(\"Записанный отчёт не был проверен чтением\")\n    if digest and not results.get(\"analysis.verify\", {}).get(\"valid\"):\n        raise RuntimeError(\"Сводка не прошла проверку\")\n    return {\"agent\": \"Gemini function calling\", \"model\": model_agent.model,\n            \"model_turns\": model_agent.turns, \"model_answer\": decision[\"answer\"],\n            \"servers\": list(registry), \"catalog\": router.catalog, \"trace\": router.trace,\n            \"file\": saved.get(\"path\"), \"content\": saved.get(\"content\", digest.get(\"summary\", \"Ничего не найдено\")),\n            \"verified\": \"storage.read\" in results}"
+          }
+        ],
+        "prompt_chars": 3855,
+        "elapsed_sec": 2.418,
+        "term_hits": [
+          "storage.save",
+          "analysis.verify",
+          "провер"
+        ],
+        "term_total": 3,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day20-mcp-orchestration/orchestrator.py",
+          "day20-mcp-orchestration/PLAN.md",
+          "day15-controlled-transitions/README.md"
+        ],
+        "source_hits": [
+          "day20-mcp-orchestration/orchestrator.py"
+        ],
+        "source_total": 2,
+        "source_recall": 0.5
+      }
+    },
+    {
+      "id": "orchestration-routing",
+      "question": "Как роутер Дня 20 различает knowledge.read и storage.read?",
+      "expectation": "Он использует полное имя server.tool и хранит соответствие имени с конкретной MCP-сессией.",
+      "required_terms": [
+        "knowledge.read",
+        "storage.read",
+        "сесси"
+      ],
+      "expected_sources": [
+        "day20-mcp-orchestration/orchestrator.py",
+        "day20-mcp-orchestration/README.md"
+      ],
+      "plain": {
+        "mode": "plain",
+        "question": "Как роутер Дня 20 различает knowledge.read и storage.read?",
+        "answer": "В материалах Дня 20 роутер различает `knowledge.read` и `storage.read` по **типу запроса/намерению**, а не по источнику данных:\n\n- `knowledge.read` — запрос на **поиск знаний**: «что известно по теме X», семантический/векторный поиск, вопросы вида «объясни», «найди информацию».\n- `storage.read` — запрос на **чтение конкретного объекта из хранилища**: по id/ключу/пути, «покажи файл», «верни запись», точное извлечение без семантики.\n\nТо есть решение принимается на этапе классификации интента: если нужен поиск по смыслу — `knowledge.read`, если адресное извлечение по идентификатору — `storage.read`.\n\nЕсли в твоём проекте роутер устроен иначе (например, по префиксу инструмента или по схеме аргументов), уточни — отвечу по конкретной реализации.",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": null,
+        "sources": [],
+        "prompt_chars": 58,
+        "elapsed_sec": 2.387,
+        "term_hits": [
+          "knowledge.read",
+          "storage.read"
+        ],
+        "term_total": 3,
+        "answer_score": 0.667
+      },
+      "rag": {
+        "mode": "rag",
+        "question": "Как роутер Дня 20 различает knowledge.read и storage.read?",
+        "answer": "Роутер различает их по полному имени маршрута: при подключении каждого сервера он формирует имя вида `{name}.{tool.name}`, то есть `knowledge.read` и `storage.read` — это два разных ключа в словаре маршрутов, каждый со своей MCP-сессией. Поэтому, хотя локальное имя инструмента `read` совпадает, маршрутизатор направляет вызовы в разные процессы.\n\nИсточники: [1], [3]",
+        "model": "deepseek:deepseek-v4-flash",
+        "embedding_model": "intfloat/multilingual-e5-small",
+        "sources": [
+          {
+            "rank": 1,
+            "chunk_id": "structure:feff2fc5ca08206f3ada",
+            "source": "day20-mcp-orchestration/PLAN.md",
+            "title": "День 20: план и контракт",
+            "section": "День 20: план и контракт > Контракты",
+            "score": 0.883989,
+            "text": "## Контракты\n\n- knowledge.search(query) → ids; knowledge.read(id) → документ.\n- analysis.summarize(items) → {summary,source_ids}; analysis.verify(items,summary,source_ids) → {valid}.\n- storage.save(content) → {id,path}; storage.read(id) → {content,path}.\n- `knowledge.read` и `storage.read` имеют одинаковое локальное имя, поэтому модель видит полные имена, а маршрутизатор использует разные сессии.\n- Корпус импортируется из дня 19; сервер хранения принимает только сгенерированные ID."
+          },
+          {
+            "rank": 2,
+            "chunk_id": "structure:8f3e6bc52f15251bf445",
+            "source": "day20-mcp-orchestration/README.md",
+            "title": "День 20. Orchestration MCP",
+            "section": "День 20. Orchestration MCP > Что происходит",
+            "score": 0.850734,
+            "text": "## Что происходит\n\n`servers.json` регистрирует три процесса stdio. Каждый проходит `initialize` и `tools/list`. Клиент превращает полученные схемы в объявления функций Gemini и хранит соответствие полного имени с MCP-сессией. Gemini возвращает имя инструмента и аргументы; клиент проверяет их по схеме, выполняет `tools/call`, возвращает результат модели и повторяет цикл. История сохраняет исходные части ответа Gemini, включая подписи рассуждения. Маршрутизатор не позволяет сохранить отчёт до успешной проверки.\n\n| Сервер | Инструменты | Задача |\n|---|---|---|\n| knowledge | search, read | Искать и читать локальные материалы дней 16–18 |\n| analysis | summarize, verify | Составить сводку из источников и проверить её |\n| storage | save, read | Записать TXT и прочитать его обратно |\n\n`knowledge.read` и `storage.read` направляются в разные процессы. На проверенном живом запросе `MCP` модель `gemini-3.5-flash` сделала 9 ходов и выбрала 8 вызовов: `search → read × 3 → summarize → verify → save → read`. Результат `storage.read` совпал с переданной сводкой. Это наблюдение одного запуска, а не жёстко заданный порядок в коде; модель может выбрать другой допустимый путь."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "structure:dc96ed90d7c6192d604a",
+            "source": "day20-mcp-orchestration/orchestrator.py",
+            "title": "Gemini selects tools; this client routes them across three real MCP sessions.",
+            "section": "class Router",
+            "score": 0.848464,
+            "text": "class Router:\n    def __init__(self):\n        self.routes = {}\n        self.catalog = []\n        self.trace = []\n\n    async def connect(self, stack, registry):\n        for name, config in registry.items():\n            env = {\"PYTHONUTF8\": \"1\"}\n            if \"DAY20_OUTPUT_DIR\" in os.environ:\n                env[\"DAY20_OUTPUT_DIR\"] = os.environ[\"DAY20_OUTPUT_DIR\"]\n            params = StdioServerParameters(command=sys.executable, args=[str(DAY / config[\"script\"]), *config[\"args\"]], env=env)\n            read, write = await stack.enter_async_context(stdio_client(params))\n            session = await stack.enter_async_context(ClientSession(read, write))\n            info = await session.initialize()\n            if info.server_info.name != f\"day20-{name}\":\n                raise RuntimeError(\"Имя сервера не соответствует регистрации\")\n            catalog = await session.list_tools()\n            for tool in catalog.tools:\n                route = f\"{name}.{tool.name}\"\n                if route in self.routes:\n                    raise RuntimeError(\"Повтор маршрута\")\n                self.routes[route] = (session, tool)"
+          },
+          {
+            "rank": 4,
+            "chunk_id": "structure:88478648447e28320590",
+            "source": "day20-mcp-orchestration/README.md",
+            "title": "День 20. Orchestration MCP",
+            "section": "День 20. Orchestration MCP > Что происходит",
+            "score": 0.839215,
+            "text": "водкой. Это наблюдение одного запуска, а не жёстко заданный порядок в коде; модель может выбрать другой допустимый путь. Сводку формирует локальный инструмент `analysis.summarize`, Gemini решает, когда его вызвать.\n\nОтчёты создаются в `output/` или каталоге `DAY20_OUTPUT_DIR`. Веб-сервер слушает только localhost и выбирает свободный порт, либо `DAY20_WEB_PORT`. Лимиты: 16 MCP-вызовов и 600 секунд на полный запуск."
+          }
+        ],
+        "prompt_chars": 3835,
+        "elapsed_sec": 1.824,
+        "term_hits": [
+          "knowledge.read",
+          "storage.read",
+          "сесси"
+        ],
+        "term_total": 3,
+        "answer_score": 1.0,
+        "retrieved_sources": [
+          "day20-mcp-orchestration/PLAN.md",
+          "day20-mcp-orchestration/README.md",
+          "day20-mcp-orchestration/orchestrator.py"
+        ],
+        "source_hits": [
+          "day20-mcp-orchestration/orchestrator.py",
+          "day20-mcp-orchestration/README.md"
+        ],
+        "source_total": 2,
+        "source_recall": 1.0
+      }
+    }
+  ]
+}
