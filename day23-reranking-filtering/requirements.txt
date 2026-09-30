@@ -1,0 +1,1 @@
+-r ../day22-first-rag-request/requirements.txt

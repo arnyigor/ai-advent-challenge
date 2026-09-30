@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>День 23 · Реранкинг и фильтрация</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body><main>
+  <header>
+    <span class="kicker">AI ADVENT · ДЕНЬ 23</span>
+    <h1>Больше кандидатов.<br><em>Меньше шума.</em></h1>
+    <p>Сравниваем обычный RAG с pipeline, который переписывает запрос, отсекает слабые результаты и пересортировывает остальные до генерации.</p>
+    <div class="pipeline">
+      <span>вопрос</span><b>→</b><span>query rewrite</span><b>→</b><span id="pipe-before">top-8</span><b>→</b><span id="pipe-threshold">score ≥ 0.83</span><b>→</b><span>heuristic rerank</span><b>→</b><span id="pipe-after">top-4</span><b>→</b><span>LLM</span>
+    </div>
+  </header>
+
+  <section class="ask panel">
+    <label for="question">Контрольный вопрос</label>
+    <div class="controls">
+      <select id="preset"></select>
+      <button id="run">Сравнить режимы</button>
+    </div>
+    <textarea id="question" maxlength="1000" rows="3"></textarea>
+    <p id="status" role="status">Готово к запуску</p>
+  </section>
+
+  <section class="rewrite panel">
+    <div><span class="kicker">QUERY REWRITE</span><small>Запрос для embedding</small></div>
+    <p id="rewritten-query">Появится после запуска improved pipeline.</p>
+  </section>
+
+  <section class="comparison">
+    <article class="answer baseline">
+      <div class="answer-head"><span>BASELINE RAG</span><small id="baseline-meta">исходный вопрос → top-4</small></div>
+      <div id="baseline-answer" class="answer-text">Ответ появится здесь.</div>
+    </article>
+    <article class="answer improved">
+      <div class="answer-head"><span>IMPROVED RAG</span><small id="improved-meta">rewrite → top-8 → filter → top-4</small></div>
+      <div id="improved-answer" class="answer-text">Отфильтрованный ответ появится здесь.</div>
+    </article>
+  </section>
+
+  <section id="trace" class="trace panel">
+    <div class="section-head">
+      <div><span class="kicker">FILTER TRACE</span><h2>Что прошло в prompt, а что отсечено</h2></div>
+      <strong id="filter-stats">—</strong>
+    </div>
+    <div id="candidates" class="candidates"><p class="muted">Здесь появятся все кандидаты до фильтрации.</p></div>
+  </section>
+
+  <section class="benchmark panel">
+    <div class="section-head">
+      <div><span class="kicker">КОНТРОЛЬНЫЙ НАБОР</span><h2>10 одинаковых вопросов для двух режимов</h2></div>
+      <div id="score" class="score">нет отчёта</div>
+    </div>
+    <div id="summary" class="summary"></div>
+    <div id="questions" class="questions"></div>
+  </section>
+</main><script src="app.js"></script></body>
+</html>
