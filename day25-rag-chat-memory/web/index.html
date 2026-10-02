@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>День 25 · Мини-чат: RAG + память задачи</title><link rel="stylesheet" href="styles.css?v=1"></head><body><main>
+<header class="compact-header"><span class="kicker">AI ADVENT · ДЕНЬ 25</span><h1>Мини-чат: RAG, источники<br>и <em>память задачи</em></h1><p>Ответы по документам и коду, с проверенными цитатами.<br>Цель и ограничения хранятся отдельно от истории и сохраняются после перезапуска.</p></header>
+<section id="demo-guide" hidden><span id="demo-step"></span><h2 id="demo-title"></h2><p id="demo-detail"></p><button id="demo-next">Следующий этап</button><small>Реальный интерфейс и вызовы модели. В видео ожидание ответов сокращено.</small></section>
+<section class="layout">
+  <section class="chat-panel">
+    <div class="chat-controls">
+      <button id="new-session">Новая сессия</button>
+      <select id="session-select" aria-label="Предыдущие сессии"><option value="">Возобновить сессию…</option></select>
+      <span id="session-id" class="pill">сессия: —</span>
+    </div>
+    <div id="messages" class="messages"><p class="muted">Начните диалог: например, «Как в Дне 18 защищаются от повторной обработки статей?»</p></div>
+    <div class="composer">
+      <textarea id="message" aria-label="Сообщение ассистенту" rows="2" maxlength="1000" placeholder="Сообщение ассистенту…"></textarea>
+      <button id="send">Отправить</button>
+    </div>
+    <p id="status" role="status">Готово к запуску</p>
+  </section>
+  <aside class="state-panel">
+    <h2>Память задачи</h2>
+    <p class="panel-help">Цель закреплена на всю сессию. Уточнения и ограничения дополняются. Для другой задачи или отмены ограничений создайте новую сессию.</p>
+    <article class="state-block"><h3>Цель диалога</h3><p id="state-goal">—</p></article>
+    <article class="state-block"><h3>Ограничения <span id="count-constraints" class="pill">0</span></h3><ul id="state-constraints"></ul></article>
+    <article class="state-block"><h3>Уточнения пользователя <span id="count-clarified" class="pill">0</span></h3><ul id="state-clarified"></ul></article>
+    <article class="state-block"><h3>Термины <span id="count-terms" class="pill">0</span></h3><ul id="state-terms"></ul></article>
+    <p id="state-version" class="muted"></p>
+    <p id="state-errors" class="state-errors"></p>
+  </aside>
+</section>
+<section id="evaluation-panel"><h2>Проверка длинных диалогов</h2><button id="show-evaluation">Показать результаты 2 сценариев</button><div id="evaluation-results"></div></section>
+</main><script src="app.js?v=1"></script></body></html>

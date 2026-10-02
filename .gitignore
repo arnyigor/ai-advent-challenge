@@ -45,3 +45,7 @@ day10-context-strategies/video-frames/
 day11-memory-layers/data/
 day13-task-state-machine/data/
 day15-controlled-transitions/data/
+day25-rag-chat-memory/data/
+day25-rag-chat-memory/*.log
+day25-rag-chat-memory/video-frames/
+day25-rag-chat-memory/results/scenarios-before-*.json
