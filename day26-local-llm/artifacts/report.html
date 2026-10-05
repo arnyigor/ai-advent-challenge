@@ -1,0 +1,36 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>День 26 · Локальная LLM</title>
+<style>body{background:#101827;color:#ecf2ff;font:20px/1.55 system-ui;max-width:1100px;margin:48px auto;padding:0 24px 96px}h1{font-size:42px}h2{color:#79e2c0}article,header{background:#1a2639;padding:28px;border-radius:18px;margin-bottom:24px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:18px/1.6 ui-monospace}small{color:#b4c5dc}b{color:#79e2c0}</style>
+<header><small>AI ADVENT CHALLENGE / ДЕНЬ 26</small><h1>Локальная LLM · Strata</h1><p>http://127.0.0.1:8083/v1<br>Запрошенная модель: <b>qwen3.8-flash-next-iq3_s</b></p><p>2026-10-05T14:20:35.012Z · HTTP-ответы: 3/3</p><small>Реальные ответы текущего прогона. Loopback не доказывает локальный инференс: отдельно покажите процесс Strata и загруженную модель. Проверки ниже — частичные, не оценка качества модели.</small></header>
+<article><h2>1 · Простой запрос</h2><small>ЗАПРОС</small><pre>Назови столицу Франции. Ответь одним словом.</pre><small>ОТВЕТ</small><pre>Париж</pre><p>3234 мс · Модель API: qwen3.8-flash-next-iq3_s · finish_reason: stop</p><small>Проверка: частичная проверка пройдена<br>Usage API: {&quot;prompt_tokens&quot;:64,&quot;completion_tokens&quot;:61,&quot;total_tokens&quot;:125,&quot;prompt_tokens_details&quot;:{&quot;cached_tokens&quot;:0}}</small></article><article><h2>2 · Расчёт с условиями</h2><small>ЗАПРОС</small><pre>Три товара стоят по 1200 рублей. Скидка 15% на товары, доставка 300 рублей без скидки. Покажи расчёт и итоговую сумму в рублях.</pre><small>ОТВЕТ</small><pre>Расчёт:
+
+- 3 товара × 1200 ₽ = 3600 ₽  
+- Скидка 15% на товары: 3600 ₽ × 15% = 540 ₽  
+- Стоимость товаров со скидкой: 3600 ₽ − 540 ₽ = 3060 ₽  
+- Доставка без скидки: 300 ₽  
+- Итоговая сумма: 3060 ₽ + 300 ₽ = 3360 ₽
+
+**Итог: 3 360 рублей.**</pre><p>7975 мс · Модель API: qwen3.8-flash-next-iq3_s · finish_reason: stop</p><small>Проверка: частичная проверка пройдена<br>Usage API: {&quot;prompt_tokens&quot;:95,&quot;completion_tokens&quot;:273,&quot;total_tokens&quot;:368,&quot;prompt_tokens_details&quot;:{&quot;cached_tokens&quot;:0}}</small></article><article><h2>3 · Код и граничные случаи</h2><small>ЗАПРОС</small><pre>Напиши JavaScript-функцию uniqueStable(values), которая убирает дубликаты, сохраняя порядок. Не изменяй входной массив. Покажи примеры для [3,1,3,2,1] и []. Кратко укажи временную сложность. Не используй внешние библиотеки.</pre><small>ОТВЕТ</small><pre>```javascript
+function uniqueStable(values) {
+  const seen = new Set();
+  const result = [];
+
+  for (const value of values) {
+    if (!seen.has(value)) {
+      seen.add(value);
+      result.push(value);
+    }
+  }
+
+  return result;
+}
+```
+
+Примеры:
+
+```javascript
+console.log(uniqueStable([3, 1, 3, 2, 1])); // [3, 1, 2]
+console.log(uniqueStable([])); // []
+```
+
+Временная сложность: `O(n)` в среднем, так как `Set.has()` и `Set.add()` выполняются примерно за `O(1)`.</pre><p>14055 мс · Модель API: qwen3.8-flash-next-iq3_s · finish_reason: stop</p><small>Проверка: нужна ручная проверка<br>Usage API: {&quot;prompt_tokens&quot;:119,&quot;completion_tokens&quot;:374,&quot;total_tokens&quot;:493,&quot;prompt_tokens_details&quot;:{&quot;cached_tokens&quot;:0}}</small></article>
+<footer>Независимые запросы · Без облачного fallback · Код модели не исполняется автоматически</footer></html>

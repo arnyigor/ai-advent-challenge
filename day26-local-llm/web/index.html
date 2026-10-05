@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>День 26 · Локальная LLM Strata</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="/web/styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="badge">AI ADVENT CHALLENGE · ДЕНЬ 26</div>
+    <h1>Локальная LLM<br><span>через HTTP</span></h1>
+    <dl class="meta">
+      <dt>Endpoint</dt><dd id="endpoint" class="mono">…</dd>
+      <dt>Модель запроса</dt><dd id="model" class="mono">…</dd>
+      <dt>Статус сервера</dt><dd id="health">проверяю…</dd>
+    </dl>
+    <ul id="models" class="models"></ul>
+    <button id="run" class="run" disabled>Запустить три запроса</button>
+    <p class="note">Ответы приходят от модели по HTTP. Стенд не подставляет заранее заготовленный текст и не переключается на облако.</p>
+  </aside>
+  <main class="main">
+    <div class="cmd mono" id="cmd"></div>
+    <div id="cards" class="cards">
+      <div class="empty">
+        <div class="empty-title">Три запроса разной сложности</div>
+        <div class="empty-sub">источник → расчёт → код</div>
+      </div>
+    </div>
+    <div id="reportbar" class="reportbar" hidden><a id="report-link" href="#">Открыть сохранённый отчёт этого прогона</a></div>
+  </main>
+  <section class="log">
+    <div class="log-head mono">ЖУРНАЛ ЗАПРОСОВ</div>
+    <div id="lines" class="lines mono"></div>
+  </section>
+</div>
+<script src="/web/app.js"></script>
+</body>
+</html>

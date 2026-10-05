@@ -1,0 +1,61 @@
+{
+  "startedAt": "2026-10-05T14:20:35.012Z",
+  "base": "http://127.0.0.1:8083/v1",
+  "model": "qwen3.8-flash-next-iq3_s",
+  "results": [
+    {
+      "id": "simple",
+      "title": "1 · Простой запрос",
+      "prompt": "Назови столицу Франции. Ответь одним словом.",
+      "answer": "Париж",
+      "elapsedMs": 3234,
+      "returnedModel": "qwen3.8-flash-next-iq3_s",
+      "usage": {
+        "prompt_tokens": 64,
+        "completion_tokens": 61,
+        "total_tokens": 125,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "finishReason": "stop",
+      "validation": "частичная проверка пройдена"
+    },
+    {
+      "id": "reasoning",
+      "title": "2 · Расчёт с условиями",
+      "prompt": "Три товара стоят по 1200 рублей. Скидка 15% на товары, доставка 300 рублей без скидки. Покажи расчёт и итоговую сумму в рублях.",
+      "answer": "Расчёт:\n\n- 3 товара × 1200 ₽ = 3600 ₽  \n- Скидка 15% на товары: 3600 ₽ × 15% = 540 ₽  \n- Стоимость товаров со скидкой: 3600 ₽ − 540 ₽ = 3060 ₽  \n- Доставка без скидки: 300 ₽  \n- Итоговая сумма: 3060 ₽ + 300 ₽ = 3360 ₽\n\n**Итог: 3 360 рублей.**",
+      "elapsedMs": 7975,
+      "returnedModel": "qwen3.8-flash-next-iq3_s",
+      "usage": {
+        "prompt_tokens": 95,
+        "completion_tokens": 273,
+        "total_tokens": 368,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "finishReason": "stop",
+      "validation": "частичная проверка пройдена"
+    },
+    {
+      "id": "code",
+      "title": "3 · Код и граничные случаи",
+      "prompt": "Напиши JavaScript-функцию uniqueStable(values), которая убирает дубликаты, сохраняя порядок. Не изменяй входной массив. Покажи примеры для [3,1,3,2,1] и []. Кратко укажи временную сложность. Не используй внешние библиотеки.",
+      "answer": "```javascript\nfunction uniqueStable(values) {\n  const seen = new Set();\n  const result = [];\n\n  for (const value of values) {\n    if (!seen.has(value)) {\n      seen.add(value);\n      result.push(value);\n    }\n  }\n\n  return result;\n}\n```\n\nПримеры:\n\n```javascript\nconsole.log(uniqueStable([3, 1, 3, 2, 1])); // [3, 1, 2]\nconsole.log(uniqueStable([])); // []\n```\n\nВременная сложность: `O(n)` в среднем, так как `Set.has()` и `Set.add()` выполняются примерно за `O(1)`.",
+      "elapsedMs": 14055,
+      "returnedModel": "qwen3.8-flash-next-iq3_s",
+      "usage": {
+        "prompt_tokens": 119,
+        "completion_tokens": 374,
+        "total_tokens": 493,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "finishReason": "stop",
+      "validation": "нужна ручная проверка"
+    }
+  ]
+}
