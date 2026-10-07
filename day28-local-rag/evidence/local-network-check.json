@@ -1,0 +1,132 @@
+{
+  "guard_active": true,
+  "connections": [
+    {
+      "host": "127.0.0.1",
+      "port": 8083
+    }
+  ],
+  "blocked_application_attempts": [],
+  "result": {
+    "question": "Какой аварийный код Atlas и кто разрешает его использовать?",
+    "prompt": "КОНТЕКСТ:\n[1] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas > Безопасность\n## Безопасность\n\nПеред выполнением операции клиент обязан проверить цифровую подпись ответа.\nСекреты не записываются в журнал и не добавляются в metadata чанка. Аварийный\nкод проекта Atlas — **ORBIT-47**. Код разрешено использовать только после\nподтверждения оператора.\n\n---\n\n[2] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas\n# Руководство проекта Atlas\n\nЭтот документ описывает локальный сервис Atlas и используется как наглядный\nпример прохождения одного файла через pipeline индексации.\n\n---\n\n[3] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas > Подключение\n## Подключение\n\nСервис запускается только в локальной сети. Клиент открывает соединение с\nузлом `atlas.local`, выполняет handshake и получает каталог доступных команд.\nДля повторного подключения используется тот же идентификатор проекта.\n\n---\n\n[4] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas > Диагностика\n## Диагностика\n\nЕсли соединение не установлено, нужно проверить локальный адрес, состояние\nсервера и журнал handshake. После восстановления соединения клиент повторно\nзапрашивает каталог, но не повторяет уже подтверждённые операции.\n\n---\n\n[5] day16-mcp-connection/web_server.py / function server_profiles\ndef server_profiles():\n    root = Path(os.environ.get(\"JARVIS_MCP_ROOT\", DAY_DIR.parents[1] / \"MCPs\" / \"McpServer\"))\n    python = root / \".venv\" / (\"Scripts/python.exe\" if os.name == \"nt\" else \"bin/python\")\n    script = root / \"server.py\"\n    return {\n        \"jarvis\": {\n            \"id\": \"jarvis\", \"name\": \"Jarvis\", \"description\": \"Ваш MCP: файлы, поиск, код и документы\",\n            \"available\": python.is_file() and script.is_file(),\n            \"command\": [str(python), str(script)],\n        },\n        \"demo\": {\n            \"id\": \"demo\", \"name\": \"Учебный сервер\", \"description\": \"Два простых инструмента: сложение и приветствие\",\n            \"available\": True, \"command\": None,\n        },\n    }\n\n---\n\n[6] day17-first-mcp-tool/README.md / День 17. Первый MCP-инструмент\n# День 17. Первый MCP-инструмент\n\n**Видео-демо:** [day17-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/FUsxRxn2imiegA) — два реальных вызова MCP-инструмента из приложения, входная схема, результаты Git и ответы агента.\n\nСвой MCP-сервер `git_mcp_server.py` оборачивает локальный Git и регистрирует `get_git_snapshot`. Параметр `scope` обязателен: `summary` читает ветку и число изменённых отслеживаемых файлов; `latest_commit` читает хеш, заголовок, автора и дату последнего коммита. Сервер не изменяет репозиторий.\n\n`git_agent.py` запускает сервер по stdio, выполняет `initialize`, получает описание инструмента через `tools/list`, вызывает его через `tools/call` и формирует ответ из полученного результата. Агент детерминированный: это позволяет запустить демонстрацию без API-ключа. Веб-приложение использует тот же код агента.\n\nВОПРОС:\nКакой аварийный код Atlas и кто разрешает его использовать?",
+    "sources": [
+      {
+        "chunk_id": "structure:c9dc1cf27997e8ca42a8",
+        "source": "day21-document-indexing/corpus/atlas-handbook.md",
+        "title": "Руководство проекта Atlas",
+        "file": "atlas-handbook.md",
+        "section": "Руководство проекта Atlas > Безопасность",
+        "strategy": "structure",
+        "chunk_index": 2,
+        "start_char": 404,
+        "end_char": 675,
+        "char_count": 269,
+        "text": "## Безопасность\n\nПеред выполнением операции клиент обязан проверить цифровую подпись ответа.\nСекреты не записываются в журнал и не добавляются в metadata чанка. Аварийный\nкод проекта Atlas — **ORBIT-47**. Код разрешено использовать только после\nподтверждения оператора.",
+        "score": 0.89409,
+        "rerank_score": 0.837234,
+        "rank": 1
+      },
+      {
+        "chunk_id": "structure:cd58ad3c185f181ed7c8",
+        "source": "day21-document-indexing/corpus/atlas-handbook.md",
+        "title": "Руководство проекта Atlas",
+        "file": "atlas-handbook.md",
+        "section": "Руководство проекта Atlas",
+        "strategy": "structure",
+        "chunk_index": 0,
+        "start_char": 0,
+        "end_char": 165,
+        "char_count": 163,
+        "text": "# Руководство проекта Atlas\n\nЭтот документ описывает локальный сервис Atlas и используется как наглядный\nпример прохождения одного файла через pipeline индексации.",
+        "score": 0.845706,
+        "rerank_score": 0.675946,
+        "rank": 2
+      },
+      {
+        "chunk_id": "structure:a31a6cfbb702ed47babe",
+        "source": "day21-document-indexing/corpus/atlas-handbook.md",
+        "title": "Руководство проекта Atlas",
+        "file": "atlas-handbook.md",
+        "section": "Руководство проекта Atlas > Подключение",
+        "strategy": "structure",
+        "chunk_index": 1,
+        "start_char": 165,
+        "end_char": 404,
+        "char_count": 237,
+        "text": "## Подключение\n\nСервис запускается только в локальной сети. Клиент открывает соединение с\nузлом `atlas.local`, выполняет handshake и получает каталог доступных команд.\nДля повторного подключения используется тот же идентификатор проекта.",
+        "score": 0.812081,
+        "rerank_score": 0.650727,
+        "rank": 3
+      },
+      {
+        "chunk_id": "structure:685f241941ce23a509fa",
+        "source": "day21-document-indexing/corpus/atlas-handbook.md",
+        "title": "Руководство проекта Atlas",
+        "file": "atlas-handbook.md",
+        "section": "Руководство проекта Atlas > Диагностика",
+        "strategy": "structure",
+        "chunk_index": 3,
+        "start_char": 675,
+        "end_char": 909,
+        "char_count": 232,
+        "text": "## Диагностика\n\nЕсли соединение не установлено, нужно проверить локальный адрес, состояние\nсервера и журнал handshake. После восстановления соединения клиент повторно\nзапрашивает каталог, но не повторяет уже подтверждённые операции.",
+        "score": 0.784951,
+        "rerank_score": 0.63038,
+        "rank": 4
+      },
+      {
+        "chunk_id": "structure:034481f53693cea8aa53",
+        "source": "day16-mcp-connection/web_server.py",
+        "title": "Day 16 local UI, following the HTTP server pattern from Day 15.",
+        "file": "web_server.py",
+        "section": "function server_profiles",
+        "strategy": "structure",
+        "chunk_index": 1,
+        "start_char": 393,
+        "end_char": 1097,
+        "char_count": 701,
+        "text": "def server_profiles():\n    root = Path(os.environ.get(\"JARVIS_MCP_ROOT\", DAY_DIR.parents[1] / \"MCPs\" / \"McpServer\"))\n    python = root / \".venv\" / (\"Scripts/python.exe\" if os.name == \"nt\" else \"bin/python\")\n    script = root / \"server.py\"\n    return {\n        \"jarvis\": {\n            \"id\": \"jarvis\", \"name\": \"Jarvis\", \"description\": \"Ваш MCP: файлы, поиск, код и документы\",\n            \"available\": python.is_file() and script.is_file(),\n            \"command\": [str(python), str(script)],\n        },\n        \"demo\": {\n            \"id\": \"demo\", \"name\": \"Учебный сервер\", \"description\": \"Два простых инструмента: сложение и приветствие\",\n            \"available\": True, \"command\": None,\n        },\n    }",
+        "score": 0.778005,
+        "rerank_score": 0.62517,
+        "rank": 5
+      },
+      {
+        "chunk_id": "structure:a0a717b1d5e7fae383b1",
+        "source": "day17-first-mcp-tool/README.md",
+        "title": "День 17. Первый MCP-инструмент",
+        "file": "README.md",
+        "section": "День 17. Первый MCP-инструмент",
+        "strategy": "structure",
+        "chunk_index": 0,
+        "start_char": 0,
+        "end_char": 830,
+        "char_count": 828,
+        "text": "# День 17. Первый MCP-инструмент\n\n**Видео-демо:** [day17-demo.mp4 на Яндекс.Диске](https://yadi.sk/i/FUsxRxn2imiegA) — два реальных вызова MCP-инструмента из приложения, входная схема, результаты Git и ответы агента.\n\nСвой MCP-сервер `git_mcp_server.py` оборачивает локальный Git и регистрирует `get_git_snapshot`. Параметр `scope` обязателен: `summary` читает ветку и число изменённых отслеживаемых файлов; `latest_commit` читает хеш, заголовок, автора и дату последнего коммита. Сервер не изменяет репозиторий.\n\n`git_agent.py` запускает сервер по stdio, выполняет `initialize`, получает описание инструмента через `tools/list`, вызывает его через `tools/call` и формирует ответ из полученного результата. Агент детерминированный: это позволяет запустить демонстрацию без API-ключа. Веб-приложение использует тот же код агента.",
+        "score": 0.775779,
+        "rerank_score": 0.623501,
+        "rank": 6
+      }
+    ],
+    "retrieval_sec": 11.0507,
+    "retrieval_mode": "hybrid",
+    "answer": "Аварийный код Atlas — **ORBIT-47**. Его разрешено использовать только после подтверждения оператора [1].",
+    "model": "qwen3.8-flash-next-iq3_s",
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 958,
+      "completion_tokens": 94,
+      "total_tokens": 1052,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "generation_sec": 5.9188,
+    "citation_ids": [
+      1
+    ],
+    "citation_ids_valid": true,
+    "has_citations": true
+  },
+  "scope": "Python RAG process only; OS network and separate Strata process unchanged"
+}

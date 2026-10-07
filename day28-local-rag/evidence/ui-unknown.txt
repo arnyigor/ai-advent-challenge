@@ -1,0 +1,25 @@
+- main:
+  - text: AI ADVENT / ДЕНЬ 28
+  - heading "Ответы по документам проекта" [level=1]
+  - paragraph: Поиск в локальном индексе недели 6. Генерация через локальную модель.
+  - paragraph: "224 фрагментов · intfloat/multilingual-e5-small · LLM: qwen3.8-flash-next-iq3_s"
+  - text: Ваш вопрос
+  - paragraph:
+    - link "Сохранённые результаты сравнения":
+      - /url: /report
+    - text: · открытие отчёта не вызывает модели
+  - textbox "Ваш вопрос": Какая точная выручка проекта Atlas за 2026 год и кто его крупнейший платящий заказчик? Если документы этого не содержат, не придумывайте.
+  - button "Найти и ответить"
+  - button "Только поиск"
+  - status: "Модель сообщила: в найденных документах недостаточно данных."
+  - heading "Ответ" [level=2]
+  - paragraph: В найденных документах недостаточно данных.
+  - paragraph: "Поиск: 10.9574 с · Генерация: 9.168 с · qwen3.8-flash-next-iq3_s · Завершение: stop"
+  - heading "Найденные фрагменты" [level=2]
+  - paragraph: Это контекст поиска; корректность ссылок не подтверждает смысл ответа.
+  - generic "[1] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas > Безопасность · 0.838552"
+  - generic "[2] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas · 0.849779"
+  - generic "[3] day20-mcp-orchestration/gemini_agent.py / class GeminiAgent · 0.831951"
+  - generic "[4] day16-mcp-connection/README.md / Streamable HTTP endpoint без авторизации. > Проверено на существующем сервере · 0.826162"
+  - generic "[5] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas > Диагностика · 0.800023"
+  - generic "[6] day18-rss-scheduler/README.md / День 18 — Habr RSS по расписанию > Локальный запуск · 0.818388"

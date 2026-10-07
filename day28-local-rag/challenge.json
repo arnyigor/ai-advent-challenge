@@ -1,0 +1,1 @@
+{"day":28,"title":"Локальная LLM + RAG","status":"local-rag-and-video-verified","model":"qwen3.8-flash-next-iq3_s","comparison_calls":120,"tests_passed":384,"video_seconds":118,"network_check_scope":"Python RAG loopback guard; OS and Strata network unchanged"}

@@ -1,0 +1,25 @@
+- main:
+  - text: AI ADVENT / ДЕНЬ 28
+  - heading "Ответы по документам проекта" [level=1]
+  - paragraph: Поиск в локальном индексе недели 6. Генерация через локальную модель.
+  - paragraph: "224 фрагментов · intfloat/multilingual-e5-small · LLM: qwen3.8-flash-next-iq3_s"
+  - text: Ваш вопрос
+  - paragraph:
+    - link "Сохранённые результаты сравнения":
+      - /url: /report
+    - text: · открытие отчёта не вызывает модели
+  - textbox "Ваш вопрос": Какой аварийный код Atlas, кто разрешает его использование и что нельзя повторять после восстановления соединения?
+  - button "Найти и ответить"
+  - button "Только поиск"
+  - status: Готово. Сверьте утверждения с фрагментами.
+  - heading "Ответ" [level=2]
+  - paragraph: Аварийный код Atlas — **ORBIT-47**; его использование разрешено только после подтверждения оператора [1]. После восстановления соединения нельзя повторять уже подтверждённые операции [2].
+  - paragraph: "Поиск: 11.1169 с · Генерация: 6.8219 с · qwen3.8-flash-next-iq3_s · Завершение: stop"
+  - heading "Найденные фрагменты" [level=2]
+  - paragraph: Это контекст поиска; корректность ссылок не подтверждает смысл ответа.
+  - generic "[1] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas > Безопасность · 0.891038"
+  - generic "[2] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas > Диагностика · 0.834318"
+  - generic "[3] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas · 0.840922"
+  - generic "[4] day21-document-indexing/corpus/atlas-handbook.md / Руководство проекта Atlas > Подключение · 0.83719"
+  - generic "[5] day15-controlled-transitions/lifecycle_assistant.py / class LifecycleAssistant · 0.821019"
+  - generic "[6] day15-controlled-transitions/README.md / День 15. Контролируемые переходы состояний > Что реализовано · 0.815356"

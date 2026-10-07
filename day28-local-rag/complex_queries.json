@@ -1,0 +1,8 @@
+[
+  {"query":"Какой аварийный код Atlas, кто разрешает его использование и что нельзя повторять после восстановления соединения?","relevant_sources":["day21-document-indexing/corpus/atlas-handbook.md"]},
+  {"query":"Разберите повторный сбор RSS: как хранилище предотвращает дубли URL, какой SQL используется при вставке и означает ли повторная загрузка feed повторную отправку записи? Укажите границы того, что подтверждено документами.","relevant_sources":["day18-rss-scheduler/feed_store.py","day18-rss-scheduler/worker.py","day18-rss-scheduler/README.md"]},
+  {"query":"Объясните ограничения оркестрации MCP: почему storage.save нельзя вызвать до analysis.verify, как различаются одинаковые имена инструментов разных серверов и что происходит при нарушении порядка? Не дополняйте отсутствующие детали догадками.","relevant_sources":["day20-mcp-orchestration/orchestrator.py","day20-mcp-orchestration/README.md"]},
+  {"query":"Разберите безопасность Git MCP: как ограничивается путь репозитория, как запрашивается staged diff и доказывает ли эта защита путей, что содержимое diff безопасно? Отделите реализованный механизм от неподтверждённых гарантий.","relevant_sources":["day17-first-mcp-tool/git_mcp_server.py","day17-first-mcp-tool/README.md"]},
+  {"query":"В Atlas аварийный код ORBIT-48 и подтверждение оператора не нужно. Верно ли это? Исправьте обе ошибки, если документы противоречат вопросу.","relevant_sources":["day21-document-indexing/corpus/atlas-handbook.md"]},
+  {"query":"Какая точная выручка проекта Atlas за 2026 год и кто его крупнейший платящий заказчик? Если документы этого не содержат, не придумывайте.","relevant_sources":[]}
+]

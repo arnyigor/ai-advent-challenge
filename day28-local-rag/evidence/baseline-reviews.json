@@ -1,0 +1,704 @@
+[
+  {
+    "question": "Какой аварийный код у проекта Atlas?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "8e84b5ead159277a81baeae03a12c7ced44a1d337068ba3e6a6759db3184010c",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "54058545bb75168b0fe17b1f1bbc29302a7086c94cb455e40c5876ff039fa019"
+  },
+  {
+    "question": "Какой аварийный код у проекта Atlas?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "8e84b5ead159277a81baeae03a12c7ced44a1d337068ba3e6a6759db3184010c",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "54058545bb75168b0fe17b1f1bbc29302a7086c94cb455e40c5876ff039fa019"
+  },
+  {
+    "question": "Какой аварийный код у проекта Atlas?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "8e84b5ead159277a81baeae03a12c7ced44a1d337068ba3e6a6759db3184010c",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "54058545bb75168b0fe17b1f1bbc29302a7086c94cb455e40c5876ff039fa019"
+  },
+  {
+    "question": "Какой аварийный код у проекта Atlas?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "8e84b5ead159277a81baeae03a12c7ced44a1d337068ba3e6a6759db3184010c",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "54058545bb75168b0fe17b1f1bbc29302a7086c94cb455e40c5876ff039fa019"
+  },
+  {
+    "question": "Какой аварийный код у проекта Atlas?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "8e84b5ead159277a81baeae03a12c7ced44a1d337068ba3e6a6759db3184010c",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "54058545bb75168b0fe17b1f1bbc29302a7086c94cb455e40c5876ff039fa019"
+  },
+  {
+    "question": "Какой аварийный код у проекта Atlas?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "8e84b5ead159277a81baeae03a12c7ced44a1d337068ba3e6a6759db3184010c",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "54058545bb75168b0fe17b1f1bbc29302a7086c94cb455e40c5876ff039fa019"
+  },
+  {
+    "question": "Как клиент получает все страницы каталога tools/list?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "08a5e6adf4448e5a019733b17d400164143909089cd1b28c28f9c3ff7c0239e2",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6e5931b027784ad48df351461e484a9258fb44ff265014ef1d6754eb00c3f867"
+  },
+  {
+    "question": "Как клиент получает все страницы каталога tools/list?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "d13cf4169117353f3a9f62923b7c7ac0098a8b0a36835fe81918648fe9900e46",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6e5931b027784ad48df351461e484a9258fb44ff265014ef1d6754eb00c3f867"
+  },
+  {
+    "question": "Как клиент получает все страницы каталога tools/list?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "d919edc98d37376341ad42c6b805a55ab82bbd0b92d8aed67e3c7f2b77ebe400",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6e5931b027784ad48df351461e484a9258fb44ff265014ef1d6754eb00c3f867"
+  },
+  {
+    "question": "Как клиент получает все страницы каталога tools/list?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "251fede57ef00c227db5c9fba4b70648bf98e88361d67247e2903f93e1840427",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6e5931b027784ad48df351461e484a9258fb44ff265014ef1d6754eb00c3f867"
+  },
+  {
+    "question": "Как клиент получает все страницы каталога tools/list?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "e732eb36b54f12657d2a50b307fb37e0e701bae87f9aa70524df9ea500853841",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6e5931b027784ad48df351461e484a9258fb44ff265014ef1d6754eb00c3f867"
+  },
+  {
+    "question": "Как клиент получает все страницы каталога tools/list?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "251fede57ef00c227db5c9fba4b70648bf98e88361d67247e2903f93e1840427",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6e5931b027784ad48df351461e484a9258fb44ff265014ef1d6754eb00c3f867"
+  },
+  {
+    "question": "Как подключается Jarvis MCP через переменную окружения?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "1f2b3a94b8a9c91c7fd2d073d784786a672eb97de3112f67b18cc074a428b70e",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "901eecf58f7c06854cc50d4ded8a29b3eb0dcf16889f76bf1f0395238cadf9ad"
+  },
+  {
+    "question": "Как подключается Jarvis MCP через переменную окружения?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "3e612e970b7615303aad8249b8a5b5f3697737f83873a77f5531e87ca984e51a",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "901eecf58f7c06854cc50d4ded8a29b3eb0dcf16889f76bf1f0395238cadf9ad"
+  },
+  {
+    "question": "Как подключается Jarvis MCP через переменную окружения?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "8710199c0b65f5c8c4fee346808644d9f34759e690f6f16feb4d74a0e30a9d00",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "901eecf58f7c06854cc50d4ded8a29b3eb0dcf16889f76bf1f0395238cadf9ad"
+  },
+  {
+    "question": "Как подключается Jarvis MCP через переменную окружения?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "3e612e970b7615303aad8249b8a5b5f3697737f83873a77f5531e87ca984e51a",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "901eecf58f7c06854cc50d4ded8a29b3eb0dcf16889f76bf1f0395238cadf9ad"
+  },
+  {
+    "question": "Как подключается Jarvis MCP через переменную окружения?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "76dfe9bf81d1a55a99e1c92679d7fb85ef8ccb4969b8f56a9f47539e3d76e61a",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "901eecf58f7c06854cc50d4ded8a29b3eb0dcf16889f76bf1f0395238cadf9ad"
+  },
+  {
+    "question": "Как подключается Jarvis MCP через переменную окружения?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "3e612e970b7615303aad8249b8a5b5f3697737f83873a77f5531e87ca984e51a",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "901eecf58f7c06854cc50d4ded8a29b3eb0dcf16889f76bf1f0395238cadf9ad"
+  },
+  {
+    "question": "Как инструмент Git показывает staged diff?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "3a202712764e36949ab0dce75c2ae121ae0a0e864d3334c8b6cde68cc5222ead",
+    "score": 2,
+    "notes": "Корректный отказ: staged diff отсутствует в реализованном инструменте дня 17.",
+    "prompt_sha256": "e7fcfc3ef12b7632ff4f36b2b1428230182189aa5b4ab4e01aeda086dd0cf97e"
+  },
+  {
+    "question": "Как инструмент Git показывает staged diff?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 2,
+    "notes": "Корректный отказ: staged diff отсутствует в реализованном инструменте дня 17.",
+    "prompt_sha256": "e7fcfc3ef12b7632ff4f36b2b1428230182189aa5b4ab4e01aeda086dd0cf97e"
+  },
+  {
+    "question": "Как инструмент Git показывает staged diff?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 2,
+    "notes": "Корректный отказ: staged diff отсутствует в реализованном инструменте дня 17.",
+    "prompt_sha256": "e7fcfc3ef12b7632ff4f36b2b1428230182189aa5b4ab4e01aeda086dd0cf97e"
+  },
+  {
+    "question": "Как инструмент Git показывает staged diff?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 2,
+    "notes": "Корректный отказ: staged diff отсутствует в реализованном инструменте дня 17.",
+    "prompt_sha256": "e7fcfc3ef12b7632ff4f36b2b1428230182189aa5b4ab4e01aeda086dd0cf97e"
+  },
+  {
+    "question": "Как инструмент Git показывает staged diff?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 2,
+    "notes": "Корректный отказ: staged diff отсутствует в реализованном инструменте дня 17.",
+    "prompt_sha256": "e7fcfc3ef12b7632ff4f36b2b1428230182189aa5b4ab4e01aeda086dd0cf97e"
+  },
+  {
+    "question": "Как инструмент Git показывает staged diff?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 2,
+    "notes": "Корректный отказ: staged diff отсутствует в реализованном инструменте дня 17.",
+    "prompt_sha256": "e7fcfc3ef12b7632ff4f36b2b1428230182189aa5b4ab4e01aeda086dd0cf97e"
+  },
+  {
+    "question": "Как ограничивается путь к разрешённому Git-репозиторию?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "d74e10794ed3b81e09dcc3afb11de4000adc50f5afcaaf4726eb2d422eb5b775",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "8fcd42a5b644fd6948364c0ac0420d94b7491fe07e26bb5fe1ba7237d74462d6"
+  },
+  {
+    "question": "Как ограничивается путь к разрешённому Git-репозиторию?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "24eb1dcc58e8d2f4e0d3dc8102a0389188c2dbb5701cea6a49bc59eac3be64c2",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "8fcd42a5b644fd6948364c0ac0420d94b7491fe07e26bb5fe1ba7237d74462d6"
+  },
+  {
+    "question": "Как ограничивается путь к разрешённому Git-репозиторию?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "9522b6d82c30d1c37451deb7c69ea24e890789bcd6f53949c0405e79b3b30807",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "8fcd42a5b644fd6948364c0ac0420d94b7491fe07e26bb5fe1ba7237d74462d6"
+  },
+  {
+    "question": "Как ограничивается путь к разрешённому Git-репозиторию?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "dbc5e40fe9abcc8134e9d0fd5c0b391a15c42a8da7e979c44ab128d8aa111895",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "8fcd42a5b644fd6948364c0ac0420d94b7491fe07e26bb5fe1ba7237d74462d6"
+  },
+  {
+    "question": "Как ограничивается путь к разрешённому Git-репозиторию?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "b0d303ea5dec4d6c331586fb002ab4c87d19ac76ccaeb472569962b6d52607a3",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "8fcd42a5b644fd6948364c0ac0420d94b7491fe07e26bb5fe1ba7237d74462d6"
+  },
+  {
+    "question": "Как ограничивается путь к разрешённому Git-репозиторию?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "dbc5e40fe9abcc8134e9d0fd5c0b391a15c42a8da7e979c44ab128d8aa111895",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "8fcd42a5b644fd6948364c0ac0420d94b7491fe07e26bb5fe1ba7237d74462d6"
+  },
+  {
+    "question": "Как RSS worker предотвращает повторную обработку записей?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "score": 0,
+    "notes": "В индексе есть код дедупликации, но vector-only не нашёл нужный фрагмент. Локальный API дал пустой content; облако отказалось. Ошибка всей системы, не доказательство незнания модели.",
+    "prompt_sha256": "0f202e6f12833d2aa8b8024420ce069885389007f89c59ccb6ffa4b5c2d7fa1a"
+  },
+  {
+    "question": "Как RSS worker предотвращает повторную обработку записей?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 0,
+    "notes": "В индексе есть код дедупликации, но vector-only не нашёл нужный фрагмент. Локальный API дал пустой content; облако отказалось. Ошибка всей системы, не доказательство незнания модели.",
+    "prompt_sha256": "0f202e6f12833d2aa8b8024420ce069885389007f89c59ccb6ffa4b5c2d7fa1a"
+  },
+  {
+    "question": "Как RSS worker предотвращает повторную обработку записей?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "score": 0,
+    "notes": "В индексе есть код дедупликации, но vector-only не нашёл нужный фрагмент. Локальный API дал пустой content; облако отказалось. Ошибка всей системы, не доказательство незнания модели.",
+    "prompt_sha256": "0f202e6f12833d2aa8b8024420ce069885389007f89c59ccb6ffa4b5c2d7fa1a"
+  },
+  {
+    "question": "Как RSS worker предотвращает повторную обработку записей?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 0,
+    "notes": "В индексе есть код дедупликации, но vector-only не нашёл нужный фрагмент. Локальный API дал пустой content; облако отказалось. Ошибка всей системы, не доказательство незнания модели.",
+    "prompt_sha256": "0f202e6f12833d2aa8b8024420ce069885389007f89c59ccb6ffa4b5c2d7fa1a"
+  },
+  {
+    "question": "Как RSS worker предотвращает повторную обработку записей?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "score": 0,
+    "notes": "В индексе есть код дедупликации, но vector-only не нашёл нужный фрагмент. Локальный API дал пустой content; облако отказалось. Ошибка всей системы, не доказательство незнания модели.",
+    "prompt_sha256": "0f202e6f12833d2aa8b8024420ce069885389007f89c59ccb6ffa4b5c2d7fa1a"
+  },
+  {
+    "question": "Как RSS worker предотвращает повторную обработку записей?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 0,
+    "notes": "В индексе есть код дедупликации, но vector-only не нашёл нужный фрагмент. Локальный API дал пустой content; облако отказалось. Ошибка всей системы, не доказательство незнания модели.",
+    "prompt_sha256": "0f202e6f12833d2aa8b8024420ce069885389007f89c59ccb6ffa4b5c2d7fa1a"
+  },
+  {
+    "question": "Как планировщик запускает сбор RSS по расписанию?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "f0ba7d56697cf88dc5ee6ce45c9183955f799567b7708c1bf1fe5aa5cd657a83",
+    "score": 1,
+    "notes": "Смешаны локальный долгоживущий scheduler и одноразовые процессы VPS.",
+    "prompt_sha256": "faf3412b0fbc64522658e9b2940bd87c0a4f0665f4a58b6539c4c9ad96d26018"
+  },
+  {
+    "question": "Как планировщик запускает сбор RSS по расписанию?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "2aa794e036848692271f5b9caf85ffa8ffa96136ecf404e8c9f51a8fa418aae9",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "faf3412b0fbc64522658e9b2940bd87c0a4f0665f4a58b6539c4c9ad96d26018"
+  },
+  {
+    "question": "Как планировщик запускает сбор RSS по расписанию?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "3dffd109553f27033117ec25d0f967a5ab9b617d7f34b42a863cb06a58ec4ce4",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "faf3412b0fbc64522658e9b2940bd87c0a4f0665f4a58b6539c4c9ad96d26018"
+  },
+  {
+    "question": "Как планировщик запускает сбор RSS по расписанию?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "c48d35eb880fa6c48f045438468d72beba0468870b95173224887cae71cc049d",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "faf3412b0fbc64522658e9b2940bd87c0a4f0665f4a58b6539c4c9ad96d26018"
+  },
+  {
+    "question": "Как планировщик запускает сбор RSS по расписанию?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "88b2988616b444b8464faa39dddca65eae2d6eab9a3ebd633981ffc7463192c5",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "faf3412b0fbc64522658e9b2940bd87c0a4f0665f4a58b6539c4c9ad96d26018"
+  },
+  {
+    "question": "Как планировщик запускает сбор RSS по расписанию?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "a92d4c1378735ee457c33df661ba2f1e18c12946c2b9da9005ec133091147724",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "faf3412b0fbc64522658e9b2940bd87c0a4f0665f4a58b6539c4c9ad96d26018"
+  },
+  {
+    "question": "Как результаты MCP-инструментов передаются следующему шагу pipeline?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "e46426aefc8f4de87769e06ca72aa17cee6449a2f35d88f03fb72062c4d49c6a",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "ae188ec63fc0480944eac125e2706122e670b8ee63497aef5a78ba3bf8b54341"
+  },
+  {
+    "question": "Как результаты MCP-инструментов передаются следующему шагу pipeline?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "f369011105cf0215da03fd9db67961aeba0f40971c1d79503752fa51621b6e60",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "ae188ec63fc0480944eac125e2706122e670b8ee63497aef5a78ba3bf8b54341"
+  },
+  {
+    "question": "Как результаты MCP-инструментов передаются следующему шагу pipeline?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "306f0fe9eaa366412990b348b7edd92cde0d0dd304dce2ca7fe091028fa48ec1",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "ae188ec63fc0480944eac125e2706122e670b8ee63497aef5a78ba3bf8b54341"
+  },
+  {
+    "question": "Как результаты MCP-инструментов передаются следующему шагу pipeline?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "f27bb26f081f6188c7cdfd7a070663db93206bbab49861c4b06af06d3427be9f",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "ae188ec63fc0480944eac125e2706122e670b8ee63497aef5a78ba3bf8b54341"
+  },
+  {
+    "question": "Как результаты MCP-инструментов передаются следующему шагу pipeline?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "80138ce093598a85961fbd2943a4bb4ddd82ca3d7e8aad95f06707a91f26643f",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "ae188ec63fc0480944eac125e2706122e670b8ee63497aef5a78ba3bf8b54341"
+  },
+  {
+    "question": "Как результаты MCP-инструментов передаются следующему шагу pipeline?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "f369011105cf0215da03fd9db67961aeba0f40971c1d79503752fa51621b6e60",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "ae188ec63fc0480944eac125e2706122e670b8ee63497aef5a78ba3bf8b54341"
+  },
+  {
+    "question": "Какие инструменты композиции публикует MCP server?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "c52bdd5db8af89dbbb1fe30d2625a19434d508bd3f6fec5304ab934542fffb50",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6d82bec7e575884c3a0bf13a3bdd8b240c9f8171c8e527eba4f73789565a6a59"
+  },
+  {
+    "question": "Какие инструменты композиции публикует MCP server?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "62dc0f0b02ce60179bc3f728b89da7e2738565674c13edb075d0e5cfa5bd6635",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6d82bec7e575884c3a0bf13a3bdd8b240c9f8171c8e527eba4f73789565a6a59"
+  },
+  {
+    "question": "Какие инструменты композиции публикует MCP server?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "a075d19e8febd9a87a0f96209f467f75343ee782edb9f050ecf0dfbb7c52992d",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6d82bec7e575884c3a0bf13a3bdd8b240c9f8171c8e527eba4f73789565a6a59"
+  },
+  {
+    "question": "Какие инструменты композиции публикует MCP server?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "fde336b8eb38f7dc36ba4af106be812d462a1406aae0093b7730c65d24e7498b",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6d82bec7e575884c3a0bf13a3bdd8b240c9f8171c8e527eba4f73789565a6a59"
+  },
+  {
+    "question": "Какие инструменты композиции публикует MCP server?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "bfd81d709169690ccc9e7729d3b76d7c2a59b2e21f241d9350ddc73431c279c3",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6d82bec7e575884c3a0bf13a3bdd8b240c9f8171c8e527eba4f73789565a6a59"
+  },
+  {
+    "question": "Какие инструменты композиции публикует MCP server?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "fde336b8eb38f7dc36ba4af106be812d462a1406aae0093b7730c65d24e7498b",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "6d82bec7e575884c3a0bf13a3bdd8b240c9f8171c8e527eba4f73789565a6a59"
+  },
+  {
+    "question": "Почему storage.save разрешён только после analysis.verify?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "3e1daf96d03175e6517413c55a34d11d070bef8b6d0670759d381db58395d047",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "e13efb24f8d571e3837624c5057a2974d86e9890ab5f0de4c4408c3743c120b2"
+  },
+  {
+    "question": "Почему storage.save разрешён только после analysis.verify?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "1fcae25596dcce883581be14e2a559b037d79b6274aa4ae506c34ae60d4add4c",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "e13efb24f8d571e3837624c5057a2974d86e9890ab5f0de4c4408c3743c120b2"
+  },
+  {
+    "question": "Почему storage.save разрешён только после analysis.verify?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "dbd32968f85c1e3061334b8c458451dc72f50a78cafbf8e3d26b7191a5b0b1fb",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "e13efb24f8d571e3837624c5057a2974d86e9890ab5f0de4c4408c3743c120b2"
+  },
+  {
+    "question": "Почему storage.save разрешён только после analysis.verify?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "30cfc60a9a94cdcd47c5c516ed472115d62c6c8d3eac691231853089a61dd333",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "e13efb24f8d571e3837624c5057a2974d86e9890ab5f0de4c4408c3743c120b2"
+  },
+  {
+    "question": "Почему storage.save разрешён только после analysis.verify?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "87ee71a9c8b457561c38858cacfeb3a210d6789193ffae3e0598639beb849ba3",
+    "score": 1,
+    "notes": "Условия guard верны, но фраза сначала verify затем summarize вводит ложный порядок.",
+    "prompt_sha256": "e13efb24f8d571e3837624c5057a2974d86e9890ab5f0de4c4408c3743c120b2"
+  },
+  {
+    "question": "Почему storage.save разрешён только после analysis.verify?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "eadfbbaf083dc5f748003701c9669ea4ed141678ba1f2b9b861b1358fe07a230",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "e13efb24f8d571e3837624c5057a2974d86e9890ab5f0de4c4408c3743c120b2"
+  },
+  {
+    "question": "Как роутер различает одинаковые имена инструментов разных серверов?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "f8d607a54993386bdd45e62eb8b3fbc7d89ec9227b35b2379fc338c0f540cb9a",
+    "score": 1,
+    "notes": "Ответ верен по найденному README, но не объясняет квалифицированные имена server.tool.",
+    "prompt_sha256": "7c00834e4f8db8dacdd937cdfab6a92983352cb28ec0fa153078c6ef2d7ec27b"
+  },
+  {
+    "question": "Как роутер различает одинаковые имена инструментов разных серверов?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "e8df6d3c46d80ca366b6ae24bdbf85eebcea3631369957ef8b3e265c9e7f3430",
+    "score": 1,
+    "notes": "Ответ верен по найденному README, но не объясняет квалифицированные имена server.tool.",
+    "prompt_sha256": "7c00834e4f8db8dacdd937cdfab6a92983352cb28ec0fa153078c6ef2d7ec27b"
+  },
+  {
+    "question": "Как роутер различает одинаковые имена инструментов разных серверов?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "22970a2c02a2a4fa0ab06c71a4cac7a8120a64db8dcd873d7aa952dfe18a40d7",
+    "score": 1,
+    "notes": "Ответ верен по найденному README, но не объясняет квалифицированные имена server.tool.",
+    "prompt_sha256": "7c00834e4f8db8dacdd937cdfab6a92983352cb28ec0fa153078c6ef2d7ec27b"
+  },
+  {
+    "question": "Как роутер различает одинаковые имена инструментов разных серверов?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "e7338bd77fbd3e98317be207f5aaae38c0dbfb6ab9da21a5483b1fe59f667d3e",
+    "score": 1,
+    "notes": "Ответ верен по найденному README, но не объясняет квалифицированные имена server.tool.",
+    "prompt_sha256": "7c00834e4f8db8dacdd937cdfab6a92983352cb28ec0fa153078c6ef2d7ec27b"
+  },
+  {
+    "question": "Как роутер различает одинаковые имена инструментов разных серверов?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "a6ae79c6cb1478b871525dd6fb76ae2a12a52a855b45d730a80e4ddc61e7f93f",
+    "score": 1,
+    "notes": "Ответ верен по найденному README, но не объясняет квалифицированные имена server.tool.",
+    "prompt_sha256": "7c00834e4f8db8dacdd937cdfab6a92983352cb28ec0fa153078c6ef2d7ec27b"
+  },
+  {
+    "question": "Как роутер различает одинаковые имена инструментов разных серверов?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "e7338bd77fbd3e98317be207f5aaae38c0dbfb6ab9da21a5483b1fe59f667d3e",
+    "score": 1,
+    "notes": "Ответ верен по найденному README, но не объясняет квалифицированные имена server.tool.",
+    "prompt_sha256": "7c00834e4f8db8dacdd937cdfab6a92983352cb28ec0fa153078c6ef2d7ec27b"
+  },
+  {
+    "question": "Как проверяются допустимые переходы состояния задачи?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "771cc8faa65e62fad8e203dfb4d3fa91e5256f292fdafc226550eaf9c54c4587",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "0f819c00690fda8624682e22709368d991cc47ef6a1bc57a938be328a4bd7246"
+  },
+  {
+    "question": "Как проверяются допустимые переходы состояния задачи?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "bde56fe9b48194e038f4a1ed43b95b8080fffa48a0baadf7723cc0100a5b5d6f",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "0f819c00690fda8624682e22709368d991cc47ef6a1bc57a938be328a4bd7246"
+  },
+  {
+    "question": "Как проверяются допустимые переходы состояния задачи?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "08f42ad2e4fd17b12eedabd69fbcf89f42cea404942e401d1e11685cfdaf0126",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "0f819c00690fda8624682e22709368d991cc47ef6a1bc57a938be328a4bd7246"
+  },
+  {
+    "question": "Как проверяются допустимые переходы состояния задачи?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "423c591ede39025d125ba1ee68a8da788d225a49bc5ccb58fec717eedbb09f3e",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "0f819c00690fda8624682e22709368d991cc47ef6a1bc57a938be328a4bd7246"
+  },
+  {
+    "question": "Как проверяются допустимые переходы состояния задачи?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "56349a3ded41807d0f327303d02412314391908142cee086ff4f8af252faaa40",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "0f819c00690fda8624682e22709368d991cc47ef6a1bc57a938be328a4bd7246"
+  },
+  {
+    "question": "Как проверяются допустимые переходы состояния задачи?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "b15ea13e3dddc0bbf723e4bfe8f417c8793d5c9cd345567edcff445e8aaec14a",
+    "score": 2,
+    "notes": "Ключевые факты сверены с сохранённым контекстом и исходниками.",
+    "prompt_sha256": "0f819c00690fda8624682e22709368d991cc47ef6a1bc57a938be328a4bd7246"
+  },
+  {
+    "question": "Где сохраняется история переходов задачи?",
+    "provider": "local",
+    "repeat": 1,
+    "answer_sha256": "01d066e7b1c4773e5556b1042a1f65f85348cd1afd7912c7b2480aba0dca9dcf",
+    "score": 1,
+    "notes": "Указано self.store, но не указаны SQLite и таблица истории; в найденном контексте нет нужного task_store.py.",
+    "prompt_sha256": "da0d87945e98dd7912750665203c70d0ccb59258a54aa8cedc9730e9865eda83"
+  },
+  {
+    "question": "Где сохраняется история переходов задачи?",
+    "provider": "cloud",
+    "repeat": 1,
+    "answer_sha256": "d8ca15f0977ee9339b4c6bb930c779140380f8df2964d6f21b52c742cc8f0fce",
+    "score": 1,
+    "notes": "Указано self.store, но не указаны SQLite и таблица истории; в найденном контексте нет нужного task_store.py.",
+    "prompt_sha256": "da0d87945e98dd7912750665203c70d0ccb59258a54aa8cedc9730e9865eda83"
+  },
+  {
+    "question": "Где сохраняется история переходов задачи?",
+    "provider": "local",
+    "repeat": 2,
+    "answer_sha256": "eb60eaba28951f34dfd08685f98d764a0ea4a56fa1ceab0dc97f29d8ffa359d1",
+    "score": 1,
+    "notes": "Указано self.store, но не указаны SQLite и таблица истории; в найденном контексте нет нужного task_store.py.",
+    "prompt_sha256": "da0d87945e98dd7912750665203c70d0ccb59258a54aa8cedc9730e9865eda83"
+  },
+  {
+    "question": "Где сохраняется история переходов задачи?",
+    "provider": "cloud",
+    "repeat": 2,
+    "answer_sha256": "d8ca15f0977ee9339b4c6bb930c779140380f8df2964d6f21b52c742cc8f0fce",
+    "score": 1,
+    "notes": "Указано self.store, но не указаны SQLite и таблица истории; в найденном контексте нет нужного task_store.py.",
+    "prompt_sha256": "da0d87945e98dd7912750665203c70d0ccb59258a54aa8cedc9730e9865eda83"
+  },
+  {
+    "question": "Где сохраняется история переходов задачи?",
+    "provider": "local",
+    "repeat": 3,
+    "answer_sha256": "ca7201e8ebadabb993413591421223a86699132c4fec1240776e39653ecada7f",
+    "score": 1,
+    "notes": "Указано self.store, но не указаны SQLite и таблица истории; в найденном контексте нет нужного task_store.py.",
+    "prompt_sha256": "da0d87945e98dd7912750665203c70d0ccb59258a54aa8cedc9730e9865eda83"
+  },
+  {
+    "question": "Где сохраняется история переходов задачи?",
+    "provider": "cloud",
+    "repeat": 3,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "score": 0,
+    "notes": "Отказ вместо частичного ответа, хотя self.store.history присутствует в контексте.",
+    "prompt_sha256": "da0d87945e98dd7912750665203c70d0ccb59258a54aa8cedc9730e9865eda83"
+  }
+]

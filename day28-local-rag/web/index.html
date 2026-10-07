@@ -1,0 +1,12 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>День 28 · Локальный RAG</title><link rel="stylesheet" href="/style.css">
+<main><header><span>AI ADVENT / ДЕНЬ 28</span><h1>Ответы по документам проекта</h1>
+<p>Поиск в локальном индексе недели 6. Генерация через локальную модель.</p></header>
+<p id="config">Чтение настроек…</p><label for="question">Ваш вопрос</label>
+<p><a href="/report">Сохранённые результаты сравнения</a> · открытие отчёта не вызывает модели</p>
+<textarea id="question" maxlength="1000">Как RSS worker предотвращает повторную обработку записей?</textarea>
+<div><button id="ask">Найти и ответить</button><button id="retrieve">Только поиск</button></div>
+<p id="status" role="status">Модель вызывается только кнопкой «Найти и ответить».</p>
+<section><h2>Ответ</h2><p id="answer">Задайте вопрос по документам.</p><p id="metrics"></p></section>
+<section><h2>Найденные фрагменты</h2><p>Это контекст поиска; корректность ссылок не подтверждает смысл ответа.</p><div id="sources"></div></section>
+</main><script src="/app.js"></script></html>
