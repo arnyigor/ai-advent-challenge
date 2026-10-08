@@ -1,0 +1,56 @@
+[
+  {
+    "profile": "minimal",
+    "repeat": 1,
+    "case_id": 1,
+    "answer_sha256": "1d87448d93ed54d16eea0589d5761116f8403a549e081ff4ed26028b2827668a",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 1,
+    "notes": "Only emergency code answered; repeats it against wrong source numbers, omits confirmation and recovery condition."
+  },
+  {
+    "profile": "minimal-zero",
+    "repeat": 1,
+    "case_id": 1,
+    "answer_sha256": "1d87448d93ed54d16eea0589d5761116f8403a549e081ff4ed26028b2827668a",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 1,
+    "notes": "Only emergency code answered; repeats it against wrong source numbers, omits confirmation and recovery condition."
+  },
+  {
+    "profile": "minimal",
+    "repeat": 1,
+    "case_id": 3,
+    "answer_sha256": "dea24ad7467bded5b871467e32b9d853174250aebac60a905ce88db38a95b4bc",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents numerical limits and tool examples absent from frozen snippets; does not explain server.tool routing or exact guard."
+  },
+  {
+    "profile": "minimal-zero",
+    "repeat": 1,
+    "case_id": 3,
+    "answer_sha256": "10949551949464960e7d405fb7b3d83d6c2ac324450f352609688519d74419eb",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents numerical limits and tool examples absent from frozen snippets; does not explain server.tool routing or exact guard."
+  },
+  {
+    "profile": "minimal",
+    "repeat": 1,
+    "case_id": 5,
+    "answer_sha256": "d112acd26d63bb1b523cf2a97ff47cc8ef23c14325f8ddf55147a3e07db05423",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 1,
+    "notes": "Corrects both false premises in first sentence, then repeats unneeded claims with misleading source numbering."
+  },
+  {
+    "profile": "minimal-zero",
+    "repeat": 1,
+    "case_id": 5,
+    "answer_sha256": "d112acd26d63bb1b523cf2a97ff47cc8ef23c14325f8ddf55147a3e07db05423",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 1,
+    "notes": "Corrects both false premises in first sentence, then repeats unneeded claims with misleading source numbering."
+  }
+]

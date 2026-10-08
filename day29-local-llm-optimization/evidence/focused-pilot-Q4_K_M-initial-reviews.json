@@ -1,0 +1,56 @@
+[
+  {
+    "profile": "cpu-focused",
+    "repeat": 1,
+    "case_id": 1,
+    "answer_sha256": "6c41d89c6e2499defc9d4ff9c0da4d5815e48089d0226e98c83e8500bd79eb9e",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 2,
+    "notes": "All three requested Atlas facts correct with matching source citations."
+  },
+  {
+    "profile": "cpu-focused",
+    "repeat": 1,
+    "case_id": 2,
+    "answer_sha256": "180a3bd608ea257d490e3e5d92d0bf3b7d6afb467125e2e1045607348a8a29ac",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 1,
+    "notes": "Correct SQL and URL-key idea, but cites module source 4 instead of functions 2/6; unsupported update/delivery claims."
+  },
+  {
+    "profile": "cpu-focused",
+    "repeat": 1,
+    "case_id": 3,
+    "answer_sha256": "a21d9c5220856a8f96d6d831022a71af4a40beb1e8e10117c94953ae4edab284",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents knowledge.save; does not explain server.tool routing and concrete RuntimeError guard."
+  },
+  {
+    "profile": "cpu-focused",
+    "repeat": 1,
+    "case_id": 4,
+    "answer_sha256": "520c8b95ebb79b13d2d22bd0152597dd42524fa9420f3e68eb19f53aa92af191",
+    "prompt_sha256": "48b4a278a6d7dd331d45bb3af635956d40f72c118147766504bbce32ec278cd9",
+    "score": 1,
+    "notes": "Path setting and unavailable staged-diff capability discussed; weak unsupported security reasoning and redundant refusal."
+  },
+  {
+    "profile": "cpu-focused",
+    "repeat": 1,
+    "case_id": 5,
+    "answer_sha256": "920421f23ebf3e419c253162587bf2ba1f373180dabe1610117f29d96f04db54",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 1,
+    "notes": "Corrects code and says confirmation required, then contradicts itself by claiming operation executes without confirmation."
+  },
+  {
+    "profile": "cpu-focused",
+    "repeat": 1,
+    "case_id": 6,
+    "answer_sha256": "2b06cf6213ca52d1ae8f37a4f08f35775e70c5cafd66ebfdf3c7936cf8d50f52",
+    "prompt_sha256": "e5c0e058a12b955dc856abb61aa7a0bbe60e77ed496cecfa8775029ed33afce8",
+    "score": 2,
+    "notes": "Correct refusal; revenue/customer facts absent."
+  }
+]

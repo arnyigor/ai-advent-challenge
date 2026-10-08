@@ -1,0 +1,20 @@
+[
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 3,
+    "answer_sha256": "1e14a41462cabdcb79b918ceaf9c965eac45eb8e3f61f0f528fc7739892358f1",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 1,
+    "notes": "Routing concept and save-before-verify guard improved, but gives wrong triggers for post-run read/verification RuntimeErrors and unsupported server/tool examples."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 5,
+    "answer_sha256": "19a8a2b47cf5a4ec70c11a9d1967a0963e9ab962099ac8109ba7401bfcd1cadb",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 2,
+    "notes": "Corrects ORBIT-48 to ORBIT-47 and states mandatory operator confirmation with source 1."
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 1,
+    "answer_sha256": "4e0e6d6ba475056059c68a5cc7c37ffdd5bc1401f77d0aae59e0961b70c8b88c",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 1,
+    "notes": "Facts correct; diagnostic fact needs source 2 rather than citations 1/4."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 2,
+    "answer_sha256": "e30b37622b54053653a132cfa822bc7145867e2b2419c5c8fbeca3ea838e7a39",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 1,
+    "notes": "Insertion SQL correct; unjustified external-delivery conclusion and missing primary-key explanation."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 3,
+    "answer_sha256": "bd4d9ecc7b056e58a7b6fbd077f596ee1c96914df39cc2a34f29ab16cea80376",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents restriction on same-named tools and fails to explain routing and concrete guard."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 4,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "48b4a278a6d7dd331d45bb3af635956d40f72c118147766504bbce32ec278cd9",
+    "score": 0,
+    "notes": "Whole-question refusal omits available path facts."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 5,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 0,
+    "notes": "Unsupported refusal despite explicit evidence for both corrections."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 6,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "e5c0e058a12b955dc856abb61aa7a0bbe60e77ed496cecfa8775029ed33afce8",
+    "score": 2,
+    "notes": "Correct refusal; no revenue/customer facts."
+  }
+]

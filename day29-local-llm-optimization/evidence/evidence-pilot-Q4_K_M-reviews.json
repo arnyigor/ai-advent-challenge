@@ -1,0 +1,38 @@
+[
+  {
+    "profile": "extractive",
+    "repeat": 1,
+    "case_id": 1,
+    "answer_sha256": "f251bbbe6c88800a806df49267c5d1e7d3abffed08dca8517fd64f554d91a64e",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 1,
+    "notes": "Required facts present, but operator confirmation wrongly attributed to source 5; repeated format placeholders and irrelevant facts."
+  },
+  {
+    "profile": "extractive-zero",
+    "repeat": 1,
+    "case_id": 1,
+    "answer_sha256": "07a1ebee8491561f47b3061c47d5863d3a65cf9e9260bae9151c8615a4a3ec35",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 1,
+    "notes": "Required facts present, but wrong operator citation and repeated format placeholders."
+  },
+  {
+    "profile": "extractive",
+    "repeat": 1,
+    "case_id": 2,
+    "answer_sha256": "a82f6a58472cf5f27c449662e3cf70445f3b8170a8d72f9f49b478a080217fba",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 0,
+    "notes": "Incorrectly claims duplicate URL is inserted again and counters duplicated; unrelated quote offered as delivery evidence."
+  },
+  {
+    "profile": "extractive-zero",
+    "repeat": 1,
+    "case_id": 2,
+    "answer_sha256": "a82f6a58472cf5f27c449662e3cf70445f3b8170a8d72f9f49b478a080217fba",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 0,
+    "notes": "Incorrect duplicate insertion/counter claims and unrelated delivery evidence."
+  }
+]

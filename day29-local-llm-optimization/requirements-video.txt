@@ -1,0 +1,2 @@
+# Optional: only for rebuilding the video; ffmpeg must also be in PATH.
+Pillow>=10,<13

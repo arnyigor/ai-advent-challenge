@@ -1,0 +1,326 @@
+[
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 1,
+    "answer_sha256": "f91e57930b67ff30eacf603a87007532e69ea31ac6f09dcb85f46c2b12707863",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 1,
+    "notes": "Requested Atlas facts correct, but diagnostic fact cites source 1 instead of 2."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 1,
+    "case_id": 1,
+    "answer_sha256": "a961db70097ccbe319a4159211d3ade498cea82ffc8e362c6653372f657518af",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 2,
+    "notes": "All requested Atlas facts correct with matching citations 1 and 2; some repeats/irrelevant true facts."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 2,
+    "answer_sha256": "1f6e3816fc57450133caeab1f670630a0085063208944776386199f888d03646",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 1,
+    "notes": "Insertion SQL correct; no evidence for claimed external delivery behavior; incomplete URL primary-key explanation."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 1,
+    "case_id": 2,
+    "answer_sha256": "4790ec26bae176f08a4993a82a48cfbf8ee86fc5787070024d0a39b84a81d414",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 1,
+    "notes": "SQL/key idea correct, but citations point to module source 4 instead of functions 2/6; unsupported delivery/update claims."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 3,
+    "answer_sha256": "34f8788566d10392b1e40814eeaec0c64fa2e1844b362ebd7d83f9fce87457e2",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents ban on same-named tools instead of server.tool routing."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 1,
+    "case_id": 3,
+    "answer_sha256": "370b3bfd5b748c91780f946ffbbba6bd71b973404d769301082276f247403f97",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents tool examples or same-name restrictions; routing and guard explanation remains incorrect."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 4,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "48b4a278a6d7dd331d45bb3af635956d40f72c118147766504bbce32ec278cd9",
+    "score": 0,
+    "notes": "Whole-question refusal omits available path facts."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 1,
+    "case_id": 4,
+    "answer_sha256": "bc32d08ceb342ca776cb14b8eb2e3eebac5fa4e2fe855b84e0882380c9972673",
+    "prompt_sha256": "48b4a278a6d7dd331d45bb3af635956d40f72c118147766504bbce32ec278cd9",
+    "score": 1,
+    "notes": "Configured repository path and lack of content-security guarantee discussed, but staged-diff API capability inferred without evidence."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 5,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 0,
+    "notes": "Unsupported refusal: source 1 explicitly corrects code and confirmation requirement."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 1,
+    "case_id": 5,
+    "answer_sha256": "47101619335766dc9e2c2eed55754edf37a83ea513e1e1863425c762d59e7799",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 2,
+    "notes": "Correct code ORBIT-47 and literal operator-confirmation requirement cited in source 1; verbose repetitions."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 1,
+    "case_id": 6,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "e5c0e058a12b955dc856abb61aa7a0bbe60e77ed496cecfa8775029ed33afce8",
+    "score": 2,
+    "notes": "Correct refusal, no invented revenue/customer facts."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 1,
+    "case_id": 6,
+    "answer_sha256": "d5bf1b96100e53fc60740a5c452b3d019fd8be416514402a5d7154df346fd887",
+    "prompt_sha256": "e5c0e058a12b955dc856abb61aa7a0bbe60e77ed496cecfa8775029ed33afce8",
+    "score": 2,
+    "notes": "Correct revenue/customer refusal; additional Atlas facts are irrelevant but supported."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 2,
+    "case_id": 1,
+    "answer_sha256": "a961db70097ccbe319a4159211d3ade498cea82ffc8e362c6653372f657518af",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 2,
+    "notes": "All requested Atlas facts correct with matching citations 1 and 2; some repeats/irrelevant true facts."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 2,
+    "case_id": 1,
+    "answer_sha256": "f91e57930b67ff30eacf603a87007532e69ea31ac6f09dcb85f46c2b12707863",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 1,
+    "notes": "Requested Atlas facts correct, but diagnostic fact cites source 1 instead of 2."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 2,
+    "case_id": 2,
+    "answer_sha256": "bf7b50483652639b1e390e59a614f8e3009cad311fdfaa03feb5c9133638e63b",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 1,
+    "notes": "SQL/key idea correct, but citations point to module source 4 instead of functions 2/6; unsupported delivery/update claims."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 2,
+    "case_id": 2,
+    "answer_sha256": "296e5909b4a196fc851998e0ec0351eaf0e056a0c01fdd545ca5c6d52da70c44",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 1,
+    "notes": "Insertion SQL correct; no evidence for claimed external delivery behavior; incomplete URL primary-key explanation."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 2,
+    "case_id": 3,
+    "answer_sha256": "27200beea7531f357478ebd2737185a572caf4e61646649843da3c63f743b115",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents tool examples or same-name restrictions; routing and guard explanation remains incorrect."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 2,
+    "case_id": 3,
+    "answer_sha256": "9dcad3068e909ede3ea996b6003bee6de48de88d714287cb039fe749d3ad767e",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents ban on same-named tools instead of server.tool routing."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 2,
+    "case_id": 4,
+    "answer_sha256": "24569b7a80d3b27e63efd0dd57b5d2551a7705f69fed8df88d4c2e4d6890ce6a",
+    "prompt_sha256": "48b4a278a6d7dd331d45bb3af635956d40f72c118147766504bbce32ec278cd9",
+    "score": 1,
+    "notes": "Configured repository path and lack of content-security guarantee discussed, but staged-diff API capability inferred without evidence."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 2,
+    "case_id": 4,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "48b4a278a6d7dd331d45bb3af635956d40f72c118147766504bbce32ec278cd9",
+    "score": 0,
+    "notes": "Whole-question refusal omits available path facts."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 2,
+    "case_id": 5,
+    "answer_sha256": "920421f23ebf3e419c253162587bf2ba1f373180dabe1610117f29d96f04db54",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 1,
+    "notes": "Correct code and says confirmation required, then contradicts itself by claiming operation runs without confirmation."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 2,
+    "case_id": 5,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 0,
+    "notes": "Unsupported refusal: source 1 explicitly corrects code and confirmation requirement."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 2,
+    "case_id": 6,
+    "answer_sha256": "3a94a70025722ad13755fa01c870973d8b3bc0c2c728e434bcf0bad494f22a03",
+    "prompt_sha256": "e5c0e058a12b955dc856abb61aa7a0bbe60e77ed496cecfa8775029ed33afce8",
+    "score": 0,
+    "notes": "Correct initial refusal followed by invented additional questions and unsupported attribution of MCP tools to Atlas."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 2,
+    "case_id": 6,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "e5c0e058a12b955dc856abb61aa7a0bbe60e77ed496cecfa8775029ed33afce8",
+    "score": 2,
+    "notes": "Correct refusal, no invented revenue/customer facts."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 3,
+    "case_id": 1,
+    "answer_sha256": "f91e57930b67ff30eacf603a87007532e69ea31ac6f09dcb85f46c2b12707863",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 1,
+    "notes": "Requested Atlas facts correct, but diagnostic fact cites source 1 instead of 2."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 3,
+    "case_id": 1,
+    "answer_sha256": "6c41d89c6e2499defc9d4ff9c0da4d5815e48089d0226e98c83e8500bd79eb9e",
+    "prompt_sha256": "761a49d6f62556b993c4a22cd66d355e672ee87fae2bf2a4df9d8fa8a1ff30c8",
+    "score": 2,
+    "notes": "All requested Atlas facts correct with matching citations 1 and 2; some repeats/irrelevant true facts."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 3,
+    "case_id": 2,
+    "answer_sha256": "91150f316083cf26f213a3c579029f3585de7f57146ddeae74f75d74b907395a",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 1,
+    "notes": "Insertion SQL correct; no evidence for claimed external delivery behavior; incomplete URL primary-key explanation."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 3,
+    "case_id": 2,
+    "answer_sha256": "a5eae2c1542a35a6c36f5e499981cae76005b71654a51d6ff3a677a3c851e1e1",
+    "prompt_sha256": "f93a3854cf1f1359eca7a9dfd56954b104f86cc83a62a3315b862012003293ed",
+    "score": 1,
+    "notes": "SQL/key idea correct, but citations point to module source 4 instead of functions 2/6; unsupported delivery/update claims."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 3,
+    "case_id": 3,
+    "answer_sha256": "de9d2b3aca8c8ec6eebf03c37f000306ae5585360ee7a64fc8240087e0dab9dd",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents ban on same-named tools instead of server.tool routing."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 3,
+    "case_id": 3,
+    "answer_sha256": "69b0d6b08b0c2aa15254b44634b7f5071b3891eb9487973a538acaa339acbce6",
+    "prompt_sha256": "963e1c0fb1ca7d287c7fcefe8949b71d76d79ded09b7a1baef72dbc95d257700",
+    "score": 0,
+    "notes": "Invents tool examples or same-name restrictions; routing and guard explanation remains incorrect."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 3,
+    "case_id": 4,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "48b4a278a6d7dd331d45bb3af635956d40f72c118147766504bbce32ec278cd9",
+    "score": 0,
+    "notes": "Whole-question refusal omits available path facts."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 3,
+    "case_id": 4,
+    "answer_sha256": "3b4286f7f7eec80a5b1842454b12313a492b61364753c8d2b6dac86fec9efa79",
+    "prompt_sha256": "48b4a278a6d7dd331d45bb3af635956d40f72c118147766504bbce32ec278cd9",
+    "score": 1,
+    "notes": "Configured repository path and lack of content-security guarantee discussed, but staged-diff API capability inferred without evidence."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 3,
+    "case_id": 5,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 0,
+    "notes": "Unsupported refusal: source 1 explicitly corrects code and confirmation requirement."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 3,
+    "case_id": 5,
+    "answer_sha256": "920421f23ebf3e419c253162587bf2ba1f373180dabe1610117f29d96f04db54",
+    "prompt_sha256": "49aae469ab3a79b9ea5a2f40ed0ad28c4c8c1311678cced3efbf757adb9b0d6a",
+    "score": 1,
+    "notes": "Correct code and says confirmation required, then contradicts itself by claiming operation runs without confirmation."
+  },
+  {
+    "profile": "baseline",
+    "repeat": 3,
+    "case_id": 6,
+    "answer_sha256": "45b2b71879eb1bba80ed7c0b29767f7d9945ba0eb022f8cd1e4aeb8c3ec8568f",
+    "prompt_sha256": "e5c0e058a12b955dc856abb61aa7a0bbe60e77ed496cecfa8775029ed33afce8",
+    "score": 2,
+    "notes": "Correct refusal, no invented revenue/customer facts."
+  },
+  {
+    "profile": "focused-control",
+    "repeat": 3,
+    "case_id": 6,
+    "answer_sha256": "3e551b5902f57729d60fe1ae855a97cfbdfa7718e1e1b9dc2b600ca4b8438193",
+    "prompt_sha256": "e5c0e058a12b955dc856abb61aa7a0bbe60e77ed496cecfa8775029ed33afce8",
+    "score": 0,
+    "notes": "Correct initial refusal followed by invented additional questions and unsupported attribution of MCP tools to Atlas."
+  }
+]
