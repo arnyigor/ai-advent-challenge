@@ -1,0 +1,127 @@
+{
+  "stage": "network",
+  "day": 30,
+  "started_at": "2026-10-09T20:45:09+00:00",
+  "finished_at": "2026-10-09T20:45:11+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [
+    "Запросы отправлены на http://192.168.1.212:8091 с этого же компьютера: это доказывает bind, но не заменяет запрос со второго устройства."
+  ],
+  "expectations": [
+    {
+      "name": "health answers on http://192.168.1.212:8091",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "authorized models call works on the bind address",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "the bind address still requires a key",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "a real generation works on the bind address",
+      "ok": true,
+      "detail": "HTTP 200"
+    }
+  ],
+  "summary": {
+    "calls": 4,
+    "by_status": {
+      "200": 4
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 604,
+      "max": 672
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "GET /health via http://192.168.1.212:8091",
+      "status": 200,
+      "body": {
+        "status": "ok",
+        "backend": "ok",
+        "model": "day30-qwen3-1.7b",
+        "context_window": 4096,
+        "queue": {
+          "active": false,
+          "waiting": 0,
+          "max_waiting": 3
+        }
+      }
+    },
+    {
+      "call": "window probe (tests)",
+      "key_label": "tests",
+      "request_id": "req-b53692dc762f",
+      "status": 200,
+      "wall_ms": 536,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Ок.",
+      "unexpected": false
+    },
+    {
+      "call": "GET /v1/models via the bind address",
+      "status": 200
+    },
+    {
+      "call": "chat via the bind address",
+      "key_label": "tests",
+      "request_id": "req-b912248c245c",
+      "status": 200,
+      "wall_ms": 672,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 78,
+      "completion_tokens": 6,
+      "finish_reason": "stop",
+      "answer_excerpt": "Доступ есть.",
+      "unexpected": false
+    }
+  ]
+}

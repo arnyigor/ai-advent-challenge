@@ -1,0 +1,319 @@
+{
+  "stage": "core",
+  "day": 30,
+  "started_at": "2026-10-09T20:40:32+00:00",
+  "finished_at": "2026-10-09T20:40:35+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [
+    "История не хранится на сервере: клиент отправляет её с каждым запросом, поэтому пара «с историей / без истории» и есть доказательство передачи."
+  ],
+  "expectations": [
+    {
+      "name": "health reports ready backend",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "gateway advertises the same window as config",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no key -> 401",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "wrong key -> 401",
+      "ok": true,
+      "detail": "HTTP 401"
+    },
+    {
+      "name": "authorized models list returns exactly the alias",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "authorized chat returns 200 with a non-empty answer",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "unknown model -> 400 unknown_model",
+      "ok": true,
+      "detail": "HTTP 400 unknown_model"
+    },
+    {
+      "name": "max_tokens too large -> 400 invalid_max_tokens",
+      "ok": true,
+      "detail": "HTTP 400 invalid_max_tokens"
+    },
+    {
+      "name": "max_tokens zero -> 400 invalid_max_tokens",
+      "ok": true,
+      "detail": "HTTP 400 invalid_max_tokens"
+    },
+    {
+      "name": "client system role -> 400 invalid_messages",
+      "ok": true,
+      "detail": "HTTP 400 invalid_messages"
+    },
+    {
+      "name": "empty messages -> 400 invalid_messages",
+      "ok": true,
+      "detail": "HTTP 400 invalid_messages"
+    },
+    {
+      "name": "client sets temperature -> 400 invalid_request",
+      "ok": true,
+      "detail": "HTTP 400 invalid_request"
+    },
+    {
+      "name": "stream=true -> 400 invalid_request",
+      "ok": true,
+      "detail": "HTTP 400 invalid_request"
+    },
+    {
+      "name": "body over the limit -> 413 payload_too_large",
+      "ok": true,
+      "detail": "HTTP 413"
+    },
+    {
+      "name": "broken JSON -> 400 invalid_json",
+      "ok": true,
+      "detail": "HTTP 400"
+    },
+    {
+      "name": "history reaches the model: the code appears with history",
+      "ok": true,
+      "detail": "'КЕДР-42'"
+    },
+    {
+      "name": "control: the code does not appear without history",
+      "ok": true,
+      "detail": "'Код, который вы просили запомнить, не предоставлен.'"
+    },
+    {
+      "name": "health after the contract checks",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "summary": {
+    "calls": 18,
+    "by_status": {
+      "200": 8,
+      "401": 2,
+      "400": 7,
+      "413": 1
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 677,
+      "max": 1011
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "window probe (tests)",
+      "key_label": "tests",
+      "request_id": "req-194b4117f022",
+      "status": 200,
+      "wall_ms": 508,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Ок.",
+      "unexpected": false
+    },
+    {
+      "call": "GET /health",
+      "status": 200,
+      "body": {
+        "status": "ok",
+        "backend": "ok",
+        "model": "day30-qwen3-1.7b",
+        "context_window": 4096,
+        "queue": {
+          "active": false,
+          "waiting": 0,
+          "max_waiting": 3
+        }
+      }
+    },
+    {
+      "call": "GET /v1/models (no key)",
+      "status": 401,
+      "error_code": "unauthorized"
+    },
+    {
+      "call": "GET /v1/models (wrong key)",
+      "status": 401,
+      "error_code": "unauthorized"
+    },
+    {
+      "call": "GET /v1/models (main key)",
+      "status": 200,
+      "models": [
+        "day30-qwen3-1.7b"
+      ]
+    },
+    {
+      "call": "POST chat (main key)",
+      "key_label": "tests",
+      "request_id": "req-6bdacb55ceaf",
+      "status": 200,
+      "wall_ms": 515,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 85,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Париж",
+      "unexpected": false
+    },
+    {
+      "call": "reject: unknown model",
+      "status": 400,
+      "error_code": "unknown_model",
+      "unexpected": false
+    },
+    {
+      "call": "reject: max_tokens too large",
+      "status": 400,
+      "error_code": "invalid_max_tokens",
+      "unexpected": false
+    },
+    {
+      "call": "reject: max_tokens zero",
+      "status": 400,
+      "error_code": "invalid_max_tokens",
+      "unexpected": false
+    },
+    {
+      "call": "reject: client system role",
+      "status": 400,
+      "error_code": "invalid_messages",
+      "unexpected": false
+    },
+    {
+      "call": "reject: empty messages",
+      "status": 400,
+      "error_code": "invalid_messages",
+      "unexpected": false
+    },
+    {
+      "call": "reject: client sets temperature",
+      "status": 400,
+      "error_code": "invalid_request",
+      "unexpected": false
+    },
+    {
+      "call": "reject: stream=true",
+      "status": 400,
+      "error_code": "invalid_request",
+      "unexpected": false
+    },
+    {
+      "call": "reject: body over 64 KiB",
+      "status": 413,
+      "error_code": "payload_too_large"
+    },
+    {
+      "call": "history: seed turn",
+      "key_label": "tests",
+      "request_id": "req-466e57a4c17d",
+      "status": 200,
+      "wall_ms": 677,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 96,
+      "completion_tokens": 7,
+      "finish_reason": "stop",
+      "answer_excerpt": "Запомнил.",
+      "unexpected": false
+    },
+    {
+      "call": "history: question with history",
+      "key_label": "tests",
+      "request_id": "req-996b651cde24",
+      "status": 200,
+      "wall_ms": 831,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 127,
+      "completion_tokens": 8,
+      "finish_reason": "stop",
+      "answer_excerpt": "КЕДР-42",
+      "unexpected": false
+    },
+    {
+      "call": "history: same question without history",
+      "key_label": "tests",
+      "request_id": "req-180dac4c1a86",
+      "status": 200,
+      "wall_ms": 1011,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 86,
+      "completion_tokens": 15,
+      "finish_reason": "stop",
+      "answer_excerpt": "Код, который вы просили запомнить, не предоставлен.",
+      "unexpected": false
+    },
+    {
+      "call": "history: verdict",
+      "status": 200,
+      "with_history": "КЕДР-42",
+      "without_history": "Код, который вы просили запомнить, не предоставлен.",
+      "code_with": true,
+      "code_without": false
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "day": 30,
+  "generated_at": "2026-10-09T20:45:52+00:00",
+  "stages": [
+    {
+      "stage": "backend-down",
+      "calls": 2,
+      "by_status": {
+        "503": 2
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 2044,
+      "wall_ms_max": 2044,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "backend-up",
+      "calls": 2,
+      "by_status": {
+        "200": 2
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 530,
+      "wall_ms_max": 530,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "backend",
+      "calls": 4,
+      "by_status": {
+        "200": 4
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 834,
+      "wall_ms_max": 834,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "budget",
+      "calls": 3,
+      "by_status": {
+        "200": 3
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 484,
+      "wall_ms_max": 1018,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "concurrent",
+      "calls": 13,
+      "by_status": {
+        "200": 13
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 1245,
+      "wall_ms_max": 1891,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "context",
+      "calls": 5,
+      "by_status": {
+        "200": 4,
+        "400": 1
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 421,
+      "wall_ms_max": 20265,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "core",
+      "calls": 18,
+      "by_status": {
+        "200": 8,
+        "401": 2,
+        "400": 7,
+        "413": 1
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 677,
+      "wall_ms_max": 1011,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "load",
+      "calls": 22,
+      "by_status": {
+        "200": 22
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 879,
+      "wall_ms_max": 1164,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "network",
+      "calls": 4,
+      "by_status": {
+        "200": 4
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 604,
+      "wall_ms_max": 672,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "queue",
+      "calls": 9,
+      "by_status": {
+        "200": 8,
+        "503": 1
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 14470,
+      "wall_ms_max": 15618,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    },
+    {
+      "stage": "ratelimit",
+      "calls": 12,
+      "by_status": {
+        "200": 11,
+        "429": 1
+      },
+      "failed_expectations": 0,
+      "wall_ms_median": 527,
+      "wall_ms_max": 582,
+      "generation_ms_median": null,
+      "queue_ms_max": null
+    }
+  ],
+  "total_calls": 94,
+  "failed_expectations": 0
+}

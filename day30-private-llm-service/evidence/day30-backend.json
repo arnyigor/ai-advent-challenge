@@ -1,0 +1,121 @@
+{
+  "stage": "backend",
+  "day": 30,
+  "started_at": "2026-10-09T20:40:30+00:00",
+  "finished_at": "2026-10-09T20:40:32+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [
+    "llama-server запущен с --api-key, поэтому шлюз — единственный держатель ключа; /health остаётся открытым для проверки готовности."
+  ],
+  "expectations": [
+    {
+      "name": "backend alias is day30-qwen3-1.7b",
+      "ok": true,
+      "detail": "alias=day30-qwen3-1.7b"
+    },
+    {
+      "name": "backend context window is 4096",
+      "ok": true,
+      "detail": "n_ctx=4096"
+    },
+    {
+      "name": "backend has one slot",
+      "ok": true,
+      "detail": "total_slots=1"
+    },
+    {
+      "name": "model listing matches the alias",
+      "ok": true,
+      "detail": "id=day30-qwen3-1.7b"
+    },
+    {
+      "name": "direct backend calls without the model key -> 401",
+      "ok": true,
+      "detail": "statuses={'/props': 401, '/v1/models': 401, '/v1/chat/completions': 401}"
+    },
+    {
+      "name": "apply-template + tokenize equals usage.prompt_tokens",
+      "ok": true,
+      "detail": "counted=83 reported=83"
+    },
+    {
+      "name": "smoke answer is not empty",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "summary": {
+    "calls": 4,
+    "by_status": {
+      "200": 4
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 834,
+      "max": 834
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "backend:/props",
+      "status": 200,
+      "model_alias": "day30-qwen3-1.7b",
+      "n_ctx": 4096,
+      "total_slots": 1,
+      "chat_template_present": true
+    },
+    {
+      "call": "backend: key configured",
+      "status": 200,
+      "model_api_key": true
+    },
+    {
+      "call": "backend: direct calls without the model key",
+      "status": 200,
+      "statuses": {
+        "/props": 401,
+        "/v1/models": 401,
+        "/v1/chat/completions": 401
+      }
+    },
+    {
+      "call": "backend:chat",
+      "status": 200,
+      "wall_ms": 834,
+      "counted_prompt_tokens": 83,
+      "prompt_tokens": 83,
+      "completion_tokens": 11,
+      "finish_reason": "stop",
+      "answer_excerpt": "Чёрный, белый, красный."
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>День 30 · приватный AI-сервис</title>
+<style>
+  :root { color-scheme: dark; --bg:#0b1220; --panel:#142235; --line:#26374f; --text:#eef4ff; --muted:#b8c7db; --accent:#78dec0; --warn:#ffcf7a; --err:#ff9c8a; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 "Segoe UI", system-ui, sans-serif; }
+  header { padding:18px 22px; border-bottom:1px solid var(--line); display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+  header b { color:var(--accent); letter-spacing:.04em; }
+  .meta { color:var(--muted); font-size:13px; margin-left:auto; text-align:right; }
+  main { max-width:920px; margin:0 auto; padding:18px 22px 40px; }
+  .row { display:flex; gap:10px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
+  input, textarea, button { font:inherit; color:var(--text); background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:9px 12px; }
+  input#key { flex:1 1 260px; min-width:200px; }
+  button { cursor:pointer; }
+  button:disabled { opacity:.5; cursor:default; }
+  #log { display:flex; flex-direction:column; gap:12px; min-height:220px; }
+  .msg { border:1px solid var(--line); border-radius:12px; padding:10px 14px; white-space:pre-wrap; word-wrap:break-word; }
+  .user { background:#17253a; }
+  .bot { background:var(--panel); }
+  .who { color:var(--accent); font-size:12px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; }
+  .note { color:var(--muted); font-size:13px; margin-top:6px; }
+  .err { border-color:var(--err); }
+  .err .who { color:var(--err); }
+  #status { min-height:22px; color:var(--warn); font-size:14px; margin:10px 0; }
+  .ask { display:flex; gap:10px; align-items:flex-end; }
+  .ask textarea { flex:1; min-height:64px; resize:vertical; }
+  code { color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <b>ДЕНЬ 30 · ПРИВАТНЫЙ AI-СЕРВИС</b>
+  <span class="meta" id="limits">лимиты загружаются…</span>
+</header>
+<main>
+  <div class="row">
+    <input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="Bearer key (спросите администратора сервиса)">
+    <button id="new">Новый чат</button>
+  </div>
+  <div class="note">Ключ хранится только в памяти этой вкладки и не сохраняется на сервере. История живёт в браузере и отправляется с каждым запросом; сервер её не хранит.</div>
+  <div id="status"></div>
+  <div id="log"></div>
+  <div class="ask">
+    <textarea id="prompt" placeholder="Вопрос к локальной модели (Ctrl+Enter — отправить)"></textarea>
+    <button id="send">Отправить</button>
+  </div>
+  <div class="note">Модель: Qwen3-1.7B Q4_K_M, CPU, окно 4096, temperature 0, без стриминга. Одновременно генерируется один запрос, остальные ждут в очереди.</div>
+</main>
+<script>
+"use strict";
+// History and the key live in this tab's memory only; nothing is persisted.
+let history = [];
+let busy = false;
+const $ = (id) => document.getElementById(id);
+
+function setStatus(text) { $("status").textContent = text || ""; }
+
+function addMessage(who, text, extra) {
+  const box = document.createElement("div");
+  box.className = "msg " + (who === "Вы" ? "user" : "bot");
+  const head = document.createElement("div");
+  head.className = "who";
+  head.textContent = who;
+  const body = document.createElement("div");
+  body.textContent = text;               // plain text only, never innerHTML
+  const note = document.createElement("div");
+  note.className = "note";
+  note.textContent = extra || "";
+  note.hidden = !extra;
+  box.append(head, body, note);
+  $("log").append(box);
+  box.scrollIntoView({ block: "end" });
+  return { box, head, body, note };
+}
+
+async function loadLimits() {
+  try {
+    const r = await fetch("/limits");
+    const d = await r.json();
+    $("limits").textContent = `${d.model} · окно ${d.context_window} · max_tokens ${d.max_tokens.min}–${d.max_tokens.max} · ${d.rate_limit.requests} запросов/${d.rate_limit.window_sec} с · очередь ${d.queue.active}+${d.queue.waiting}`;
+  } catch (e) {
+    $("limits").textContent = "лимиты недоступны";
+  }
+}
+
+async function send() {
+  const key = $("key").value.trim();
+  const text = $("prompt").value.trim();
+  if (!key) { setStatus("Введите ключ доступа — без него шлюз отвечает 401."); return; }
+  if (!text || busy) return;
+  busy = true;
+  $("send").disabled = true;
+  $("prompt").value = "";
+  addMessage("Вы", text);
+  const pending = addMessage("Модель", "…", "запрос принят, ждём генерацию");
+  setStatus("Отправлено. Одна генерация за раз: при занятом слоте запрос ждёт в очереди.");
+  const started = performance.now();
+  try {
+    const response = await fetch("/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key },
+      body: JSON.stringify({ model: "day30-qwen3-1.7b", messages: history.concat([{ role: "user", content: text }]), max_tokens: 256 })
+    });
+    const wall = ((performance.now() - started) / 1000).toFixed(1);
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const err = data.error || {};
+      pending.box.classList.add("err");
+      pending.head.textContent = "Ошибка " + response.status;
+      pending.body.textContent = `${err.code || "error"}: ${err.message || response.statusText}`;
+      const retry = response.headers.get("retry-after");
+      pending.note.hidden = false;
+      pending.note.textContent = `HTTP ${response.status}` + (retry ? `, Retry-After: ${retry} с` : "") + `, ${wall} с`;
+      setStatus("Запрос отклонён шлюзом. История не изменена.");
+      return;
+    }
+    const choice = (data.choices || [{}])[0];
+    const answer = (choice.message || {}).content || "(пустой ответ)";
+    const usage = data.usage || {};
+    pending.body.textContent = answer;
+    pending.note.hidden = false;
+    pending.note.textContent =
+      `${wall} с · prompt ${usage.prompt_tokens} + ответ ${usage.completion_tokens} токенов · finish_reason: ${choice.finish_reason} · ${data.request_id}`;
+    history.push({ role: "user", content: text }, { role: "assistant", content: answer });
+    setStatus("");
+  } catch (e) {
+    pending.box.classList.add("err");
+    pending.body.textContent = "Сеть недоступна: " + e.message;
+    setStatus("Не удалось связаться со шлюзом.");
+  } finally {
+    busy = false;
+    $("send").disabled = false;
+    $("prompt").focus();
+  }
+}
+
+$("send").addEventListener("click", send);
+$("new").addEventListener("click", () => {
+  history = [];
+  $("log").replaceChildren();
+  setStatus("История очищена.");
+});
+$("prompt").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); send(); }
+});
+loadLimits();
+</script>
+</body>
+</html>

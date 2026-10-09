@@ -1,0 +1,139 @@
+{
+  "stage": "context",
+  "day": 30,
+  "started_at": "2026-10-09T20:40:37+00:00",
+  "finished_at": "2026-10-09T20:40:58+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [
+    "История не обрезается молча: превышение возвращает context_limit, клиент сам решает, что сокращать."
+  ],
+  "expectations": [
+    {
+      "name": "prompt close to the window still passes when the answer fits",
+      "ok": true,
+      "detail": "counted=3894 HTTP 200"
+    },
+    {
+      "name": "prompt + max_tokens + margin over the window -> 400 context_limit before inference",
+      "ok": true,
+      "detail": "HTTP 400 context_limit"
+    },
+    {
+      "name": "rejection happens fast: no generation was started",
+      "ok": true,
+      "detail": "30 ms"
+    }
+  ],
+  "summary": {
+    "calls": 5,
+    "by_status": {
+      "200": 4,
+      "400": 1
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 421,
+      "max": 20265
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "window probe (main)",
+      "key_label": "main",
+      "request_id": "req-a705d13fd243",
+      "status": 200,
+      "wall_ms": 421,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Ок.",
+      "unexpected": false
+    },
+    {
+      "call": "context: just below the boundary",
+      "key_label": "main",
+      "request_id": "req-5479e77a56e6",
+      "status": 200,
+      "wall_ms": 20265,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 3894,
+      "completion_tokens": 16,
+      "finish_reason": "length",
+      "answer_excerpt": "Алгоритм проверки контекста и границ окна обычно в",
+      "unexpected": false,
+      "counted_prompt_tokens": 3894
+    },
+    {
+      "call": "context: below boundary math",
+      "status": 200,
+      "prompt_tokens": 3894,
+      "max_tokens": 16,
+      "required": 3942,
+      "window": 4096
+    },
+    {
+      "call": "context: prompt + answer over the boundary",
+      "key_label": "main",
+      "request_id": "req-06d431baa4d6",
+      "status": 400,
+      "wall_ms": 30,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": "context_limit",
+      "error_message": "prompt 3992 + max_tokens 256 + запас 32 = 4280 > 4096; историю нужно сократить на клиенте",
+      "retry_after": null,
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "finish_reason": null,
+      "answer_excerpt": "",
+      "unexpected": false,
+      "counted_prompt_tokens": 3992
+    },
+    {
+      "call": "context: above boundary math",
+      "status": 200,
+      "prompt_tokens": 3992,
+      "max_tokens": 256,
+      "required": 4280,
+      "window": 4096
+    }
+  ]
+}

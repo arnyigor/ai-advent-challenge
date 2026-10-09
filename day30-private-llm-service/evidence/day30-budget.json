@@ -1,0 +1,115 @@
+{
+  "stage": "budget",
+  "day": 30,
+  "started_at": "2026-10-09T20:40:35+00:00",
+  "finished_at": "2026-10-09T20:40:37+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [
+    "finish_reason=length — ответ обрезан лимитом генерации, а не контекстом: входной контекст проверяется отдельно (стадия context)."
+  ],
+  "expectations": [
+    {
+      "name": "max_tokens=1 is accepted",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "truncation is reported as finish_reason=length",
+      "ok": true,
+      "detail": "finish_reason=length"
+    }
+  ],
+  "summary": {
+    "calls": 3,
+    "by_status": {
+      "200": 3
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 484,
+      "max": 1018
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "window probe (main)",
+      "key_label": "main",
+      "request_id": "req-55702f176c7d",
+      "status": 200,
+      "wall_ms": 484,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Ок.",
+      "unexpected": false
+    },
+    {
+      "call": "budget: max_tokens=1",
+      "key_label": "main",
+      "request_id": "req-2b50bb295275",
+      "status": 200,
+      "wall_ms": 355,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 1,
+      "finish_reason": "length",
+      "answer_excerpt": "Д",
+      "unexpected": false
+    },
+    {
+      "call": "budget: truncation visible",
+      "key_label": "main",
+      "request_id": "req-cd808afbe0a4",
+      "status": 200,
+      "wall_ms": 1018,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 85,
+      "completion_tokens": 16,
+      "finish_reason": "length",
+      "answer_excerpt": "Времена года: зима, весна, лето, осень",
+      "unexpected": false
+    }
+  ]
+}

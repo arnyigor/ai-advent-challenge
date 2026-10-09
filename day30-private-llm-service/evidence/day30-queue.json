@@ -1,0 +1,205 @@
+{
+  "stage": "queue",
+  "day": 30,
+  "started_at": "2026-10-09T20:43:42+00:00",
+  "finished_at": "2026-10-09T20:44:00+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [],
+  "expectations": [
+    {
+      "name": "queue overflow -> 503 queue_full with Retry-After",
+      "ok": true,
+      "detail": "HTTP 503 queue_full Retry-After=5"
+    },
+    {
+      "name": "all accepted requests finished after the overflow",
+      "ok": true,
+      "detail": "statuses=[200, 200, 200, 200]"
+    },
+    {
+      "name": "after the queue drains the service answers again",
+      "ok": true,
+      "detail": "HTTP 200"
+    }
+  ],
+  "summary": {
+    "calls": 9,
+    "by_status": {
+      "200": 8,
+      "503": 1
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 14470,
+      "max": 15618
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "window probe (queue)",
+      "key_label": "queue",
+      "request_id": "req-597d178fb402",
+      "status": 200,
+      "wall_ms": 522,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Ок.",
+      "unexpected": false
+    },
+    {
+      "call": "queue: active observed",
+      "status": 200,
+      "queue": {
+        "active": true,
+        "waiting": 0,
+        "max_waiting": 3
+      }
+    },
+    {
+      "call": "queue: waiting room full",
+      "status": 200,
+      "queue": {
+        "active": true,
+        "waiting": 3,
+        "max_waiting": 3
+      }
+    },
+    {
+      "call": "queue: overflow request",
+      "key_label": "queue",
+      "request_id": "req-48ea1bba3323",
+      "status": 503,
+      "wall_ms": 36,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": "queue_full",
+      "error_message": "queue is full: 3 waiting, 3 allowed; занято генерацией и 3 местами ожидания",
+      "retry_after": "5",
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "finish_reason": null,
+      "answer_excerpt": "",
+      "unexpected": false
+    },
+    {
+      "call": "queue: long",
+      "key_label": "queue",
+      "request_id": "req-1f22a9ae58f2",
+      "status": 200,
+      "wall_ms": 14470,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 90,
+      "completion_tokens": 267,
+      "finish_reason": "stop",
+      "answer_excerpt": "Зима — это время года, когда температура воздуха значительно снижается, и природа переходит в состояние покоя. В этот период года снег покрывает землю, создавая снежные ландшафты, а ветер дует с севера, часто снежные бризы. Зима также характеризуется сильным солнцем, которое, в отличие от лета, не д",
+      "unexpected": false
+    },
+    {
+      "call": "queue: waiter1",
+      "key_label": "queue",
+      "request_id": "req-5c6ca13ff3b0",
+      "status": 200,
+      "wall_ms": 15023,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 78,
+      "completion_tokens": 5,
+      "finish_reason": "stop",
+      "answer_excerpt": "Клиент.",
+      "unexpected": false
+    },
+    {
+      "call": "queue: waiter2",
+      "key_label": "queue",
+      "request_id": "req-dceea17edb3a",
+      "status": 200,
+      "wall_ms": 15316,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 78,
+      "completion_tokens": 5,
+      "finish_reason": "stop",
+      "answer_excerpt": "Клиент.",
+      "unexpected": false
+    },
+    {
+      "call": "queue: waiter3",
+      "key_label": "queue",
+      "request_id": "req-645fba842d67",
+      "status": 200,
+      "wall_ms": 15618,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 78,
+      "completion_tokens": 5,
+      "finish_reason": "stop",
+      "answer_excerpt": "Клиент.",
+      "unexpected": false
+    },
+    {
+      "call": "queue: recovery request",
+      "key_label": "queue",
+      "request_id": "req-f590597ab793",
+      "status": 200,
+      "wall_ms": 606,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 78,
+      "completion_tokens": 5,
+      "finish_reason": "stop",
+      "answer_excerpt": "Клиент.",
+      "unexpected": false
+    }
+  ]
+}

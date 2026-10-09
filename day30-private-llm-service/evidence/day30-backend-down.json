@@ -1,0 +1,92 @@
+{
+  "stage": "backend-down",
+  "day": 30,
+  "started_at": "2026-10-09T20:45:14+00:00",
+  "finished_at": "2026-10-09T20:45:19+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [
+    "Прогон выполнялся при остановленном llama-server (остановлен вручную)."
+  ],
+  "expectations": [
+    {
+      "name": "health reports 503 while the backend is down",
+      "ok": true,
+      "detail": "HTTP 503"
+    },
+    {
+      "name": "chat returns a clear 503 backend_unavailable, no traceback",
+      "ok": true,
+      "detail": "HTTP 503 backend_unavailable"
+    }
+  ],
+  "summary": {
+    "calls": 2,
+    "by_status": {
+      "503": 2
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 2044,
+      "max": 2044
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "GET /health with the model stopped",
+      "status": 503,
+      "body": {
+        "error": {
+          "code": "backend_unavailable",
+          "message": "backend http://127.0.0.1:8081 недоступен",
+          "request_id": "req-f2a795b09a28"
+        }
+      }
+    },
+    {
+      "call": "chat with the model stopped",
+      "key_label": "main",
+      "request_id": "req-f2c52c08361a",
+      "status": 503,
+      "wall_ms": 2044,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": "backend_unavailable",
+      "error_message": "backend http://127.0.0.1:8081 недоступен: All connection attempts failed",
+      "retry_after": "5",
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "finish_reason": null,
+      "answer_excerpt": "",
+      "unexpected": false
+    }
+  ]
+}

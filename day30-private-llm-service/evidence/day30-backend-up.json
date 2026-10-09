@@ -1,0 +1,94 @@
+{
+  "stage": "backend-up",
+  "day": 30,
+  "started_at": "2026-10-09T20:45:51+00:00",
+  "finished_at": "2026-10-09T20:45:52+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [],
+  "expectations": [
+    {
+      "name": "health is ready again after the model restarted",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "a new request succeeds after recovery",
+      "ok": true,
+      "detail": "HTTP 200"
+    }
+  ],
+  "summary": {
+    "calls": 2,
+    "by_status": {
+      "200": 2
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 530,
+      "max": 530
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "GET /health after restart",
+      "status": 200,
+      "body": {
+        "status": "ok",
+        "backend": "ok",
+        "model": "day30-qwen3-1.7b",
+        "context_window": 4096,
+        "queue": {
+          "active": false,
+          "waiting": 0,
+          "max_waiting": 3
+        }
+      }
+    },
+    {
+      "call": "chat after restart",
+      "key_label": "main",
+      "request_id": "req-e3d625049a9b",
+      "status": 200,
+      "wall_ms": 530,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 5,
+      "finish_reason": "stop",
+      "answer_excerpt": "Верно.",
+      "unexpected": false
+    }
+  ]
+}

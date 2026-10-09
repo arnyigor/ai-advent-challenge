@@ -1,0 +1,3 @@
+# Optional: only for rebuilding the demo video; ffmpeg must be in PATH.
+-r requirements.txt
+Pillow>=10,<13

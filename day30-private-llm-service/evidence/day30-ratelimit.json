@@ -1,0 +1,272 @@
+{
+  "stage": "ratelimit",
+  "day": 30,
+  "started_at": "2026-10-09T20:44:00+00:00",
+  "finished_at": "2026-10-09T20:45:02+00:00",
+  "gateway_url": "http://192.168.1.212:8091",
+  "backend_url": "http://127.0.0.1:8081",
+  "profile": {
+    "model_alias": "day30-qwen3-1.7b",
+    "context_window": 4096,
+    "context_margin_tokens": 32,
+    "parallel_slots": 1,
+    "backend_api_key": true,
+    "max_tokens": {
+      "min": 1,
+      "max": 1024
+    },
+    "rate_limit": {
+      "requests": 10,
+      "window_sec": 60.0
+    },
+    "queue": {
+      "max_waiting": 3,
+      "wait_timeout_sec": 60.0
+    }
+  },
+  "notes": [],
+  "expectations": [
+    {
+      "name": "first 10 requests pass",
+      "ok": true,
+      "detail": "statuses=[200, 200, 200, 200, 200, 200, 200, 200, 200, 200]"
+    },
+    {
+      "name": "11th request -> 429 rate_limited with Retry-After",
+      "ok": true,
+      "detail": "HTTP 429 rate_limited Retry-After=55"
+    },
+    {
+      "name": "after the window the same key passes again",
+      "ok": true,
+      "detail": "HTTP 200"
+    }
+  ],
+  "summary": {
+    "calls": 12,
+    "by_status": {
+      "200": 11,
+      "429": 1
+    },
+    "unexpected_errors": [],
+    "failed_expectations": [],
+    "wall_ms": {
+      "median": 527,
+      "max": 582
+    },
+    "generation_ms": {
+      "median": null,
+      "max": null
+    },
+    "queue_ms": {
+      "median": null,
+      "max": null
+    }
+  },
+  "calls": [
+    {
+      "call": "ratelimit #1",
+      "key_label": "ratelimit",
+      "request_id": "req-1666857aaa86",
+      "status": 200,
+      "wall_ms": 553,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #2",
+      "key_label": "ratelimit",
+      "request_id": "req-5151010370a0",
+      "status": 200,
+      "wall_ms": 542,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #3",
+      "key_label": "ratelimit",
+      "request_id": "req-6af024f3a908",
+      "status": 200,
+      "wall_ms": 528,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #4",
+      "key_label": "ratelimit",
+      "request_id": "req-d75e06e904ce",
+      "status": 200,
+      "wall_ms": 547,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #5",
+      "key_label": "ratelimit",
+      "request_id": "req-a08ea81f32dc",
+      "status": 200,
+      "wall_ms": 582,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #6",
+      "key_label": "ratelimit",
+      "request_id": "req-5bca4e2c3e55",
+      "status": 200,
+      "wall_ms": 534,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #7",
+      "key_label": "ratelimit",
+      "request_id": "req-db4ef34245eb",
+      "status": 200,
+      "wall_ms": 510,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #8",
+      "key_label": "ratelimit",
+      "request_id": "req-51d2902c1221",
+      "status": 200,
+      "wall_ms": 524,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #9",
+      "key_label": "ratelimit",
+      "request_id": "req-41c5c93e0e6a",
+      "status": 200,
+      "wall_ms": 511,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #10",
+      "key_label": "ratelimit",
+      "request_id": "req-40a9ddb978b6",
+      "status": 200,
+      "wall_ms": 526,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit #11",
+      "key_label": "ratelimit",
+      "request_id": "req-109fd49ee4ac",
+      "status": 429,
+      "wall_ms": 2,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": "rate_limited",
+      "error_message": "лимит 10 POST запросов за 60 с для этого ключа исчерпан",
+      "retry_after": "55",
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "finish_reason": null,
+      "answer_excerpt": "",
+      "unexpected": false
+    },
+    {
+      "call": "ratelimit: after the window",
+      "key_label": "ratelimit",
+      "request_id": "req-66efed07ed29",
+      "status": 200,
+      "wall_ms": 508,
+      "queue_ms": null,
+      "generation_ms": null,
+      "error_code": null,
+      "error_message": null,
+      "retry_after": null,
+      "prompt_tokens": 77,
+      "completion_tokens": 4,
+      "finish_reason": "stop",
+      "answer_excerpt": "Да.",
+      "unexpected": false
+    }
+  ]
+}
