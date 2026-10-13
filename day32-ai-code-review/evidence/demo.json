@@ -1,0 +1,31 @@
+{
+  "kind": "local two-commit PR simulation, not GitHub run",
+  "base": "7df9b3777c979029e9186a73385687e1152ca3c7",
+  "head": "45068cd7576d3785b24f2d87b38829ffa96258b7",
+  "sources": [
+    {
+      "path": "docs/architecture.md",
+      "line": 1,
+      "kind": "documentation",
+      "text": "# Checkout contract\nCheckout totals are computed by checkout.total using pricing.discount.\nA discount is a percent between 0 and 100. Prices and totals must never become negative.\nValidation belongs in pricing; callers rely on that contract.",
+      "id": "R1"
+    },
+    {
+      "path": "pricing.py",
+      "line": 1,
+      "kind": "code",
+      "text": "def discount(price, percent):\n    if not 0 <= percent <= 100:\n        raise ValueError(\"invalid percent\")\n    return price * (1 - percent / 100)",
+      "id": "R2"
+    },
+    {
+      "path": "checkout.py",
+      "line": 1,
+      "kind": "code",
+      "text": "from pricing import discount\n\ndef total(items, percent):\n    return sum(discount(price, percent) for price in items)",
+      "id": "R3"
+    }
+  ],
+  "changed_paths": [
+    "pricing.py"
+  ]
+}

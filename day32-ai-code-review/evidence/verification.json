@@ -1,0 +1,20 @@
+{
+  "syntax": "passed",
+  "tests": "passed",
+  "live_model": "gemini-3.5-flash",
+  "finish_reason": "STOP",
+  "rag_kinds": [
+    "documentation",
+    "code"
+  ],
+  "github_run": "not performed",
+  "demo": "local two-commit PR simulation, not GitHub run",
+  "full_suite": {
+    "passed": 456,
+    "warnings": 1,
+    "duration_sec": 92.6
+  },
+  "video_public_url": "https://yadi.sk/i/n1mfQD3C50gSJQ",
+  "video_local_bytes": 1360416,
+  "video_remote_bytes": 1360416
+}

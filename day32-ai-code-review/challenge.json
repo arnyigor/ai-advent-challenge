@@ -1,0 +1,24 @@
+{
+  "day": 32,
+  "title": "Автоматическое AI-ревью кода",
+  "status": "shipped",
+  "video_done": true,
+  "video_path": "ChallengeVideos/day32-demo.mp4",
+  "video_duration_sec": 54.52,
+  "video_bytes": 1360416,
+  "video_kind": "continuous browser recording of real live pipeline",
+  "unit_tests": 8,
+  "regression_tests": 5,
+  "model": "gemini-3.5-flash",
+  "rag": "SQLite FTS5 BM25 over base documentation and source code",
+  "verified_live_model_calls": 2,
+  "github_run_verified": false,
+  "not_verified": [
+    "GitHub workflow run: configure GEMINI_API_KEY secret and open a PR after publishing main",
+    "semantic correctness on arbitrary pull requests"
+  ],
+  "video_url": "https://yadi.sk/i/n1mfQD3C50gSJQ",
+  "video_remote": "yandex_challenge:AI Advent Challenge/Day 32/day32-demo.mp4",
+  "video_published_bytes": 1360416,
+  "full_suite_tests": 456
+}

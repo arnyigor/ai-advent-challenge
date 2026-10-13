@@ -1,0 +1,10 @@
+diff --git a/pricing.py b/pricing.py
+index 4372171..ed74157 100644
+--- a/pricing.py
++++ b/pricing.py
+@@ -1,4 +1,2 @@
+ def discount(price, percent):
+-    if not 0 <= percent <= 100:
+-        raise ValueError("invalid percent")
+-    return price * (1 - percent / 100)
++    return price * (1 - percent)

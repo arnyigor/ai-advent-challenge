@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>День 32 — AI Code Review</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body><header><span class="eyebrow">AI ADVENT / ДЕНЬ 32</span><h1>Автоматическое ревью кода</h1><p>Git diff → RAG по документации и коду → Gemini → текст ревью</p></header>
+<main><section class="run"><div><h2>PR: упростить расчёт скидки</h2><p>Локальный Git PR · тот же пайплайн, что в GitHub Action</p><code id="sha"></code></div><button id="start">Запустить ревью</button></section>
+<section class="pipeline"><div id="stage">Готов к запуску</div><ol id="events"></ol></section>
+<nav><button data-tab="diff" class="selected">1. Diff и файлы</button><button data-tab="rag">2. RAG-источники</button><button data-tab="review">3. Результат ревью</button></nav>
+<section id="content"><p class="empty">Нажмите «Запустить ревью». Пайплайн прочитает настоящие Git-коммиты и отправит запрос модели.</p></section></main>
+<footer>Демонстрация локального запуска · содержимое берётся из Git и живого ответа модели</footer></body></html>
