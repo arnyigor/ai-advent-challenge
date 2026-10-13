@@ -1,0 +1,4 @@
+data/
+video-frames/
+*.log
+__pycache__/

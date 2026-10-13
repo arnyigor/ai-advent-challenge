@@ -42,7 +42,7 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 class LocalModel:
-    def __init__(self, url=None, model=None, timeout=180):
+    def __init__(self, url=None, model=None, timeout=180, system=SYSTEM):
         self.url = url or os.environ.get('LOCAL_LLM_URL', '')
         self.model = model or os.environ.get('LOCAL_LLM_MODEL', '')
         parsed = urlsplit(self.url)
@@ -52,10 +52,11 @@ class LocalModel:
         if not self.model or not math.isfinite(timeout) or timeout <= 0:
             raise ValueError('Specify LOCAL_LLM_MODEL and positive timeout')
         self.timeout = timeout
+        self.system = system
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
     def generate(self, prompt):
-        payload = dict(model=self.model, messages=[dict(role='system', content=SYSTEM),
+        payload = dict(model=self.model, messages=[dict(role='system', content=self.system),
                        dict(role='user', content=prompt)], stream=False,
                        temperature=0.1, max_tokens=token_budget())
         headers = {'Content-Type': 'application/json'}

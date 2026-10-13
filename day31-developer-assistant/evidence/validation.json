@@ -1,0 +1,61 @@
+{
+  "verified_on": "2026-10-12",
+  "tests": {
+    "day31": 20,
+    "day28_regression": 14,
+    "total_passed": 34,
+    "command": "python -m pytest tests/test_day31_assistant.py tests/test_day28_local_rag.py -q"
+  },
+  "python_compile": "passed",
+  "node_syntax": "passed",
+  "git_diff_check": "passed",
+  "secrets_check": "tools/check-secrets.ps1 passed on staged-for-audit deliverables; ignored Chrome profiles excluded",
+  "index": {
+    "documents": 35,
+    "chunks": 305,
+    "embedding_model": "intfloat/multilingual-e5-small",
+    "corpus_hash": "cdbcb9126ee49bd08e030e2a36f92ebdabcccd9d1f0fa8e44557b50f17aff5fb"
+  },
+  "cli_checks": {
+    "root_readme_indexed": true,
+    "docs_indexed": true,
+    "semantic_model": true,
+    "live_branch_matches": true,
+    "real_mcp": true,
+    "not_truncated": true,
+    "citation_numbers_valid": true,
+    "structure_has_citations": true,
+    "api_has_citations": true,
+    "unknown_refusal": true
+  },
+  "cli_calls": 5,
+  "browser_calls": 4,
+  "video": {
+    "path": "ChallengeVideos\\day31-demo.mp4",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080,
+          "r_frame_rate": "25/1"
+        }
+      ],
+      "format": {
+        "duration": "156.000000",
+        "size": "3076296"
+      }
+    },
+    "decode": "ffmpeg full decode passed",
+    "sha256": "b303ad3de96f2200238bc1c8b933e12a291bf012a15a88231a95d2ac03e02f16",
+    "visual_review": "Title, result card, answer, source, MCP, API and refusal frames reviewed; real browser screenshots, no voice; waiting shortened with caption"
+  },
+  "limitations": [
+    "No semantic citation validator",
+    "No dialog history",
+    "Small acceptance sample",
+    "Video is captioned screenshot montage, not uninterrupted screen recording"
+  ]
+}

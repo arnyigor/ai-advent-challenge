@@ -1,0 +1,169 @@
+{
+  "captured_at": "2026-10-12T16:17:02.919Z",
+  "url": "http://127.0.0.1:8796/",
+  "turns": [
+    {
+      "command": "/help Где находятся документация, RAG и MCP? Какая текущая git-ветка? Ответь четырьмя короткими пунктами.",
+      "question": "Где находятся документация, RAG и MCP? Какая текущая git-ветка? Ответь четырьмя короткими пунктами.",
+      "sources": [
+        {
+          "chunk_id": "structure:59bf4a78496720f890de",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "День 31. Ассистент разработчика",
+          "strategy": "structure",
+          "chunk_index": 0,
+          "start_char": 0,
+          "end_char": 444,
+          "char_count": 442,
+          "text": "# День 31. Ассистент разработчика\n\n`/help` отвечает о **реальном AI Advent Challenge**: README и docs через RAG,\nтекущая ветка и HEAD через настоящий MCP stdio. CLI и браузер используют один\nпайплайн; ответ показывает источники, Git-контекст и трассу MCP.\n\nПодробный [план](PLAN.md), [сценарий демонстрации](DEMO.md), общая документация\nв [docs](../docs/architecture.md), [контракт API](../docs/api.md),\n[схема SQLite](../docs/data-model.md).",
+          "score": 0.905485,
+          "rerank_score": 0.804114,
+          "rank": 1
+        },
+        {
+          "chunk_id": "structure:ac25f32cb21b4a9b892f",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Где находятся RAG и MCP",
+          "strategy": "structure",
+          "chunk_index": 2,
+          "start_char": 519,
+          "end_char": 1005,
+          "char_count": 484,
+          "text": "## Где находятся RAG и MCP\n\n`day21-document-indexing/` — загрузка документов, структурный chunking,\nembeddings, SQLite с векторами и FTS5. `day28-local-rag/` — локальный hybrid\nretrieval и генерация через LocalModel, совместимый с chat completions API.\n`day17-first-mcp-tool/` — пример Git MCP-сервера и клиента через stdio.\n`day31-developer-assistant/` — помощник разработчика, объединяющий документацию\nпроекта и живой Git-контекст. Он переиспользует индексатор дня 21 и RAG дня 28.",
+          "score": 0.913366,
+          "rerank_score": 0.789191,
+          "rank": 2
+        },
+        {
+          "chunk_id": "structure:d72ac7743d32822bec6e",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Границы",
+          "strategy": "structure",
+          "chunk_index": 5,
+          "start_char": 2508,
+          "end_char": 2984,
+          "char_count": 475,
+          "text": "## Границы\n\nПомощник не меняет файлы и Git. MCP читает только название репозитория, ветку и\nSHA HEAD; список файлов и diff в дне 31 не реализованы. Состояние ветки читается\nпри каждом вопросе, оно не хранится в RAG. История чата не передаётся модели.\nДокументы — данные, а не инструкции. Если фактов нет, модель должна сообщить\n«В найденных документах недостаточно данных». Проверка номеров ссылок не\nявляется проверкой истинности текста. Ошибки модели/MCP показываются явно.",
+          "score": 0.898877,
+          "rerank_score": 0.736658,
+          "rank": 3
+        },
+        {
+          "chunk_id": "structure:a745855b71f45747d0c6",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Укажите адрес и alias своей запущенной локальной модели: > Корпус и поиск",
+          "strategy": "structure",
+          "chunk_index": 6,
+          "start_char": 3059,
+          "end_char": 3840,
+          "char_count": 779,
+          "text": "## Корпус и поиск\n\nКорневой README, README всех dayNN-* и Markdown из docs/. Скрытые папки,\nсекреты, исходники, evidence и видео не индексируются. Разбиение по секциям,\n1000 символов; E5 CPU, SQLite vectors + FTS5, top-6. Проверяется SHA-256 корпуса\nпри каждом запросе. Индекс создаётся локально в data/ и исключён из Git.\nВопросы без номера дня ищут в общей docs, корневом README и README дня 31.\nУкажите `day28` или «дня 28», чтобы добавить документацию нужного дня в поиск:\nэто предотвращает смешивание контрактов разных учебных приложений.\n\nMCP-сервер day31-project предоставляет только get_project_context без аргументов.\nОн выполняет фиксированные read-only git branch/rev-parse. Корень MCP совпадает\nс корнем индексируемого проекта. Ветка читается заново на каждый вопрос.",
+          "score": 0.885358,
+          "rerank_score": 0.726518,
+          "rank": 4
+        },
+        {
+          "chunk_id": "structure:90425308e334bfda2603",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Задайте пути к установленному llama-server и скачанному GGUF. > Реальные результаты, 12 октября 2026",
+          "strategy": "structure",
+          "chunk_index": 9,
+          "start_char": 5079,
+          "end_char": 6055,
+          "char_count": 976,
+          "text": "## Реальные результаты, 12 октября 2026\n\n20 тестов дня 31 и 14 регрессионных тестов дня 28. Проверены настоящий MCP stdio,\nсмена ветки и detached HEAD во временном репозитории, устаревание индекса,\nограничения HTTP и отсутствие смешивания API разных дней.\n\nПрогон CLI: 5 вопросов через E5 + MCP + Qwen3.8-27B, все 10 автоматических\nкритериев выполнены. Ещё 4 запроса сделаны через реальный headless Chrome и UI.\nОтветы о структуре и API сверены с показанными источниками; ветка main совпала\nс Git. На неизвестные бизнес-показатели получены отказы из-за отсутствия данных.\nВсе ответы завершились finish_reason=stop. Это небольшая приёмочная выборка,\nа не доказательство правильности произвольных ответов.\n\nПервая попытка с Qwen3-1.7B давала лишние отказы и смешивала API дня 24 с днём 31.\nОна сохранена в evidence/pilot-qwen1.7b.json. После этого ограничена область\nretrieval и добавлен отдельный system prompt помощника; более сильная модель\nпроверена уже с этими изменениями.",
+          "score": 0.876024,
+          "rerank_score": 0.719518,
+          "rank": 5
+        },
+        {
+          "chunk_id": "structure:2892c04219424b98a198",
+          "source": "docs/data-model.md",
+          "title": "Схема данных индекса помощника",
+          "file": "data-model.md",
+          "section": "Схема данных индекса помощника > Данные ответа",
+          "strategy": "structure",
+          "chunk_index": 3,
+          "start_char": 1109,
+          "end_char": 1558,
+          "char_count": 448,
+          "text": "## Данные ответа\n\n`project` содержит repository, branch, head, detached из MCP.\n`sources` — top-6 чанков с rank; ссылки [1], [2] относятся к их порядку в ответе.\n`mcp` — фактические сведения initialize/tools/list/tools/call.\n`usage`, `finish_reason` — значения API модели; length показывает обрезанный ответ.\nДанные чата не сохраняются в SQLite. Реальные демонстрационные ответы можно\nсохранить отдельно в evidence/ для проверки; это не корпус RAG.",
+          "score": 0.891936,
+          "rerank_score": 0.710619,
+          "rank": 6
+        }
+      ],
+      "retrieval_sec": 0.0531,
+      "retrieval_mode": "hybrid",
+      "project": {
+        "repository": "ai-advent-challenge",
+        "branch": "main",
+        "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+        "detached": false
+      },
+      "mcp": {
+        "server": "day31-project",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          {
+            "name": "get_project_context",
+            "description": "Текущая ветка и HEAD проекта. Только чтение Git, без аргументов.",
+            "inputSchema": {
+              "properties": {},
+              "type": "object",
+              "title": "get_project_contextArguments"
+            }
+          }
+        ],
+        "tool": "get_project_context",
+        "arguments": {},
+        "result": {
+          "repository": "ai-advent-challenge",
+          "branch": "main",
+          "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+          "detached": false
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ]
+      },
+      "answer": "1. Общая документация находится в `docs/architecture.md`, `docs/api.md` и `docs/data-model.md` [1].\n2. Загрузка документов и RAG находятся в `day21-document-indexing/` и `day28-local-rag/` [2].\n3. Пример Git MCP-сервера и клиента находится в `day17-first-mcp-tool/`, а помощник разработчика — в `day31-developer-assistant/` [1], [2].\n4. Текущая Git-ветка: `main` (HEAD: `d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a`, detached: `false`) (MCP).",
+      "model": "gemini:gemini-3.5-flash-lite",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1547,
+        "output_tokens": 183
+      },
+      "generation_sec": 3.6196,
+      "answer_status": "answered",
+      "citation_ids": [
+        1,
+        2,
+        1,
+        2
+      ],
+      "citation_ids_valid": true,
+      "has_citations": true
+    }
+  ],
+  "screenshots": [
+    "ui-00-ready.png",
+    "ui-01-pending.png",
+    "ui-2-answer.png",
+    "ui-source.png",
+    "ui-mcp.png"
+  ],
+  "note": "Реальные запросы через веб-форму. Видео монтируется из настоящих снимков, ожидание сокращено."
+}

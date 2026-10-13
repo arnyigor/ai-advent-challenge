@@ -1,0 +1,27 @@
+{
+  "day": 31,
+  "title": "Ассистент разработчика: RAG + MCP + /help",
+  "status": "shipped",
+  "video_done": true,
+  "video_path": "ChallengeVideos\\day31-demo-voiced.mp4",
+  "video_duration_sec": 54.696333,
+  "video_bytes": 1958519,
+  "video_url": "https://yadi.sk/i/vgJyd71QezoePA",
+  "video_remote": "yandex_challenge:AI Advent Challenge/Day 31/day31-demo.mp4",
+  "video_published_bytes": 1958519,
+  "video_md5": "3bacda8a426cf9e8d524853caccf1a7c",
+  "not_verified": [
+    "semantic accuracy of arbitrary answers (checked only against the shown fragments)",
+    "video is a captioned montage of real browser screenshots with synthesized narration, not an uninterrupted screen recording"
+  ],
+  "unit_tests": 25,
+  "regression_tests": 14,
+  "verified_cli_calls": 5,
+  "verified_browser_calls": 4,
+  "model": "gemini-3.5-flash-lite",
+  "index_documents": 35,
+  "index_chunks": 307,
+  "provider": "gemini",
+  "video_kind": "0:55 narrated montage of real browser screenshots (QwenTTS VoiceDesign, Russian); generation waits shortened and captioned; first silent 2:36 version kept as ChallengeVideos/day31-demo.mp4",
+  "voice_model": "Qwen3-TTS-12Hz-1.7B-VoiceDesign"
+}

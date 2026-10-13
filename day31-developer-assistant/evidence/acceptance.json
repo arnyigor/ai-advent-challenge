@@ -1,0 +1,842 @@
+{
+  "index": {
+    "id": 1,
+    "strategy": "structure",
+    "embedding_model": "intfloat/multilingual-e5-small",
+    "embedding_dim": 384,
+    "chunk_size": 1000,
+    "corpus_hash": "d7a13357f8b277db765763bfbd4f0f80779982c72ae6884e4c29c423351e25c7",
+    "created_at": 1791821673.782111,
+    "documents": 35,
+    "chunks": 307,
+    "embeddings": 307,
+    "avg_chars": 562.5,
+    "median_chars": 537,
+    "p95_chars": 984,
+    "min_chars": 12,
+    "max_chars": 999,
+    "db_size_bytes": 1904640,
+    "path": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\data\\project.sqlite3",
+    "sources": [
+      "README.md",
+      "day01-first-api-request/README.md",
+      "day02-response-control/README.md",
+      "day03-reasoning-modes/README.md",
+      "day04-temperature/README.md",
+      "day05-model-versions/README.md",
+      "day06-first-agent/README.md",
+      "day07-context-memory/README.md",
+      "day08-token-usage/README.md",
+      "day09-context-compression/README.md",
+      "day10-context-strategies/README.md",
+      "day11-memory-layers/README.md",
+      "day12-personalization/README.md",
+      "day13-task-state-machine/README.md",
+      "day14-state-invariants/README.md",
+      "day15-controlled-transitions/README.md",
+      "day16-mcp-connection/README.md",
+      "day17-first-mcp-tool/README.md",
+      "day18-rss-scheduler/README.md",
+      "day19-mcp-composition/README.md",
+      "day20-mcp-orchestration/README.md",
+      "day21-document-indexing/README.md",
+      "day22-first-rag-request/README.md",
+      "day23-reranking-filtering/README.md",
+      "day24-citations-grounding/README.md",
+      "day25-rag-chat-memory/README.md",
+      "day26-local-llm/README.md",
+      "day27-local-llm-app/README.md",
+      "day28-local-rag/README.md",
+      "day29-local-llm-optimization/README.md",
+      "day30-private-llm-service/README.md",
+      "day31-developer-assistant/README.md",
+      "docs/api.md",
+      "docs/architecture.md",
+      "docs/data-model.md"
+    ]
+  },
+  "calls": [
+    {
+      "command": "/help Как устроен проект и где находятся RAG и MCP?",
+      "question": "Как устроен проект и где находятся RAG и MCP?",
+      "sources": [
+        {
+          "chunk_id": "structure:ac25f32cb21b4a9b892f",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Где находятся RAG и MCP",
+          "strategy": "structure",
+          "chunk_index": 2,
+          "start_char": 519,
+          "end_char": 1005,
+          "char_count": 484,
+          "text": "## Где находятся RAG и MCP\n\n`day21-document-indexing/` — загрузка документов, структурный chunking,\nembeddings, SQLite с векторами и FTS5. `day28-local-rag/` — локальный hybrid\nretrieval и генерация через LocalModel, совместимый с chat completions API.\n`day17-first-mcp-tool/` — пример Git MCP-сервера и клиента через stdio.\n`day31-developer-assistant/` — помощник разработчика, объединяющий документацию\nпроекта и живой Git-контекст. Он переиспользует индексатор дня 21 и RAG дня 28.",
+          "score": 0.878359,
+          "rerank_score": 0.825436,
+          "rank": 1
+        },
+        {
+          "chunk_id": "structure:5711416cff33543a4128",
+          "source": "docs/api.md",
+          "title": "API помощника разработчика, день 31",
+          "file": "api.md",
+          "section": "API помощника разработчика, день 31 > HTTP",
+          "strategy": "structure",
+          "chunk_index": 2,
+          "start_char": 439,
+          "end_char": 1401,
+          "char_count": 962,
+          "text": "## HTTP\n\n`server.py` слушает 127.0.0.1; порт выбирается через `DAY31_WEB_PORT` (дефолт 8796).\n`GET /api/config` возвращает статистику индекса и имя настроенной модели.\n`POST /api/help` принимает JSON `{\"command\":\"/help Как устроен проект?\"}`.\n\nРезультат содержит `question`, `answer`, `project`, `mcp`, `sources`, `model`,\n`usage`, `finish_reason`, `citation_ids_valid`, `has_citations`, `retrieval_sec`,\n`generation_sec`. `project` — живой Git-контекст. `mcp` содержит имя сервера,\nпротокольную версию, список инструментов, arguments и результат вызова.\n`sources` — найденные фрагменты с путём, заголовком секции, текстом и rank.\nПоле `prompt` удаляется из HTTP-ответа; найденные документы видны отдельно.\n\nОшибки: 400 — неверная команда или JSON, 409 — запрос уже выполняется или индекс\nустарел, 413 — тело больше 8192 байт, 502 — сбой MCP/retrieval/локального API.\nЗапрос ограничен 1000 символами вопроса. Запросы принимаются только с ожидаемым\nHost и Origin.",
+          "score": 0.829561,
+          "rerank_score": 0.747171,
+          "rank": 2
+        },
+        {
+          "chunk_id": "structure:3b048f5891a4d30b4b6f",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Укажите адрес и alias своей запущенной локальной модели:",
+          "strategy": "structure",
+          "chunk_index": 5,
+          "start_char": 2416,
+          "end_char": 3059,
+          "char_count": 641,
+          "text": "# Укажите адрес и alias своей запущенной локальной модели:\n$env:LOCAL_LLM_URL = 'http://127.0.0.1:8085/v1'\n$env:LOCAL_LLM_MODEL = 'day31-qwen3.8-27b'\n$env:LOCAL_LLM_MAX_TOKENS = '1024'\n.\\.venv\\Scripts\\python.exe day31-developer-assistant\\assistant.py '/help Как устроен проект?'\n.\\.venv\\Scripts\\python.exe day31-developer-assistant\\server.py\n```\n\nОткройте http://127.0.0.1:8796. Порт меняется через DAY31_WEB_PORT.\nИндексирование не запускает LLM; старт UI не загружает E5 и не вызывает LLM.\nПри изменении README/docs выполнить `--index` снова. В UI выбранные фрагменты\nраскрываются, MCP показывает настоящий каталог и результат инструмента.",
+          "score": 0.825517,
+          "rerank_score": 0.744138,
+          "rank": 3
+        },
+        {
+          "chunk_id": "structure:2892c04219424b98a198",
+          "source": "docs/data-model.md",
+          "title": "Схема данных индекса помощника",
+          "file": "data-model.md",
+          "section": "Схема данных индекса помощника > Данные ответа",
+          "strategy": "structure",
+          "chunk_index": 3,
+          "start_char": 1109,
+          "end_char": 1558,
+          "char_count": 448,
+          "text": "## Данные ответа\n\n`project` содержит repository, branch, head, detached из MCP.\n`sources` — top-6 чанков с rank; ссылки [1], [2] относятся к их порядку в ответе.\n`mcp` — фактические сведения initialize/tools/list/tools/call.\n`usage`, `finish_reason` — значения API модели; length показывает обрезанный ответ.\nДанные чата не сохраняются в SQLite. Реальные демонстрационные ответы можно\nсохранить отдельно в evidence/ для проверки; это не корпус RAG.",
+          "score": 0.86143,
+          "rerank_score": 0.729406,
+          "rank": 4
+        },
+        {
+          "chunk_id": "structure:d72ac7743d32822bec6e",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Границы",
+          "strategy": "structure",
+          "chunk_index": 5,
+          "start_char": 2508,
+          "end_char": 2984,
+          "char_count": 475,
+          "text": "## Границы\n\nПомощник не меняет файлы и Git. MCP читает только название репозитория, ветку и\nSHA HEAD; список файлов и diff в дне 31 не реализованы. Состояние ветки читается\nпри каждом вопросе, оно не хранится в RAG. История чата не передаётся модели.\nДокументы — данные, а не инструкции. Если фактов нет, модель должна сообщить\n«В найденных документах недостаточно данных». Проверка номеров ссылок не\nявляется проверкой истинности текста. Ошибки модели/MCP показываются явно.",
+          "score": 0.85064,
+          "rerank_score": 0.721313,
+          "rank": 5
+        },
+        {
+          "chunk_id": "structure:59bf4a78496720f890de",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "День 31. Ассистент разработчика",
+          "strategy": "structure",
+          "chunk_index": 0,
+          "start_char": 0,
+          "end_char": 444,
+          "char_count": 442,
+          "text": "# День 31. Ассистент разработчика\n\n`/help` отвечает о **реальном AI Advent Challenge**: README и docs через RAG,\nтекущая ветка и HEAD через настоящий MCP stdio. CLI и браузер используют один\nпайплайн; ответ показывает источники, Git-контекст и трассу MCP.\n\nПодробный [план](PLAN.md), [сценарий демонстрации](DEMO.md), общая документация\nв [docs](../docs/architecture.md), [контракт API](../docs/api.md),\n[схема SQLite](../docs/data-model.md).",
+          "score": 0.849857,
+          "rerank_score": 0.720726,
+          "rank": 6
+        }
+      ],
+      "retrieval_sec": 10.601,
+      "retrieval_mode": "hybrid",
+      "project": {
+        "repository": "ai-advent-challenge",
+        "branch": "main",
+        "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+        "detached": false
+      },
+      "mcp": {
+        "server": "day31-project",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          {
+            "name": "get_project_context",
+            "description": "Текущая ветка и HEAD проекта. Только чтение Git, без аргументов.",
+            "inputSchema": {
+              "properties": {},
+              "type": "object",
+              "title": "get_project_contextArguments"
+            }
+          }
+        ],
+        "tool": "get_project_context",
+        "arguments": {},
+        "result": {
+          "repository": "ai-advent-challenge",
+          "branch": "main",
+          "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+          "detached": false
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ]
+      },
+      "answer": "* Проект `day31-developer-assistant` объединяет документацию и живой Git-контекст, переиспользуя индексатор дня 21 и RAG дня 28 [1].\n* Загрузка документов, structural chunking, embeddings и SQLite с векторами и FTS5 находятся в `day21-document-indexing/` [1].\n* Локальный hybrid retrieval и генерация через LocalModel (совместимую с chat completions API) находятся в `day28-local-rag/` [1].\n* Пример Git MCP-сервера и клиента через stdio находится в `day17-first-mcp-tool/` [1].\n* Текущие ветка `main` и HEAD `d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a` (MCP) читаются через настоящий MCP stdio [6].",
+      "model": "gemini:gemini-3.5-flash-lite",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1519,
+        "output_tokens": 213
+      },
+      "generation_sec": 3.8633,
+      "answer_status": "answered",
+      "citation_ids": [
+        1,
+        1,
+        1,
+        1,
+        6
+      ],
+      "citation_ids_valid": true,
+      "has_citations": true
+    },
+    {
+      "command": "/help Как проходит запрос /help и какие поля возвращает API?",
+      "question": "Как проходит запрос /help и какие поля возвращает API?",
+      "sources": [
+        {
+          "chunk_id": "structure:5711416cff33543a4128",
+          "source": "docs/api.md",
+          "title": "API помощника разработчика, день 31",
+          "file": "api.md",
+          "section": "API помощника разработчика, день 31 > HTTP",
+          "strategy": "structure",
+          "chunk_index": 2,
+          "start_char": 439,
+          "end_char": 1401,
+          "char_count": 962,
+          "text": "## HTTP\n\n`server.py` слушает 127.0.0.1; порт выбирается через `DAY31_WEB_PORT` (дефолт 8796).\n`GET /api/config` возвращает статистику индекса и имя настроенной модели.\n`POST /api/help` принимает JSON `{\"command\":\"/help Как устроен проект?\"}`.\n\nРезультат содержит `question`, `answer`, `project`, `mcp`, `sources`, `model`,\n`usage`, `finish_reason`, `citation_ids_valid`, `has_citations`, `retrieval_sec`,\n`generation_sec`. `project` — живой Git-контекст. `mcp` содержит имя сервера,\nпротокольную версию, список инструментов, arguments и результат вызова.\n`sources` — найденные фрагменты с путём, заголовком секции, текстом и rank.\nПоле `prompt` удаляется из HTTP-ответа; найденные документы видны отдельно.\n\nОшибки: 400 — неверная команда или JSON, 409 — запрос уже выполняется или индекс\nустарел, 413 — тело больше 8192 байт, 502 — сбой MCP/retrieval/локального API.\nЗапрос ограничен 1000 символами вопроса. Запросы принимаются только с ожидаемым\nHost и Origin.",
+          "score": 0.874522,
+          "rerank_score": 0.822558,
+          "rank": 1
+        },
+        {
+          "chunk_id": "structure:e5ebc14a0b4e2e5be1ec",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Путь запроса помощника",
+          "strategy": "structure",
+          "chunk_index": 3,
+          "start_char": 1005,
+          "end_char": 1720,
+          "char_count": 713,
+          "text": "## Путь запроса помощника\n\n`/help <вопрос>` → assistant.py проверяет команду и свежесть корпуса → MCP-клиент\nзапускает project_mcp_server.py через stdio → initialize, tools/list, tools/call\n→ get_project_context возвращает ветку и HEAD → поиск top-6 чанков в SQLite\n→ документы и Git-контекст передаются выбранной LLM → ответ с источниками [n].\nКоманда `/help` без вопроса использует вопрос о структуре проекта.\nCLI и HTTP UI вызывают один Assistant, поэтому pipeline и дефолты одинаковы.\nГенератор выбирается явно: локальный API, Gemini или бесплатный OpenRouter.\nEmbeddings и чтение Git остаются локальными. Для cloud используется только\nвыбранный провайдер; при ошибке не происходит скрытого платного fallback.",
+          "score": 0.868077,
+          "rerank_score": 0.776058,
+          "rank": 2
+        },
+        {
+          "chunk_id": "structure:c0da64181cce746cd1da",
+          "source": "docs/api.md",
+          "title": "API помощника разработчика, день 31",
+          "file": "api.md",
+          "section": "API помощника разработчика, день 31 > HTTP",
+          "strategy": "structure",
+          "chunk_index": 3,
+          "start_char": 1281,
+          "end_char": 1464,
+          "char_count": 181,
+          "text": "retrieval/локального API.\nЗапрос ограничен 1000 символами вопроса. Запросы принимаются только с ожидаемым\nHost и Origin. Ответы вставляются в DOM через textContent, внешних CDN нет.",
+          "score": 0.868728,
+          "rerank_score": 0.734879,
+          "rank": 3
+        },
+        {
+          "chunk_id": "structure:59bf4a78496720f890de",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "День 31. Ассистент разработчика",
+          "strategy": "structure",
+          "chunk_index": 0,
+          "start_char": 0,
+          "end_char": 444,
+          "char_count": 442,
+          "text": "# День 31. Ассистент разработчика\n\n`/help` отвечает о **реальном AI Advent Challenge**: README и docs через RAG,\nтекущая ветка и HEAD через настоящий MCP stdio. CLI и браузер используют один\nпайплайн; ответ показывает источники, Git-контекст и трассу MCP.\n\nПодробный [план](PLAN.md), [сценарий демонстрации](DEMO.md), общая документация\nв [docs](../docs/architecture.md), [контракт API](../docs/api.md),\n[схема SQLite](../docs/data-model.md).",
+          "score": 0.849624,
+          "rerank_score": 0.720551,
+          "rank": 4
+        },
+        {
+          "chunk_id": "structure:6fc8942b98622ccd77d2",
+          "source": "docs/api.md",
+          "title": "API помощника разработчика, день 31",
+          "file": "api.md",
+          "section": "API помощника разработчика, день 31 > CLI",
+          "strategy": "structure",
+          "chunk_index": 1,
+          "start_char": 39,
+          "end_char": 439,
+          "char_count": 398,
+          "text": "## CLI\n\n`python day31-developer-assistant/assistant.py --index` создаёт или обновляет индекс.\n`python day31-developer-assistant/assistant.py --inspect` показывает его метаданные\nи список источников без загрузки модели. Позиционный аргумент — команда\n`/help <вопрос>`. Без аргумента показывается справка запуска; модель не вызывается.\n`--retrieve-only` выполняет настоящий MCP и поиск без генерации.",
+          "score": 0.84102,
+          "rerank_score": 0.714098,
+          "rank": 5
+        },
+        {
+          "chunk_id": "structure:6726cc693922fcbe6c92",
+          "source": "docs/api.md",
+          "title": "API помощника разработчика, день 31",
+          "file": "api.md",
+          "section": "API помощника разработчика, день 31 > Настройки модели",
+          "strategy": "structure",
+          "chunk_index": 5,
+          "start_char": 1908,
+          "end_char": 2893,
+          "char_count": 984,
+          "text": "## Настройки модели\n\nЛокальная LLM не обязательна. DAY31_LLM_PROVIDER выбирает local, gemini или\nopenrouter. DAY31_LLM_MODEL — alias облачной модели. Gemini использует существующий\nклиент tools/llm и GEMINI_API_KEY из окружения. OpenRouter использует\nOPENROUTER_API_KEY, только openrouter/free или :free модели, без платного fallback.\nВ облако передаются вопрос, найденные фрагменты и Git-контекст. При 429/API ошибке\nHTTP возвращает явную ошибку; скрытого перехода к другому провайдеру нет.\nСам retrieval и MCP не зависят от выбранного генератора ответа.\n\n`LOCAL_LLM_URL` — явный loopback HTTP URL, включая `/v1`.\n`LOCAL_LLM_MODEL` — имя модели. `LOCAL_LLM_MAX_TOKENS` — бюджет ответа,\nпо умолчанию 4096, допустимо 128–8192 (реализация дня 28).\n`LOCAL_LLM_API_KEY` — необязательный ключ; его не включать в корпус и видео.\nМодель не стартует автоматически вместе с UI. Отдельный запуск собственного\nllama-server допускается с настройками пользователя; чужие процессы не останавливать.",
+          "score": 0.832561,
+          "rerank_score": 0.707754,
+          "rank": 6
+        }
+      ],
+      "retrieval_sec": 0.04,
+      "retrieval_mode": "hybrid",
+      "project": {
+        "repository": "ai-advent-challenge",
+        "branch": "main",
+        "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+        "detached": false
+      },
+      "mcp": {
+        "server": "day31-project",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          {
+            "name": "get_project_context",
+            "description": "Текущая ветка и HEAD проекта. Только чтение Git, без аргументов.",
+            "inputSchema": {
+              "properties": {},
+              "type": "object",
+              "title": "get_project_contextArguments"
+            }
+          }
+        ],
+        "tool": "get_project_context",
+        "arguments": {},
+        "result": {
+          "repository": "ai-advent-challenge",
+          "branch": "main",
+          "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+          "detached": false
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ]
+      },
+      "answer": "* Путь запроса: `/help <вопрос>` проверяется assistant.py, запускается MCP-клиент, получается живой Git-контекст (ветка main, HEAD `d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a` (MCP)), ищется top-6 чанков в SQLite и вызывается генератор LLM [1], [2].\n* Ответ `/api/help` содержит поля: `question`, `answer`, `project`, `mcp`, `sources`, `model`, `usage`, `finish_reason`, `citation_ids_valid`, `has_citations`, `retrieval_sec`, `generation_sec` [1].\n* Поле `project` содержит живой Git-контекст, а `mcp` — имя сервера, версию протокола, список инструментов, arguments и результат вызова [1].\n* Поле `sources` включает найденные фрагменты с путём, заголовком секции, текстом и rank [1].",
+      "model": "gemini:gemini-3.5-flash-lite",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1519,
+        "output_tokens": 237
+      },
+      "generation_sec": 2.9915,
+      "answer_status": "answered",
+      "citation_ids": [
+        1,
+        2,
+        1,
+        1,
+        1
+      ],
+      "citation_ids_valid": true,
+      "has_citations": true
+    },
+    {
+      "command": "/help Какая сейчас git-ветка проекта?",
+      "question": "Какая сейчас git-ветка проекта?",
+      "sources": [
+        {
+          "chunk_id": "structure:a745855b71f45747d0c6",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Укажите адрес и alias своей запущенной локальной модели: > Корпус и поиск",
+          "strategy": "structure",
+          "chunk_index": 6,
+          "start_char": 3059,
+          "end_char": 3840,
+          "char_count": 779,
+          "text": "## Корпус и поиск\n\nКорневой README, README всех dayNN-* и Markdown из docs/. Скрытые папки,\nсекреты, исходники, evidence и видео не индексируются. Разбиение по секциям,\n1000 символов; E5 CPU, SQLite vectors + FTS5, top-6. Проверяется SHA-256 корпуса\nпри каждом запросе. Индекс создаётся локально в data/ и исключён из Git.\nВопросы без номера дня ищут в общей docs, корневом README и README дня 31.\nУкажите `day28` или «дня 28», чтобы добавить документацию нужного дня в поиск:\nэто предотвращает смешивание контрактов разных учебных приложений.\n\nMCP-сервер day31-project предоставляет только get_project_context без аргументов.\nОн выполняет фиксированные read-only git branch/rev-parse. Корень MCP совпадает\nс корнем индексируемого проекта. Ветка читается заново на каждый вопрос.",
+          "score": 0.847322,
+          "rerank_score": 0.822991,
+          "rank": 1
+        },
+        {
+          "chunk_id": "structure:e5ebc14a0b4e2e5be1ec",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Путь запроса помощника",
+          "strategy": "structure",
+          "chunk_index": 3,
+          "start_char": 1005,
+          "end_char": 1720,
+          "char_count": 713,
+          "text": "## Путь запроса помощника\n\n`/help <вопрос>` → assistant.py проверяет команду и свежесть корпуса → MCP-клиент\nзапускает project_mcp_server.py через stdio → initialize, tools/list, tools/call\n→ get_project_context возвращает ветку и HEAD → поиск top-6 чанков в SQLite\n→ документы и Git-контекст передаются выбранной LLM → ответ с источниками [n].\nКоманда `/help` без вопроса использует вопрос о структуре проекта.\nCLI и HTTP UI вызывают один Assistant, поэтому pipeline и дефолты одинаковы.\nГенератор выбирается явно: локальный API, Gemini или бесплатный OpenRouter.\nEmbeddings и чтение Git остаются локальными. Для cloud используется только\nвыбранный провайдер; при ошибке не происходит скрытого платного fallback.",
+          "score": 0.854953,
+          "rerank_score": 0.766215,
+          "rank": 2
+        },
+        {
+          "chunk_id": "structure:4bad59c1b95a5df73780",
+          "source": "docs/api.md",
+          "title": "API помощника разработчика, день 31",
+          "file": "api.md",
+          "section": "API помощника разработчика, день 31 > MCP",
+          "strategy": "structure",
+          "chunk_index": 4,
+          "start_char": 1464,
+          "end_char": 1908,
+          "char_count": 442,
+          "text": "## MCP\n\nСервер `day31-project`, transport stdio. Инструмент `get_project_context()` без\nаргументов возвращает `repository`, `branch`, `head`, `detached`.\nbranch равен текущей ветке Git; detached HEAD обозначается `(detached HEAD)`.\nhead — полный SHA из `git rev-parse HEAD`. Корень проекта задаётся серверу через\n`DAY31_REPO_ROOT`; клиент передаёт корень того же проекта, который индексирует.\nВызовы не содержат пользовательских shell-команд.",
+          "score": 0.85225,
+          "rerank_score": 0.764188,
+          "rank": 3
+        },
+        {
+          "chunk_id": "structure:90425308e334bfda2603",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Задайте пути к установленному llama-server и скачанному GGUF. > Реальные результаты, 12 октября 2026",
+          "strategy": "structure",
+          "chunk_index": 9,
+          "start_char": 5079,
+          "end_char": 6055,
+          "char_count": 976,
+          "text": "## Реальные результаты, 12 октября 2026\n\n20 тестов дня 31 и 14 регрессионных тестов дня 28. Проверены настоящий MCP stdio,\nсмена ветки и detached HEAD во временном репозитории, устаревание индекса,\nограничения HTTP и отсутствие смешивания API разных дней.\n\nПрогон CLI: 5 вопросов через E5 + MCP + Qwen3.8-27B, все 10 автоматических\nкритериев выполнены. Ещё 4 запроса сделаны через реальный headless Chrome и UI.\nОтветы о структуре и API сверены с показанными источниками; ветка main совпала\nс Git. На неизвестные бизнес-показатели получены отказы из-за отсутствия данных.\nВсе ответы завершились finish_reason=stop. Это небольшая приёмочная выборка,\nа не доказательство правильности произвольных ответов.\n\nПервая попытка с Qwen3-1.7B давала лишние отказы и смешивала API дня 24 с днём 31.\nОна сохранена в evidence/pilot-qwen1.7b.json. После этого ограничена область\nretrieval и добавлен отдельный system prompt помощника; более сильная модель\nпроверена уже с этими изменениями.",
+          "score": 0.828842,
+          "rerank_score": 0.746632,
+          "rank": 4
+        },
+        {
+          "chunk_id": "structure:59bf4a78496720f890de",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "День 31. Ассистент разработчика",
+          "strategy": "structure",
+          "chunk_index": 0,
+          "start_char": 0,
+          "end_char": 444,
+          "char_count": 442,
+          "text": "# День 31. Ассистент разработчика\n\n`/help` отвечает о **реальном AI Advent Challenge**: README и docs через RAG,\nтекущая ветка и HEAD через настоящий MCP stdio. CLI и браузер используют один\nпайплайн; ответ показывает источники, Git-контекст и трассу MCP.\n\nПодробный [план](PLAN.md), [сценарий демонстрации](DEMO.md), общая документация\nв [docs](../docs/architecture.md), [контракт API](../docs/api.md),\n[схема SQLite](../docs/data-model.md).",
+          "score": 0.82758,
+          "rerank_score": 0.745685,
+          "rank": 5
+        },
+        {
+          "chunk_id": "structure:a7a871cd884cfe4a52f1",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Структура проекта",
+          "strategy": "structure",
+          "chunk_index": 1,
+          "start_char": 35,
+          "end_char": 519,
+          "char_count": 482,
+          "text": "## Структура проекта\n\nЭто репозиторий ежедневных заданий AI Advent Challenge. Каждый день находится\nв отдельной папке `dayNN-slug/` со своим README, исходниками и зависимостями.\nКорневой `README.md` описывает запуск ежедневного workflow. `tools/` содержит\nобщие утилиты, включая `tools/llm/` и скрипты сдачи. `tests/` содержит тесты.\n`docs/` — общая документация проекта: архитектура, API помощника и схема данных.\n`ChallengeVideos/` — локальные видео; MP4/MOV/MKV исключены из Git.",
+          "score": 0.824201,
+          "rerank_score": 0.743151,
+          "rank": 6
+        }
+      ],
+      "retrieval_sec": 0.0347,
+      "retrieval_mode": "hybrid",
+      "project": {
+        "repository": "ai-advent-challenge",
+        "branch": "main",
+        "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+        "detached": false
+      },
+      "mcp": {
+        "server": "day31-project",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          {
+            "name": "get_project_context",
+            "description": "Текущая ветка и HEAD проекта. Только чтение Git, без аргументов.",
+            "inputSchema": {
+              "properties": {},
+              "type": "object",
+              "title": "get_project_contextArguments"
+            }
+          }
+        ],
+        "tool": "get_project_context",
+        "arguments": {},
+        "result": {
+          "repository": "ai-advent-challenge",
+          "branch": "main",
+          "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+          "detached": false
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ]
+      },
+      "answer": "* Текущая ветка проекта: `main` [3], (MCP).\n* HEAD: `d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a` [3], (MCP).",
+      "model": "gemini:gemini-3.5-flash-lite",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1574,
+        "output_tokens": 65
+      },
+      "generation_sec": 4.708,
+      "answer_status": "answered",
+      "citation_ids": [
+        3,
+        3
+      ],
+      "citation_ids_valid": true,
+      "has_citations": true
+    },
+    {
+      "command": "/help Какова выручка проекта за 2025 год?",
+      "question": "Какова выручка проекта за 2025 год?",
+      "sources": [
+        {
+          "chunk_id": "structure:4bad59c1b95a5df73780",
+          "source": "docs/api.md",
+          "title": "API помощника разработчика, день 31",
+          "file": "api.md",
+          "section": "API помощника разработчика, день 31 > MCP",
+          "strategy": "structure",
+          "chunk_index": 4,
+          "start_char": 1464,
+          "end_char": 1908,
+          "char_count": 442,
+          "text": "## MCP\n\nСервер `day31-project`, transport stdio. Инструмент `get_project_context()` без\nаргументов возвращает `repository`, `branch`, `head`, `detached`.\nbranch равен текущей ветке Git; detached HEAD обозначается `(detached HEAD)`.\nhead — полный SHA из `git rev-parse HEAD`. Корень проекта задаётся серверу через\n`DAY31_REPO_ROOT`; клиент передаёт корень того же проекта, который индексирует.\nВызовы не содержат пользовательских shell-команд.",
+          "score": 0.788388,
+          "rerank_score": 0.632958,
+          "rank": 1
+        },
+        {
+          "chunk_id": "structure:90425308e334bfda2603",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Задайте пути к установленному llama-server и скачанному GGUF. > Реальные результаты, 12 октября 2026",
+          "strategy": "structure",
+          "chunk_index": 9,
+          "start_char": 5079,
+          "end_char": 6055,
+          "char_count": 976,
+          "text": "## Реальные результаты, 12 октября 2026\n\n20 тестов дня 31 и 14 регрессионных тестов дня 28. Проверены настоящий MCP stdio,\nсмена ветки и detached HEAD во временном репозитории, устаревание индекса,\nограничения HTTP и отсутствие смешивания API разных дней.\n\nПрогон CLI: 5 вопросов через E5 + MCP + Qwen3.8-27B, все 10 автоматических\nкритериев выполнены. Ещё 4 запроса сделаны через реальный headless Chrome и UI.\nОтветы о структуре и API сверены с показанными источниками; ветка main совпала\nс Git. На неизвестные бизнес-показатели получены отказы из-за отсутствия данных.\nВсе ответы завершились finish_reason=stop. Это небольшая приёмочная выборка,\nа не доказательство правильности произвольных ответов.\n\nПервая попытка с Qwen3-1.7B давала лишние отказы и смешивала API дня 24 с днём 31.\nОна сохранена в evidence/pilot-qwen1.7b.json. После этого ограничена область\nretrieval и добавлен отдельный system prompt помощника; более сильная модель\nпроверена уже с этими изменениями.",
+          "score": 0.788002,
+          "rerank_score": 0.632668,
+          "rank": 2
+        },
+        {
+          "chunk_id": "structure:a745855b71f45747d0c6",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Укажите адрес и alias своей запущенной локальной модели: > Корпус и поиск",
+          "strategy": "structure",
+          "chunk_index": 6,
+          "start_char": 3059,
+          "end_char": 3840,
+          "char_count": 779,
+          "text": "## Корпус и поиск\n\nКорневой README, README всех dayNN-* и Markdown из docs/. Скрытые папки,\nсекреты, исходники, evidence и видео не индексируются. Разбиение по секциям,\n1000 символов; E5 CPU, SQLite vectors + FTS5, top-6. Проверяется SHA-256 корпуса\nпри каждом запросе. Индекс создаётся локально в data/ и исключён из Git.\nВопросы без номера дня ищут в общей docs, корневом README и README дня 31.\nУкажите `day28` или «дня 28», чтобы добавить документацию нужного дня в поиск:\nэто предотвращает смешивание контрактов разных учебных приложений.\n\nMCP-сервер day31-project предоставляет только get_project_context без аргументов.\nОн выполняет фиксированные read-only git branch/rev-parse. Корень MCP совпадает\nс корнем индексируемого проекта. Ветка читается заново на каждый вопрос.",
+          "score": 0.784281,
+          "rerank_score": 0.629877,
+          "rank": 3
+        },
+        {
+          "chunk_id": "structure:a7a871cd884cfe4a52f1",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Структура проекта",
+          "strategy": "structure",
+          "chunk_index": 1,
+          "start_char": 35,
+          "end_char": 519,
+          "char_count": 482,
+          "text": "## Структура проекта\n\nЭто репозиторий ежедневных заданий AI Advent Challenge. Каждый день находится\nв отдельной папке `dayNN-slug/` со своим README, исходниками и зависимостями.\nКорневой `README.md` описывает запуск ежедневного workflow. `tools/` содержит\nобщие утилиты, включая `tools/llm/` и скрипты сдачи. `tests/` содержит тесты.\n`docs/` — общая документация проекта: архитектура, API помощника и схема данных.\n`ChallengeVideos/` — локальные видео; MP4/MOV/MKV исключены из Git.",
+          "score": 0.778295,
+          "rerank_score": 0.625388,
+          "rank": 4
+        },
+        {
+          "chunk_id": "structure:30ab2ac706f6a34fec5c",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "GEMINI_API_KEY задаётся в окружении, не в коде и не на видео.",
+          "strategy": "structure",
+          "chunk_index": 2,
+          "start_char": 798,
+          "end_char": 1790,
+          "char_count": 991,
+          "text": "# GEMINI_API_KEY задаётся в окружении, не в коде и не на видео.\n$env:LOCAL_LLM_MAX_TOKENS = '700'\n.\\.venv\\Scripts\\python.exe day31-developer-assistant\\server.py\n```\n\nДля бесплатного OpenRouter: DAY31_LLM_PROVIDER=openrouter,\nDAY31_LLM_MODEL=openrouter/free, OPENROUTER_API_KEY в окружении. Допускаются только\nopenrouter/free или модели с суффиксом :free; платного fallback нет. Бесплатные\nAPI могут возвращать 429; ошибка видна, модель не переключается скрытно.\nDAY31_LLM_PROVIDER=local сохраняет первоначальный локальный режим.\nУ Gemini наличие free tier зависит от проекта/квоты, приложением биллинг не определяется.\n\nОсновное видео теперь — короткая версия с русской озвучкой QwenTTS Voice Design:\n`ChallengeVideos/day31-demo-voiced.mp4`. Один вопрос демонстрирует README/docs,\nответ /help по источникам и текущую ветку через MCP. Подробности — DEMO.md.\nПервая версия без озвучки сохранена как расширенное техническое видео.\n\nPython 3.12+, Git, зависимости requirements.txt; локальный кеш",
+          "score": 0.778116,
+          "rerank_score": 0.625254,
+          "rank": 5
+        },
+        {
+          "chunk_id": "structure:e5ebc14a0b4e2e5be1ec",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Путь запроса помощника",
+          "strategy": "structure",
+          "chunk_index": 3,
+          "start_char": 1005,
+          "end_char": 1720,
+          "char_count": 713,
+          "text": "## Путь запроса помощника\n\n`/help <вопрос>` → assistant.py проверяет команду и свежесть корпуса → MCP-клиент\nзапускает project_mcp_server.py через stdio → initialize, tools/list, tools/call\n→ get_project_context возвращает ветку и HEAD → поиск top-6 чанков в SQLite\n→ документы и Git-контекст передаются выбранной LLM → ответ с источниками [n].\nКоманда `/help` без вопроса использует вопрос о структуре проекта.\nCLI и HTTP UI вызывают один Assistant, поэтому pipeline и дефолты одинаковы.\nГенератор выбирается явно: локальный API, Gemini или бесплатный OpenRouter.\nEmbeddings и чтение Git остаются локальными. Для cloud используется только\nвыбранный провайдер; при ошибке не происходит скрытого платного fallback.",
+          "score": 0.777199,
+          "rerank_score": 0.624566,
+          "rank": 6
+        }
+      ],
+      "retrieval_sec": 0.0373,
+      "retrieval_mode": "hybrid",
+      "project": {
+        "repository": "ai-advent-challenge",
+        "branch": "main",
+        "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+        "detached": false
+      },
+      "mcp": {
+        "server": "day31-project",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          {
+            "name": "get_project_context",
+            "description": "Текущая ветка и HEAD проекта. Только чтение Git, без аргументов.",
+            "inputSchema": {
+              "properties": {},
+              "type": "object",
+              "title": "get_project_contextArguments"
+            }
+          }
+        ],
+        "tool": "get_project_context",
+        "arguments": {},
+        "result": {
+          "repository": "ai-advent-challenge",
+          "branch": "main",
+          "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+          "detached": false
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ]
+      },
+      "answer": "В найденных документах недостаточно данных.",
+      "model": "gemini:gemini-3.5-flash-lite",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1757,
+        "output_tokens": 8
+      },
+      "generation_sec": 5.9088,
+      "answer_status": "unknown",
+      "citation_ids": [],
+      "citation_ids_valid": true,
+      "has_citations": false
+    },
+    {
+      "command": "/help Сколько платных подписчиков было у проекта на 1 сентября 2026 года?",
+      "question": "Сколько платных подписчиков было у проекта на 1 сентября 2026 года?",
+      "sources": [
+        {
+          "chunk_id": "structure:a745855b71f45747d0c6",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Укажите адрес и alias своей запущенной локальной модели: > Корпус и поиск",
+          "strategy": "structure",
+          "chunk_index": 6,
+          "start_char": 3059,
+          "end_char": 3840,
+          "char_count": 779,
+          "text": "## Корпус и поиск\n\nКорневой README, README всех dayNN-* и Markdown из docs/. Скрытые папки,\nсекреты, исходники, evidence и видео не индексируются. Разбиение по секциям,\n1000 символов; E5 CPU, SQLite vectors + FTS5, top-6. Проверяется SHA-256 корпуса\nпри каждом запросе. Индекс создаётся локально в data/ и исключён из Git.\nВопросы без номера дня ищут в общей docs, корневом README и README дня 31.\nУкажите `day28` или «дня 28», чтобы добавить документацию нужного дня в поиск:\nэто предотвращает смешивание контрактов разных учебных приложений.\n\nMCP-сервер day31-project предоставляет только get_project_context без аргументов.\nОн выполняет фиксированные read-only git branch/rev-parse. Корень MCP совпадает\nс корнем индексируемого проекта. Ветка читается заново на каждый вопрос.",
+          "score": 0.78293,
+          "rerank_score": 0.642753,
+          "rank": 1
+        },
+        {
+          "chunk_id": "structure:90425308e334bfda2603",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "Задайте пути к установленному llama-server и скачанному GGUF. > Реальные результаты, 12 октября 2026",
+          "strategy": "structure",
+          "chunk_index": 9,
+          "start_char": 5079,
+          "end_char": 6055,
+          "char_count": 976,
+          "text": "## Реальные результаты, 12 октября 2026\n\n20 тестов дня 31 и 14 регрессионных тестов дня 28. Проверены настоящий MCP stdio,\nсмена ветки и detached HEAD во временном репозитории, устаревание индекса,\nограничения HTTP и отсутствие смешивания API разных дней.\n\nПрогон CLI: 5 вопросов через E5 + MCP + Qwen3.8-27B, все 10 автоматических\nкритериев выполнены. Ещё 4 запроса сделаны через реальный headless Chrome и UI.\nОтветы о структуре и API сверены с показанными источниками; ветка main совпала\nс Git. На неизвестные бизнес-показатели получены отказы из-за отсутствия данных.\nВсе ответы завершились finish_reason=stop. Это небольшая приёмочная выборка,\nа не доказательство правильности произвольных ответов.\n\nПервая попытка с Qwen3-1.7B давала лишние отказы и смешивала API дня 24 с днём 31.\nОна сохранена в evidence/pilot-qwen1.7b.json. После этого ограничена область\nretrieval и добавлен отдельный system prompt помощника; более сильная модель\nпроверена уже с этими изменениями.",
+          "score": 0.782648,
+          "rerank_score": 0.642542,
+          "rank": 2
+        },
+        {
+          "chunk_id": "structure:30ab2ac706f6a34fec5c",
+          "source": "day31-developer-assistant/README.md",
+          "title": "День 31. Ассистент разработчика",
+          "file": "README.md",
+          "section": "GEMINI_API_KEY задаётся в окружении, не в коде и не на видео.",
+          "strategy": "structure",
+          "chunk_index": 2,
+          "start_char": 798,
+          "end_char": 1790,
+          "char_count": 991,
+          "text": "# GEMINI_API_KEY задаётся в окружении, не в коде и не на видео.\n$env:LOCAL_LLM_MAX_TOKENS = '700'\n.\\.venv\\Scripts\\python.exe day31-developer-assistant\\server.py\n```\n\nДля бесплатного OpenRouter: DAY31_LLM_PROVIDER=openrouter,\nDAY31_LLM_MODEL=openrouter/free, OPENROUTER_API_KEY в окружении. Допускаются только\nopenrouter/free или модели с суффиксом :free; платного fallback нет. Бесплатные\nAPI могут возвращать 429; ошибка видна, модель не переключается скрытно.\nDAY31_LLM_PROVIDER=local сохраняет первоначальный локальный режим.\nУ Gemini наличие free tier зависит от проекта/квоты, приложением биллинг не определяется.\n\nОсновное видео теперь — короткая версия с русской озвучкой QwenTTS Voice Design:\n`ChallengeVideos/day31-demo-voiced.mp4`. Один вопрос демонстрирует README/docs,\nответ /help по источникам и текущую ветку через MCP. Подробности — DEMO.md.\nПервая версия без озвучки сохранена как расширенное техническое видео.\n\nPython 3.12+, Git, зависимости requirements.txt; локальный кеш",
+          "score": 0.778495,
+          "rerank_score": 0.639427,
+          "rank": 3
+        },
+        {
+          "chunk_id": "structure:4bad59c1b95a5df73780",
+          "source": "docs/api.md",
+          "title": "API помощника разработчика, день 31",
+          "file": "api.md",
+          "section": "API помощника разработчика, день 31 > MCP",
+          "strategy": "structure",
+          "chunk_index": 4,
+          "start_char": 1464,
+          "end_char": 1908,
+          "char_count": 442,
+          "text": "## MCP\n\nСервер `day31-project`, transport stdio. Инструмент `get_project_context()` без\nаргументов возвращает `repository`, `branch`, `head`, `detached`.\nbranch равен текущей ветке Git; detached HEAD обозначается `(detached HEAD)`.\nhead — полный SHA из `git rev-parse HEAD`. Корень проекта задаётся серверу через\n`DAY31_REPO_ROOT`; клиент передаёт корень того же проекта, который индексирует.\nВызовы не содержат пользовательских shell-команд.",
+          "score": 0.773981,
+          "rerank_score": 0.608264,
+          "rank": 4
+        },
+        {
+          "chunk_id": "structure:e5ebc14a0b4e2e5be1ec",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Путь запроса помощника",
+          "strategy": "structure",
+          "chunk_index": 3,
+          "start_char": 1005,
+          "end_char": 1720,
+          "char_count": 713,
+          "text": "## Путь запроса помощника\n\n`/help <вопрос>` → assistant.py проверяет команду и свежесть корпуса → MCP-клиент\nзапускает project_mcp_server.py через stdio → initialize, tools/list, tools/call\n→ get_project_context возвращает ветку и HEAD → поиск top-6 чанков в SQLite\n→ документы и Git-контекст передаются выбранной LLM → ответ с источниками [n].\nКоманда `/help` без вопроса использует вопрос о структуре проекта.\nCLI и HTTP UI вызывают один Assistant, поэтому pipeline и дефолты одинаковы.\nГенератор выбирается явно: локальный API, Gemini или бесплатный OpenRouter.\nEmbeddings и чтение Git остаются локальными. Для cloud используется только\nвыбранный провайдер; при ошибке не происходит скрытого платного fallback.",
+          "score": 0.773884,
+          "rerank_score": 0.608191,
+          "rank": 5
+        },
+        {
+          "chunk_id": "structure:a7a871cd884cfe4a52f1",
+          "source": "docs/architecture.md",
+          "title": "Архитектура AI Advent Challenge",
+          "file": "architecture.md",
+          "section": "Архитектура AI Advent Challenge > Структура проекта",
+          "strategy": "structure",
+          "chunk_index": 1,
+          "start_char": 35,
+          "end_char": 519,
+          "char_count": 482,
+          "text": "## Структура проекта\n\nЭто репозиторий ежедневных заданий AI Advent Challenge. Каждый день находится\nв отдельной папке `dayNN-slug/` со своим README, исходниками и зависимостями.\nКорневой `README.md` описывает запуск ежедневного workflow. `tools/` содержит\nобщие утилиты, включая `tools/llm/` и скрипты сдачи. `tests/` содержит тесты.\n`docs/` — общая документация проекта: архитектура, API помощника и схема данных.\n`ChallengeVideos/` — локальные видео; MP4/MOV/MKV исключены из Git.",
+          "score": 0.772281,
+          "rerank_score": 0.606989,
+          "rank": 6
+        }
+      ],
+      "retrieval_sec": 0.0467,
+      "retrieval_mode": "hybrid",
+      "project": {
+        "repository": "ai-advent-challenge",
+        "branch": "main",
+        "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+        "detached": false
+      },
+      "mcp": {
+        "server": "day31-project",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          {
+            "name": "get_project_context",
+            "description": "Текущая ветка и HEAD проекта. Только чтение Git, без аргументов.",
+            "inputSchema": {
+              "properties": {},
+              "type": "object",
+              "title": "get_project_contextArguments"
+            }
+          }
+        ],
+        "tool": "get_project_context",
+        "arguments": {},
+        "result": {
+          "repository": "ai-advent-challenge",
+          "branch": "main",
+          "head": "d343e6770f73e2c4be6e8dfc009f8c87ae9eb30a",
+          "detached": false
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ]
+      },
+      "answer": "В найденных документах недостаточно данных.",
+      "model": "gemini:gemini-3.5-flash-lite",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1764,
+        "output_tokens": 8
+      },
+      "generation_sec": 2.5929,
+      "answer_status": "unknown",
+      "citation_ids": [],
+      "citation_ids_valid": true,
+      "has_citations": false
+    }
+  ],
+  "checks": {
+    "root_readme_indexed": true,
+    "docs_indexed": true,
+    "semantic_model": true,
+    "live_branch_matches": true,
+    "real_mcp": true,
+    "not_truncated": true,
+    "citation_numbers_valid": true,
+    "structure_has_citations": true,
+    "api_has_citations": true,
+    "unknown_refusal": true
+  },
+  "manual_review": {
+    "status": "completed",
+    "reviewer": "Codex",
+    "notes": "Gemini answers about project structure and API checked against retrieved sources; both unknown business metrics refused; current branch matches real Git."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "tests_passed": 39,
+  "day31_tests": 25,
+  "day28_regressions": 14,
+  "cli_checks": {
+    "root_readme_indexed": true,
+    "docs_indexed": true,
+    "semantic_model": true,
+    "live_branch_matches": true,
+    "real_mcp": true,
+    "not_truncated": true,
+    "citation_numbers_valid": true,
+    "structure_has_citations": true,
+    "api_has_citations": true,
+    "unknown_refusal": true
+  },
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "free_openrouter": "Basic request succeeded; full RAG request errored; no paid fallback",
+  "voice": "ComfyUI AILab_Qwen3TTSVoiceDesign_Advanced; Russian; five actual generated clips",
+  "voice_qa": "Local Whisper large-v3-turbo transcriptions manually compared with narration.json; abbreviations normalized differently by ASR",
+  "video": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "54.696333",
+      "size": "1958519"
+    }
+  },
+  "video_sha256": "1426ab44048676b9abba4408757a5d327bf3942871b18ae416d0ef59f844c361",
+  "full_decode": "passed",
+  "visual_qa": "Actual UI, source and MCP frames reviewed",
+  "syntax": "Python compileall and Node --check passed",
+  "source_scope": "README + docs; named days included explicitly"
+}

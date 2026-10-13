@@ -1,0 +1,36 @@
+{
+  "video": "G:\\AIModels\\ai-advent-challenge\\ChallengeVideos\\day31-demo-voiced.mp4",
+  "model": "gemini:gemini-3.5-flash-lite",
+  "scenes": [
+    {
+      "id": "intro",
+      "duration_sec": 7.206874999999999,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\short\\00-intro.png",
+      "audio": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\narration\\intro.flac"
+    },
+    {
+      "id": "question",
+      "duration_sec": 11.286875,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\short\\01-question.png",
+      "audio": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\narration\\question.flac"
+    },
+    {
+      "id": "source",
+      "duration_sec": 10.246875,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\short\\02-source.png",
+      "audio": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\narration\\source.flac"
+    },
+    {
+      "id": "answer",
+      "duration_sec": 10.566875,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\short\\03-answer.png",
+      "audio": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\narration\\answer.flac"
+    },
+    {
+      "id": "mcp",
+      "duration_sec": 15.366875,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\short\\04-mcp.png",
+      "audio": "G:\\AIModels\\ai-advent-challenge\\day31-developer-assistant\\video-frames\\narration\\mcp.flac"
+    }
+  ]
+}

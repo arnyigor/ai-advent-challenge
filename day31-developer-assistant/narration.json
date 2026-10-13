@@ -1,0 +1,10 @@
+{
+  "voice_description": "A calm Russian male narrator in his thirties. Clear native Russian pronunciation, warm medium-low voice, natural conversational delivery, slightly brisk pace. Explain a software demo simply and confidently. No dramatic acting, no music, no whispering.",
+  "scenes": [
+    {"id":"intro","title":"День 31 · Ассистент разработчика","text":"День тридцать первый. Покажу, как ассистент отвечает о моём проекте, используя документацию и текущее состояние гит.","image":"intro"},
+    {"id":"question","title":"1. README + docs подключены к поиску","text":"В поиск подключены ридми и папка докс. Задаю команду хелп: где находятся документация, поиск и эм си пи? Какая сейчас ветка?","image":"short-question.png"},
+    {"id":"source","title":"2. Найден реальный фрагмент docs","text":"Поиск находит фрагмент документации проекта. В нём прямо указано, в каких папках находятся индексатор, поиск и сервер эм си пи.","image":"short-source.png"},
+    {"id":"answer","title":"3. /help отвечает о структуре проекта","text":"На основе найденных документов ассистент даёт короткий ответ. Рядом видны ссылки на источники, поэтому ответ можно сразу проверить.","image":"short-answer.png"},
+    {"id":"mcp","title":"4. Текущая ветка прочитана через MCP","text":"Ветка мэйн получена отдельно, через настоящий вызов эм си пи. Это живые данные гит. Получились документы в поиске, текущая ветка и работающая команда хелп.","image":"short-mcp.png"}
+  ]
+}
