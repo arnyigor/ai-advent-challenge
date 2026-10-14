@@ -1,0 +1,5 @@
+data/
+.venv/
+video-frames/
+*.log
+*.env

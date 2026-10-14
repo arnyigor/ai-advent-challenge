@@ -1,0 +1,11 @@
+{
+  "https_validated": true,
+  "http_redirect": true,
+  "service_restart": true,
+  "purchase_persisted": true,
+  "chat_persisted": true,
+  "export_isolated": true,
+  "video_range_playback": true,
+  "day18_healthy": true,
+  "services": "active\nactive\nactive\nenabled\nenabled\nMemoryCurrent=59359232\n"
+}

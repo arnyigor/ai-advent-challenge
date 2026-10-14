@@ -1,0 +1,1158 @@
+{
+  "url": "https://srokok.176.53.175.196.sslip.io/",
+  "captured_at": "2026-10-14T13:02:49.192Z",
+  "kind": "continuous browser recording, real public API and LLM responses",
+  "checks": {
+    "purchase_persisted": true,
+    "history_persisted": true,
+    "mobile_no_overflow": true,
+    "js_errors": 0
+  },
+  "answers": [
+    {
+      "paragraphs": [
+        {
+          "text": "По событиям тикета SK-1042 причина ошибки в том, что ссылка для входа была отправлена в 09:12, а вы перешли по ней в 09:35. Это 23 минуты, тогда как срок действия ссылки составляет 15 минут, поэтому система вернула код LINK_EXPIRED.",
+          "source_ids": [
+            "auth-1"
+          ]
+        },
+        {
+          "text": "Чтобы войти, запросите новую ссылку и откройте последнее письмо в течение 15 минут. Старые письма использовать не нужно. Если новая ссылка не приходит, проверьте папку «Спам». Обратите внимание, что в публичной версии v1 полноценная отправка email и вход по ссылке не реализованы: эти события используются только в демонстрационных тикетах, а сам продукт работает через cookie без регистрации.",
+          "source_ids": [
+            "auth-1"
+          ]
+        }
+      ],
+      "needs_human": false,
+      "provider": "wormsoft",
+      "model": "qwen3.8-27b",
+      "usage": {
+        "prompt_tokens": 1557,
+        "total_tokens": 1800,
+        "completion_tokens": 243,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "mode": "live_llm",
+      "sources": [
+        {
+          "id": "auth-1",
+          "document_id": "auth",
+          "title": "Вход и браузерная сессия",
+          "section": "LINK_EXPIRED: ссылка для входа устарела",
+          "text": "Код LINK_EXPIRED означает, что срок ссылки истёк. В демонстрационной CRM ссылка для входа действует 15 минут с момента отправки. Запросите новую ссылку и откройте последнее письмо в течение 15 минут. Старые письма больше не используйте. Если новой ссылки нет, проверьте папку «Спам». Ассистент не отправляет ссылку сам и не может изменить срок её действия. Полноценная отправка email и вход по ссылке не реализованы в публичной версии v1: эти события используются только в демонстрационных тикетах.",
+          "url": "/api/knowledge/auth",
+          "score": 11.321
+        },
+        {
+          "id": "auth-2",
+          "document_id": "auth",
+          "title": "Вход и браузерная сессия",
+          "section": "SESSION_MISMATCH: ссылка открыта в другом браузере",
+          "text": "Код SESSION_MISMATCH в демонстрационной CRM означает несовпадение браузерной сессии. Ссылка привязана к браузеру, где был запрошен вход. Если запрос сделан на компьютере, а письмо открыто на телефоне, вернитесь в исходный браузер на компьютере и откройте там свежую ссылку. Можно начать новый запрос входа на нужном устройстве. Не очищайте cookie исходного браузера: в v1 с ними связан список покупок. При повторении ошибки сообщите поддержке браузер, устройство и код ошибки; не присылайте саму ссылку входа. Этот сценарий описывает демонстрационные события CRM, а не действующий email-login.",
+          "url": "/api/knowledge/auth",
+          "score": 6.374
+        },
+        {
+          "id": "warranty-1",
+          "document_id": "warranty",
+          "title": "Расчёт гарантии",
+          "section": "Календарные месяцы и конец месяца",
+          "text": "Дата окончания рассчитывается прибавлением указанного числа календарных месяцев к дате покупки. Если такого дня в целевом месяце нет, используется последний день этого месяца. Например, 31 января 2026 + 1 месяц = 28 февраля 2026; 31 января 2028 + 1 месяц = 29 февраля 2028; 29 февраля 2024 + 12 месяцев = 28 февраля 2025. Это ожидаемый расчёт, а не потеря дней в базе.",
+          "url": "/api/knowledge/warranty",
+          "score": 1.107
+        },
+        {
+          "id": "warranty-2",
+          "document_id": "warranty",
+          "title": "Расчёт гарантии",
+          "section": "Статусы гарантии",
+          "text": "«Активна» — до даты окончания больше 30 дней. «Истекает скоро» — осталось от 0 до 30 дней включительно. «Истекла» — дата окончания раньше сегодняшней даты. День окончания включён в срок. Для определения текущего дня сервер использует Asia/Yekaterinburg. В интерфейсе можно отфильтровать ближайшие окончания. Срок вводит сам пользователь по своим документам; СрокОК не подтверждает юридические обязательства магазина и не принимает гарантийные заявки.",
+          "url": "/api/knowledge/warranty",
+          "score": 0.839
+        }
+      ],
+      "mcp": {
+        "server": "srokok-crm",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          "list_tickets",
+          "get_ticket_context"
+        ],
+        "tool": "get_ticket_context",
+        "arguments": {
+          "ticket_id": "SK-1042"
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ],
+        "elapsed_ms": 776
+      },
+      "index_version": "4e2340e87a87",
+      "ticket_id": "SK-1042",
+      "elapsed_ms": 4209
+    },
+    {
+      "paragraphs": [
+        {
+          "text": "По событиям тикета SK-1043 причина ошибки — код SESSION_MISMATCH: запрос входа был сделан в Chrome на компьютере, а ссылка из письма была открыта в Safari на телефоне. Ссылка для входа привязана к браузеру, в котором был начат процесс авторизации, поэтому она не сработает в другом браузере или на другом устройстве.",
+          "source_ids": [
+            "auth-2"
+          ]
+        },
+        {
+          "text": "Чтобы войти, вернитесь в браузер Chrome на компьютере и откройте там свежую ссылку из последнего письма. Либо начните новый запрос входа непосредственно на телефоне в Safari. Не очищайте cookie в исходном браузере, так как в версии v1 с ними связан список покупок. Обратите внимание, что описанный сценарий с email-ссылками является демонстрационным для CRM; в публичной версии v1 вход выполняется через cookie без регистрации, а полноценная отправка email не реализована.",
+          "source_ids": [
+            "auth-2",
+            "auth-1"
+          ]
+        }
+      ],
+      "needs_human": false,
+      "provider": "wormsoft",
+      "model": "qwen3.8-27b",
+      "usage": {
+        "prompt_tokens": 1593,
+        "total_tokens": 1877,
+        "completion_tokens": 284,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "mode": "live_llm",
+      "sources": [
+        {
+          "id": "auth-2",
+          "document_id": "auth",
+          "title": "Вход и браузерная сессия",
+          "section": "SESSION_MISMATCH: ссылка открыта в другом браузере",
+          "text": "Код SESSION_MISMATCH в демонстрационной CRM означает несовпадение браузерной сессии. Ссылка привязана к браузеру, где был запрошен вход. Если запрос сделан на компьютере, а письмо открыто на телефоне, вернитесь в исходный браузер на компьютере и откройте там свежую ссылку. Можно начать новый запрос входа на нужном устройстве. Не очищайте cookie исходного браузера: в v1 с ними связан список покупок. При повторении ошибки сообщите поддержке браузер, устройство и код ошибки; не присылайте саму ссылку входа. Этот сценарий описывает демонстрационные события CRM, а не действующий email-login.",
+          "url": "/api/knowledge/auth",
+          "score": 11.842
+        },
+        {
+          "id": "auth-1",
+          "document_id": "auth",
+          "title": "Вход и браузерная сессия",
+          "section": "LINK_EXPIRED: ссылка для входа устарела",
+          "text": "Код LINK_EXPIRED означает, что срок ссылки истёк. В демонстрационной CRM ссылка для входа действует 15 минут с момента отправки. Запросите новую ссылку и откройте последнее письмо в течение 15 минут. Старые письма больше не используйте. Если новой ссылки нет, проверьте папку «Спам». Ассистент не отправляет ссылку сам и не может изменить срок её действия. Полноценная отправка email и вход по ссылке не реализованы в публичной версии v1: эти события используются только в демонстрационных тикетах.",
+          "url": "/api/knowledge/auth",
+          "score": 7.373
+        },
+        {
+          "id": "purchases-2",
+          "document_id": "purchases",
+          "title": "Покупки и сохранение",
+          "section": "Покупка исчезла в другом браузере",
+          "text": "Список покупок привязан к случайной cookie сессии. Firefox и Chrome имеют разные cookie; между браузерами и устройствами в v1 нет синхронизации. Вернитесь в тот браузер и профиль, где была сохранена покупка. Если исходная cookie сохранилась, данные останутся доступны после обновления страницы и перезапуска сервера. Удалённую cookie приложение не восстанавливает. По одному имени клиента или демонстрационному тикету ассистент не может открыть чужой список. Для резервной копии используйте экспорт JSON.",
+          "url": "/api/knowledge/purchases",
+          "score": 1.668
+        },
+        {
+          "id": "warranty-1",
+          "document_id": "warranty",
+          "title": "Расчёт гарантии",
+          "section": "Календарные месяцы и конец месяца",
+          "text": "Дата окончания рассчитывается прибавлением указанного числа календарных месяцев к дате покупки. Если такого дня в целевом месяце нет, используется последний день этого месяца. Например, 31 января 2026 + 1 месяц = 28 февраля 2026; 31 января 2028 + 1 месяц = 29 февраля 2028; 29 февраля 2024 + 12 месяцев = 28 февраля 2025. Это ожидаемый расчёт, а не потеря дней в базе.",
+          "url": "/api/knowledge/warranty",
+          "score": 1.491
+        }
+      ],
+      "mcp": {
+        "server": "srokok-crm",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          "list_tickets",
+          "get_ticket_context"
+        ],
+        "tool": "get_ticket_context",
+        "arguments": {
+          "ticket_id": "SK-1043"
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ],
+        "elapsed_ms": 754
+      },
+      "index_version": "4e2340e87a87",
+      "ticket_id": "SK-1043",
+      "elapsed_ms": 5662
+    },
+    {
+      "paragraphs": [
+        {
+          "text": "Нет, cookie удалять не нужно. По событиям тикета SK-1043 ошибка SESSION_MISMATCH возникла из-за того, что ссылка из письма была открыта в Safari на телефоне, хотя запрос входа был сделан в Chrome на компьютере. Чтобы решить проблему, вернитесь в браузер Chrome на компьютере и откройте там свежую ссылку, либо начните новый запрос входа непосредственно на телефоне в Safari.",
+          "source_ids": [
+            "auth-2"
+          ]
+        },
+        {
+          "text": "Важно не очищать cookie в исходном браузере, так как в версии v1 именно с ними связан ваш список покупок. Удаление cookie приведёт к потере связи с текущим кабинетом и сохранёнными данными, которые приложение не сможет восстановить. Если хотите перестраховаться, заранее экспортируйте важные записи в формате JSON.",
+          "source_ids": [
+            "purchases-2",
+            "auth-3",
+            "export-2"
+          ]
+        }
+      ],
+      "needs_human": false,
+      "provider": "wormsoft",
+      "model": "qwen3.8-27b",
+      "usage": {
+        "prompt_tokens": 1754,
+        "total_tokens": 1959,
+        "completion_tokens": 205,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "mode": "live_llm",
+      "sources": [
+        {
+          "id": "auth-2",
+          "document_id": "auth",
+          "title": "Вход и браузерная сессия",
+          "section": "SESSION_MISMATCH: ссылка открыта в другом браузере",
+          "text": "Код SESSION_MISMATCH в демонстрационной CRM означает несовпадение браузерной сессии. Ссылка привязана к браузеру, где был запрошен вход. Если запрос сделан на компьютере, а письмо открыто на телефоне, вернитесь в исходный браузер на компьютере и откройте там свежую ссылку. Можно начать новый запрос входа на нужном устройстве. Не очищайте cookie исходного браузера: в v1 с ними связан список покупок. При повторении ошибки сообщите поддержке браузер, устройство и код ошибки; не присылайте саму ссылку входа. Этот сценарий описывает демонстрационные события CRM, а не действующий email-login.",
+          "url": "/api/knowledge/auth",
+          "score": 9.515
+        },
+        {
+          "id": "purchases-2",
+          "document_id": "purchases",
+          "title": "Покупки и сохранение",
+          "section": "Покупка исчезла в другом браузере",
+          "text": "Список покупок привязан к случайной cookie сессии. Firefox и Chrome имеют разные cookie; между браузерами и устройствами в v1 нет синхронизации. Вернитесь в тот браузер и профиль, где была сохранена покупка. Если исходная cookie сохранилась, данные останутся доступны после обновления страницы и перезапуска сервера. Удалённую cookie приложение не восстанавливает. По одному имени клиента или демонстрационному тикету ассистент не может открыть чужой список. Для резервной копии используйте экспорт JSON.",
+          "url": "/api/knowledge/purchases",
+          "score": 5.399
+        },
+        {
+          "id": "auth-3",
+          "document_id": "auth",
+          "title": "Вход и браузерная сессия",
+          "section": "Как устроен доступ в работающей версии v1",
+          "text": "В публичном СрокОК v1 кабинет доступен без регистрации. Сервер создаёт случайную сессию с cookie HttpOnly. Покупки и история поддержки связаны с этой сессией. Эта cookie не является учётной записью с восстановлением доступа. Открытие другого браузера, режима инкогнито или удаление cookie создаёт другой пустой кабинет. Не очищайте cookie ради исправления интерфейса. Экспортируйте важный список заранее. Все имена, адреса и события тикетов — вымышленные демонстрационные данные.",
+          "url": "/api/knowledge/auth",
+          "score": 4.253
+        },
+        {
+          "id": "export-2",
+          "document_id": "export",
+          "title": "Экспорт и резервная копия",
+          "section": "Сохранность данных",
+          "text": "Покупки и история чатов хранятся в SQLite на VPS и переживают перезапуск службы. Доступ к ним определяется cookie браузера; удаление cookie теряет связь со своим кабинетом. Экспортируйте важные записи до очистки браузера. Публичная версия демонстрационная: не используйте её как единственное хранилище важных документов.",
+          "url": "/api/knowledge/export",
+          "score": 3.35
+        }
+      ],
+      "mcp": {
+        "server": "srokok-crm",
+        "protocol_version": "2025-11-25",
+        "catalog": [
+          "list_tickets",
+          "get_ticket_context"
+        ],
+        "tool": "get_ticket_context",
+        "arguments": {
+          "ticket_id": "SK-1043"
+        },
+        "steps": [
+          "initialize",
+          "tools/list",
+          "tools/call"
+        ],
+        "elapsed_ms": 740
+      },
+      "index_version": "4e2340e87a87",
+      "ticket_id": "SK-1043",
+      "elapsed_ms": 4266
+    }
+  ],
+  "frames": [
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000000.jpg",
+      "timestamp": 1791982883591
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000001.jpg",
+      "timestamp": 1791982883952
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000002.jpg",
+      "timestamp": 1791982884290
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000003.jpg",
+      "timestamp": 1791982884619
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000004.jpg",
+      "timestamp": 1791982884952
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000005.jpg",
+      "timestamp": 1791982885283
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000006.jpg",
+      "timestamp": 1791982885616
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000007.jpg",
+      "timestamp": 1791982885934
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000008.jpg",
+      "timestamp": 1791982886283
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000009.jpg",
+      "timestamp": 1791982886616
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000010.jpg",
+      "timestamp": 1791982886950
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000011.jpg",
+      "timestamp": 1791982887282
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000012.jpg",
+      "timestamp": 1791982887638
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000013.jpg",
+      "timestamp": 1791982888165
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000014.jpg",
+      "timestamp": 1791982888655
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000015.jpg",
+      "timestamp": 1791982889162
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000016.jpg",
+      "timestamp": 1791982889683
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000017.jpg",
+      "timestamp": 1791982890187
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000018.jpg",
+      "timestamp": 1791982890679
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000019.jpg",
+      "timestamp": 1791982891209
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000020.jpg",
+      "timestamp": 1791982891860
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000021.jpg",
+      "timestamp": 1791982892192
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000022.jpg",
+      "timestamp": 1791982892525
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000023.jpg",
+      "timestamp": 1791982892865
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000024.jpg",
+      "timestamp": 1791982893188
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000025.jpg",
+      "timestamp": 1791982893520
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000026.jpg",
+      "timestamp": 1791982893873
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000027.jpg",
+      "timestamp": 1791982894203
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000028.jpg",
+      "timestamp": 1791982894544
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000029.jpg",
+      "timestamp": 1791982894877
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000030.jpg",
+      "timestamp": 1791982895210
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000031.jpg",
+      "timestamp": 1791982895540
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000032.jpg",
+      "timestamp": 1791982895875
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000033.jpg",
+      "timestamp": 1791982896256
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000034.jpg",
+      "timestamp": 1791982896573
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000035.jpg",
+      "timestamp": 1791982896907
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000036.jpg",
+      "timestamp": 1791982897271
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000037.jpg",
+      "timestamp": 1791982897636
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000038.jpg",
+      "timestamp": 1791982897966
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000039.jpg",
+      "timestamp": 1791982898312
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000040.jpg",
+      "timestamp": 1791982898631
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000041.jpg",
+      "timestamp": 1791982898981
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000042.jpg",
+      "timestamp": 1791982899329
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000043.jpg",
+      "timestamp": 1791982899670
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000044.jpg",
+      "timestamp": 1791982900033
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000045.jpg",
+      "timestamp": 1791982900392
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000046.jpg",
+      "timestamp": 1791982900801
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000047.jpg",
+      "timestamp": 1791982901179
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000048.jpg",
+      "timestamp": 1791982901528
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000049.jpg",
+      "timestamp": 1791982901878
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000050.jpg",
+      "timestamp": 1791982902193
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000051.jpg",
+      "timestamp": 1791982902510
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000052.jpg",
+      "timestamp": 1791982902858
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000053.jpg",
+      "timestamp": 1791982903241
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000054.jpg",
+      "timestamp": 1791982903637
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000055.jpg",
+      "timestamp": 1791982904031
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000056.jpg",
+      "timestamp": 1791982904428
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000057.jpg",
+      "timestamp": 1791982904825
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000058.jpg",
+      "timestamp": 1791982905220
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000059.jpg",
+      "timestamp": 1791982905612
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000060.jpg",
+      "timestamp": 1791982905961
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000061.jpg",
+      "timestamp": 1791982906310
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000062.jpg",
+      "timestamp": 1791982906687
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000063.jpg",
+      "timestamp": 1791982907047
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000064.jpg",
+      "timestamp": 1791982907421
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000065.jpg",
+      "timestamp": 1791982907750
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000066.jpg",
+      "timestamp": 1791982908094
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000067.jpg",
+      "timestamp": 1791982908439
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000068.jpg",
+      "timestamp": 1791982908804
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000069.jpg",
+      "timestamp": 1791982909166
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000070.jpg",
+      "timestamp": 1791982909519
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000071.jpg",
+      "timestamp": 1791982909897
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000072.jpg",
+      "timestamp": 1791982910245
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000073.jpg",
+      "timestamp": 1791982910609
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000074.jpg",
+      "timestamp": 1791982910957
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000075.jpg",
+      "timestamp": 1791982911308
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000076.jpg",
+      "timestamp": 1791982911656
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000077.jpg",
+      "timestamp": 1791982911988
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000078.jpg",
+      "timestamp": 1791982912335
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000079.jpg",
+      "timestamp": 1791982912666
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000080.jpg",
+      "timestamp": 1791982913029
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000081.jpg",
+      "timestamp": 1791982913371
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000082.jpg",
+      "timestamp": 1791982913719
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000083.jpg",
+      "timestamp": 1791982914051
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000084.jpg",
+      "timestamp": 1791982914429
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000085.jpg",
+      "timestamp": 1791982914758
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000086.jpg",
+      "timestamp": 1791982915103
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000087.jpg",
+      "timestamp": 1791982915479
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000088.jpg",
+      "timestamp": 1791982915810
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000089.jpg",
+      "timestamp": 1791982916171
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000090.jpg",
+      "timestamp": 1791982916504
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000091.jpg",
+      "timestamp": 1791982916836
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000092.jpg",
+      "timestamp": 1791982917167
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000093.jpg",
+      "timestamp": 1791982917703
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000094.jpg",
+      "timestamp": 1791982918176
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000095.jpg",
+      "timestamp": 1791982918642
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000096.jpg",
+      "timestamp": 1791982919130
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000097.jpg",
+      "timestamp": 1791982919620
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000098.jpg",
+      "timestamp": 1791982920094
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000099.jpg",
+      "timestamp": 1791982920576
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000100.jpg",
+      "timestamp": 1791982921079
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000101.jpg",
+      "timestamp": 1791982921566
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000102.jpg",
+      "timestamp": 1791982922053
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000103.jpg",
+      "timestamp": 1791982922554
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000104.jpg",
+      "timestamp": 1791982923057
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000105.jpg",
+      "timestamp": 1791982923555
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000106.jpg",
+      "timestamp": 1791982924056
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000107.jpg",
+      "timestamp": 1791982924402
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000108.jpg",
+      "timestamp": 1791982924747
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000109.jpg",
+      "timestamp": 1791982925076
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000110.jpg",
+      "timestamp": 1791982925500
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000111.jpg",
+      "timestamp": 1791982925841
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000112.jpg",
+      "timestamp": 1791982926169
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000113.jpg",
+      "timestamp": 1791982926513
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000114.jpg",
+      "timestamp": 1791982926844
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000115.jpg",
+      "timestamp": 1791982927186
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000116.jpg",
+      "timestamp": 1791982927516
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000117.jpg",
+      "timestamp": 1791982927845
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000118.jpg",
+      "timestamp": 1791982928191
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000119.jpg",
+      "timestamp": 1791982928524
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000120.jpg",
+      "timestamp": 1791982928867
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000121.jpg",
+      "timestamp": 1791982929194
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000122.jpg",
+      "timestamp": 1791982929523
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000123.jpg",
+      "timestamp": 1791982929853
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000124.jpg",
+      "timestamp": 1791982930197
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000125.jpg",
+      "timestamp": 1791982930558
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000126.jpg",
+      "timestamp": 1791982930887
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000127.jpg",
+      "timestamp": 1791982931218
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000128.jpg",
+      "timestamp": 1791982931564
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000129.jpg",
+      "timestamp": 1791982931925
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000130.jpg",
+      "timestamp": 1791982932287
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000131.jpg",
+      "timestamp": 1791982932650
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000132.jpg",
+      "timestamp": 1791982933024
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000133.jpg",
+      "timestamp": 1791982933382
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000134.jpg",
+      "timestamp": 1791982933741
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000135.jpg",
+      "timestamp": 1791982934084
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000136.jpg",
+      "timestamp": 1791982934445
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000137.jpg",
+      "timestamp": 1791982934803
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000138.jpg",
+      "timestamp": 1791982935161
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000139.jpg",
+      "timestamp": 1791982935520
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000140.jpg",
+      "timestamp": 1791982935897
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000141.jpg",
+      "timestamp": 1791982936255
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000142.jpg",
+      "timestamp": 1791982936587
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000143.jpg",
+      "timestamp": 1791982936960
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000144.jpg",
+      "timestamp": 1791982937287
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000145.jpg",
+      "timestamp": 1791982937619
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000146.jpg",
+      "timestamp": 1791982937941
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000147.jpg",
+      "timestamp": 1791982938286
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000148.jpg",
+      "timestamp": 1791982938626
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000149.jpg",
+      "timestamp": 1791982938986
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000150.jpg",
+      "timestamp": 1791982939313
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000151.jpg",
+      "timestamp": 1791982939641
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000152.jpg",
+      "timestamp": 1791982939987
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000153.jpg",
+      "timestamp": 1791982940331
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000154.jpg",
+      "timestamp": 1791982940661
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000155.jpg",
+      "timestamp": 1791982940977
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000156.jpg",
+      "timestamp": 1791982941322
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000157.jpg",
+      "timestamp": 1791982941663
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000158.jpg",
+      "timestamp": 1791982942011
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000159.jpg",
+      "timestamp": 1791982942341
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000160.jpg",
+      "timestamp": 1791982942687
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000161.jpg",
+      "timestamp": 1791982943019
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000162.jpg",
+      "timestamp": 1791982943350
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000163.jpg",
+      "timestamp": 1791982943694
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000164.jpg",
+      "timestamp": 1791982944024
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000165.jpg",
+      "timestamp": 1791982944350
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000166.jpg",
+      "timestamp": 1791982944707
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000167.jpg",
+      "timestamp": 1791982945067
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000168.jpg",
+      "timestamp": 1791982945412
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000169.jpg",
+      "timestamp": 1791982945755
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000170.jpg",
+      "timestamp": 1791982946084
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000171.jpg",
+      "timestamp": 1791982946429
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000172.jpg",
+      "timestamp": 1791982946772
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000173.jpg",
+      "timestamp": 1791982947100
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000174.jpg",
+      "timestamp": 1791982947429
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000175.jpg",
+      "timestamp": 1791982947759
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000176.jpg",
+      "timestamp": 1791982948101
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000177.jpg",
+      "timestamp": 1791982948445
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000178.jpg",
+      "timestamp": 1791982948788
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000179.jpg",
+      "timestamp": 1791982949119
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000180.jpg",
+      "timestamp": 1791982949445
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000181.jpg",
+      "timestamp": 1791982949829
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000182.jpg",
+      "timestamp": 1791982950191
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000183.jpg",
+      "timestamp": 1791982950538
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000184.jpg",
+      "timestamp": 1791982950856
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000185.jpg",
+      "timestamp": 1791982951185
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000186.jpg",
+      "timestamp": 1791982951518
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000187.jpg",
+      "timestamp": 1791982951869
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000188.jpg",
+      "timestamp": 1791982952231
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000189.jpg",
+      "timestamp": 1791982952596
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000190.jpg",
+      "timestamp": 1791982953043
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000191.jpg",
+      "timestamp": 1791982953388
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000192.jpg",
+      "timestamp": 1791982953739
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000193.jpg",
+      "timestamp": 1791982954116
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000194.jpg",
+      "timestamp": 1791982954492
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000195.jpg",
+      "timestamp": 1791982954854
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000196.jpg",
+      "timestamp": 1791982955200
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000197.jpg",
+      "timestamp": 1791982955557
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000198.jpg",
+      "timestamp": 1791982955917
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000199.jpg",
+      "timestamp": 1791982956290
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000200.jpg",
+      "timestamp": 1791982956635
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000201.jpg",
+      "timestamp": 1791982956992
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000202.jpg",
+      "timestamp": 1791982957355
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000203.jpg",
+      "timestamp": 1791982957692
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000204.jpg",
+      "timestamp": 1791982958023
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000205.jpg",
+      "timestamp": 1791982958364
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000206.jpg",
+      "timestamp": 1791982958681
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000207.jpg",
+      "timestamp": 1791982959017
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000208.jpg",
+      "timestamp": 1791982959333
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000209.jpg",
+      "timestamp": 1791982959665
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000210.jpg",
+      "timestamp": 1791982960005
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000211.jpg",
+      "timestamp": 1791982960345
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000212.jpg",
+      "timestamp": 1791982960688
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000213.jpg",
+      "timestamp": 1791982961013
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000214.jpg",
+      "timestamp": 1791982961376
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000215.jpg",
+      "timestamp": 1791982961720
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000216.jpg",
+      "timestamp": 1791982962057
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000217.jpg",
+      "timestamp": 1791982962401
+    },
+    {
+      "file": "G:\\AIModels\\ai-advent-challenge\\day33-support-assistant\\video-frames\\live-1791982879409\\000218.jpg",
+      "timestamp": 1791982962730
+    }
+  ]
+}

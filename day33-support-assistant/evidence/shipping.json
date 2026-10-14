@@ -1,0 +1,13 @@
+{
+  "day": 33,
+  "full_suite": {"passed": 457, "warnings": 1, "duration_sec": 155.74},
+  "video_local": "ChallengeVideos/day33-demo.mp4",
+  "video_remote": "yandex_challenge:AI Advent Challenge/Day 33/day33-demo.mp4",
+  "video_url": "https://yadi.sk/i/b3btocsGf_yvEw",
+  "local_bytes": 1746179,
+  "remote_bytes": 1746179,
+  "byte_sizes_match": true,
+  "public_vps_video_sha256_match": true,
+  "temporary_cleanup": "Automatic policy rejected Remove-Item with blocked by policy. Generated video-frames remain local, ignored by Git and excluded from source ZIP.",
+  "unrelated_changes": "Existing user changes outside day33 and its test are excluded from the commit."
+}

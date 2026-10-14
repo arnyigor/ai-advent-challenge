@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Calendar month boundaries and leap years",
+    "Strict JSON parsing accepts a complete code fence, rejects surrounding instructions",
+    "Real separate MCP process: discovery, calls, different CRM users",
+    "RAG auth/export retrieval and empty out-of-domain search",
+    "Default application, bootstrap and unknown IDs",
+    "Purchases persist and export; session isolation, validation, CSRF and request size",
+    "Chat history scoped by visitor and ticket; follow-up receives its own history",
+    "Provider failure is explicit, no fake reply and no corrupted history",
+    "Per-session rate limit",
+    "Session cookie and CSP headers",
+    "Persistent daily AI budget"
+  ],
+  "passed": 11,
+  "model_calls": "fake provider only for deterministic API isolation tests; real MCP subprocess for all CRM reads"
+}
