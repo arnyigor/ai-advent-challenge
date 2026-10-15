@@ -1,0 +1,65 @@
+:root {
+  --bg: #f4f5f7; --panel: #ffffff; --ink: #1d2129; --muted: #6b7280;
+  --accent: #2563eb; --ok: #15803d; --err: #b91c1c; --line: #e5e7eb;
+  --mono: "Cascadia Code", Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+header { background: #111827; color: #f9fafb; padding: 22px 28px; }
+header h1 { margin: 0 0 6px; font-size: 22px; }
+.subtitle { margin: 0 0 12px; color: #cbd5e1; font-size: 14px; max-width: 900px; }
+.badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.badge { background: #1f2937; border: 1px solid #374151; color: #e5e7eb;
+  border-radius: 999px; padding: 3px 12px; font-size: 12px; }
+.badge.muted { color: #9ca3af; }
+.panel .badge { background: #eef2f7; border-color: #d7dee8; color: #374151; }
+.panel .badge:empty { display: none; }
+main { max-width: 1100px; margin: 20px auto 60px; padding: 0 16px; display: grid; gap: 16px; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.panel h2 { margin: 0 0 12px; font-size: 16px; }
+.hidden { display: none; }
+textarea { width: 100%; resize: vertical; border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 12px; font-size: 14px; font-family: inherit; }
+.scenarios { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+.scenarios button { border: 1px solid var(--accent); color: var(--accent); background: #eff6ff;
+  border-radius: 999px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
+.scenarios button:hover { background: #dbeafe; }
+.actions { display: flex; gap: 10px; align-items: center; }
+button.primary { background: var(--accent); color: #fff; border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; cursor: pointer; }
+button.primary:disabled { background: #93c5fd; cursor: wait; }
+button.ghost { background: none; border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 14px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.hint { color: var(--muted); font-size: 13px; margin: 10px 0 0; min-height: 18px; }
+.steps.empty { color: var(--muted); font-size: 14px; }
+.step { border: 1px solid var(--line); border-left: 4px solid var(--accent);
+  border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; animation: appear .25s ease; }
+@keyframes appear { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+.step.final { border-left-color: var(--ok); }
+.step.error { border-left-color: var(--err); }
+.step .head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.step .n { font-weight: 700; }
+.step .tool { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.step .ms { color: var(--muted); font-size: 12px; margin-left: auto; }
+.step .thought { margin: 6px 0; font-size: 13px; color: #374151; }
+.step details { margin-top: 6px; }
+.step summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+.step pre { background: #f8fafc; border: 1px solid var(--line); border-radius: 6px;
+  padding: 8px 10px; font-family: var(--mono); font-size: 12px; overflow-x: auto;
+  white-space: pre-wrap; word-break: break-word; max-height: 260px; overflow-y: auto; }
+.answer { font-size: 15px; line-height: 1.55; white-space: pre-wrap; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.chips span { background: #ecfdf5; border: 1px solid #a7f3d0; color: var(--ok);
+  border-radius: 6px; padding: 2px 10px; font-family: var(--mono); font-size: 12px; }
+pre.diff { background: #0b1020; color: #d1d5db; border-radius: 8px; padding: 14px;
+  font-family: var(--mono); font-size: 12.5px; overflow-x: auto; white-space: pre-wrap; }
+pre.error { background: #fef2f2; color: var(--err); border-radius: 8px; padding: 12px;
+  font-family: var(--mono); font-size: 13px; white-space: pre-wrap; }
+.tools { display: grid; gap: 8px; }
+.tool-card { border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+.tool-card code { color: var(--accent); font-family: var(--mono); }
+.tool-card p { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #93c5fd;
+  border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite;
+  vertical-align: -2px; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }

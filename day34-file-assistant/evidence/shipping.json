@@ -1,0 +1,16 @@
+{
+  "day": 34,
+  "full_suite": {"passed": 498, "warnings": 1, "duration_sec": 111.25},
+  "video_local": "ChallengeVideos/day34-demo.mp4",
+  "video_remote": "yandex_challenge:AI Advent Challenge/Day 34/day34-demo.mp4",
+  "video_url": "https://yadi.sk/i/vHr4h0urmWHUGA",
+  "local_bytes": 3597515,
+  "remote_bytes": 3597515,
+  "byte_sizes_match": true,
+  "video_duration_sec": 106.04,
+  "video_kind": "Continuous capture of a successful real model run; labelled idle waits may be accelerated x12",
+  "skill_validation": "ship-day: Skill is valid!",
+  "demo_rule": "Show goal entry, launch, intermediate actions, tool calls, state changes and result; label shortened waits",
+  "temporary_cleanup": "Previous automatic policy rejected temporary Chrome profile deletion with blocked by policy. Generated profiles and frames remain local and ignored by Git.",
+  "unrelated_changes": "Existing changes outside day34, its test, README demo rules and the requested ship-day rule update are excluded from the commit."
+}

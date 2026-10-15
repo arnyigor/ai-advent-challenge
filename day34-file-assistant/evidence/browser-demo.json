@@ -1,0 +1,230 @@
+{
+  "captured_at": "2026-10-15T13:35:09.926Z",
+  "url": "http://127.0.0.1:8834/",
+  "screenshots": [
+    "short-question.png",
+    "short-steps.png",
+    "short-write.png",
+    "short-result.png",
+    "short-diff.png"
+  ],
+  "note": "Реальный прогон через веб-форму. Видео монтируется из настоящих снимков, ожидание модели сокращено.",
+  "run": {
+    "id": "8169ce17",
+    "goal": "В коде проекта появилась поддержка промокодов, но CHANGELOG.md её не описывает. Изучи код и добавь запись о промокодах в раздел Unreleased.",
+    "status": "done",
+    "steps": [
+      {
+        "n": 1,
+        "action": "tool",
+        "tool": "list_files",
+        "arguments": {},
+        "thought": "Изучаем структуру проекта, чтобы найти CHANGELOG.md и файлы, связанные с промокодами.",
+        "result": {
+          "files": [
+            {
+              "path": "CHANGELOG.md",
+              "bytes": 433
+            },
+            {
+              "path": "docs/adr-001.md",
+              "bytes": 963
+            },
+            {
+              "path": "README.md",
+              "bytes": 956
+            },
+            {
+              "path": "src/api.py",
+              "bytes": 788
+            },
+            {
+              "path": "src/cart.py",
+              "bytes": 732
+            },
+            {
+              "path": "src/pricing.py",
+              "bytes": 1485
+            },
+            {
+              "path": "src/promo.py",
+              "bytes": 875
+            },
+            {
+              "path": "src/report.py",
+              "bytes": 564
+            },
+            {
+              "path": "tests/test_pricing.py",
+              "bytes": 559
+            }
+          ],
+          "truncated": false
+        },
+        "duration_ms": 7046
+      },
+      {
+        "n": 2,
+        "action": "tool",
+        "tool": "read_file",
+        "arguments": {
+          "path": "CHANGELOG.md"
+        },
+        "thought": "Прочитаем CHANGELOG.md, чтобы узнать структуру файла и формат раздела Unreleased.",
+        "result": {
+          "path": "CHANGELOG.md",
+          "total_lines": 14,
+          "shown_lines": [
+            1,
+            14
+          ],
+          "truncated": false,
+          "content": "1: # Changelog\n2: \n3: Все заметные изменения этого проекта фиксируются здесь.\n4: Формат основан на Keep a Changelog.\n5: \n6: ## [Unreleased]\n7: \n8: ## [0.1.0] — 2026-10-01\n9: \n10: ### Added\n11: \n12: - `PriceCalculator`: subtotal, скидка в процентах, налог.\n13: - Корзина `Cart` и текстовый отчёт `render_report`.\n14: - HTTP checkout без учёта промокодов."
+        },
+        "duration_ms": 2125
+      },
+      {
+        "n": 3,
+        "action": "tool",
+        "tool": "read_file",
+        "arguments": {
+          "path": "src/promo.py"
+        },
+        "thought": "Изучаем файл src/promo.py, чтобы точно описать функционал промокодов.",
+        "result": {
+          "path": "src/promo.py",
+          "total_lines": 20,
+          "shown_lines": [
+            1,
+            20
+          ],
+          "truncated": false,
+          "content": "1: \"\"\"Промокоды: фиксированная скидка по коду. Новая фича, в CHANGELOG не внесена.\"\"\"\n2: \n3: PROMO_CODES = {\n4:     'WELCOME10': 1000,  # 1000 копеек = 10 рублей\n5:     'VIP500': 50000,\n6: }\n7: \n8: \n9: def promo_discount(code: str, subtotal: int) -> int:\n10:     \"\"\"Скидка по промокоду в копейках; не больше subtotal. Неизвестный код -> 0.\"\"\"\n11:     if not isinstance(code, str):\n12:         return 0\n13:     amount = PROMO_CODES.get(code.strip().upper(), 0)\n14:     return min(amount, max(subtotal, 0))\n15: \n16: \n17: def apply_promo(calculator, items, code: str) -> int:\n18:     \"\"\"Итог с промокодом: subtotal - промо + налог через PriceCalculator.\"\"\"\n19:     base = calculator.subtotal(items) - promo_discount(code, calculator.subtotal(items))\n20:     return base + round(base * calculator.tax_rate)"
+        },
+        "duration_ms": 9500
+      },
+      {
+        "n": 4,
+        "action": "tool",
+        "tool": "search_files",
+        "arguments": {
+          "query": "promo"
+        },
+        "thought": "Проверим, где еще в коде используется промокод, чтобы составить максимально точное описание для CHANGELOG.",
+        "result": {
+          "query": "promo",
+          "files_scanned": 9,
+          "matches": [
+            {
+              "path": "src/api.py",
+              "line": 3,
+              "text": "from promo import promo_discount"
+            },
+            {
+              "path": "src/api.py",
+              "line": 9,
+              "text": "\"\"\"order = {\"items\": [{\"name\", \"unit_price\", \"quantity\"}], \"discount_percent\", \"promo_code\"}.\"\"\""
+            },
+            {
+              "path": "src/api.py",
+              "line": 13,
+              "text": "promo = promo_discount(order.get('promo_code', ''), _calculator.subtotal(items))"
+            },
+            {
+              "path": "src/api.py",
+              "line": 14,
+              "text": "total = _calculator.total_price(items, percent) - promo"
+            },
+            {
+              "path": "src/api.py",
+              "line": 15,
+              "text": "return {'total': max(total, 0), 'promo_discount': promo, 'items_count': len(items)}"
+            },
+            {
+              "path": "src/promo.py",
+              "line": 9,
+              "text": "def promo_discount(code: str, subtotal: int) -> int:"
+            },
+            {
+              "path": "src/promo.py",
+              "line": 17,
+              "text": "def apply_promo(calculator, items, code: str) -> int:"
+            },
+            {
+              "path": "src/promo.py",
+              "line": 19,
+              "text": "base = calculator.subtotal(items) - promo_discount(code, calculator.subtotal(items))"
+            },
+            {
+              "path": "tests/test_pricing.py",
+              "line": 2,
+              "text": "from promo import promo_discount"
+            },
+            {
+              "path": "tests/test_pricing.py",
+              "line": 17,
+              "text": "def test_promo_discount_caps_at_subtotal():"
+            },
+            {
+              "path": "tests/test_pricing.py",
+              "line": 18,
+              "text": "assert promo_discount('VIP500', 1000) == 1000"
+            },
+            {
+              "path": "tests/test_pricing.py",
+              "line": 19,
+              "text": "assert promo_discount('UNKNOWN', 1000) == 0"
+            }
+          ],
+          "truncated": false
+        },
+        "duration_ms": 11235
+      },
+      {
+        "n": 5,
+        "action": "tool",
+        "tool": "replace_in_file",
+        "arguments": {
+          "path": "CHANGELOG.md",
+          "old": "## [Unreleased]\n\n## [0.1.0]",
+          "new": "## [Unreleased]\n\n### Added\n\n- Поддержка промокодов (`promo_discount`, `apply_promo`) с фиксированной скидкой и применением в API.\n\n## [0.1.0]"
+        },
+        "thought": "Добавляем описание поддержки промокодов в раздел Unreleased файла CHANGELOG.md.",
+        "result": {
+          "path": "CHANGELOG.md",
+          "replacements": 1,
+          "diff": "--- a/CHANGELOG.md\n+++ b/CHANGELOG.md\n@@ -4,6 +4,10 @@\n Формат основан на Keep a Changelog.\n \n ## [Unreleased]\n+\n+### Added\n+\n+- Поддержка промокодов (`promo_discount`, `apply_promo`) с фиксированной скидкой и применением в API.\n \n ## [0.1.0] — 2026-10-01\n \n"
+        },
+        "duration_ms": 4859
+      },
+      {
+        "n": 6,
+        "action": "tool",
+        "tool": "session_diff",
+        "arguments": {},
+        "thought": "Проверяем внесенные изменения с помощью session_diff перед завершением задачи.",
+        "result": {
+          "changed_files": [
+            "CHANGELOG.md"
+          ],
+          "diff": "--- a/CHANGELOG.md\n+++ b/CHANGELOG.md\n@@ -4,6 +4,10 @@\n Формат основан на Keep a Changelog.\n \n ## [Unreleased]\n+\n+### Added\n+\n+- Поддержка промокодов (`promo_discount`, `apply_promo`) с фиксированной скидкой и применением в API.\n \n ## [0.1.0] — 2026-10-01\n \n"
+        },
+        "duration_ms": 5687
+      },
+      {
+        "n": 7,
+        "action": "final",
+        "duration_ms": 6812
+      }
+    ],
+    "created": 1792071310.334116,
+    "answer": "Запись о поддержке промокодов успешно добавлена в раздел [Unreleased] файла CHANGELOG.md.",
+    "diff": "--- a/CHANGELOG.md\n+++ b/CHANGELOG.md\n@@ -4,6 +4,10 @@\n Формат основан на Keep a Changelog.\n \n ## [Unreleased]\n+\n+### Added\n+\n+- Поддержка промокодов (`promo_discount`, `apply_promo`) с фиксированной скидкой и применением в API.\n \n ## [0.1.0] — 2026-10-01\n \n",
+    "changed_files": [
+      "CHANGELOG.md"
+    ],
+    "model": "gemini:gemini-3.5-flash-lite",
+    "tool_calls": 6,
+    "duration_ms": 48250
+  }
+}

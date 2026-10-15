@@ -1,0 +1,16 @@
+{
+  "tests": 41,
+  "passed": 41,
+  "command": ".venv/Scripts/python.exe -m pytest tests/test_day34_file_assistant.py -q",
+  "warning": "Starlette uses deprecated AnyIO BlockingPortal alias",
+  "video": {
+    "duration_seconds": 106.04,
+    "width": 1600,
+    "height": 1000,
+    "codec": "h264",
+    "bytes": 3597515,
+    "audio": false
+  },
+  "secret_scan": "Project sources and evidence scanned; ignored generated browser profiles excluded",
+  "full_suite": {"passed": 498, "warnings": 1, "duration_sec": 111.25}
+}

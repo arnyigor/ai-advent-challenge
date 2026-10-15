@@ -1,0 +1,36 @@
+{
+  "day": 34,
+  "title": "Ассистент для работы с файлами проекта: агентный цикл + MCP file tools",
+  "status": "shipped",
+  "video_done": true,
+  "video_path": "ChallengeVideos\\day34-demo.mp4",
+  "video_duration_sec": 106.04,
+  "video_bytes": 3597515,
+  "video_url": "https://yadi.sk/i/vHr4h0urmWHUGA",
+  "not_verified": [
+    "semantic quality of arbitrary edits (checked only by the acceptance criteria of three scenarios)",
+    "Narration is not included; primary video is a real continuous browser capture."
+  ],
+  "unit_tests": 41,
+  "verified_scenarios": 1,
+  "verified_browser_calls": 2,
+  "model": "gemini-3.5-flash-lite",
+  "provider": "gemini",
+  "mcp_server": "day34-files",
+  "mcp_tools": [
+    "list_files",
+    "read_file",
+    "search_files",
+    "write_file",
+    "replace_in_file",
+    "session_diff"
+  ],
+  "video_kind": "continuous capture of a real live model run; only idle waits accelerated x12",
+  "audit": "day34-file-assistant/AUDIT.md",
+  "previous_verified_scenarios": 3,
+  "latest_acceptance_all_passed": false,
+  "latest_acceptance_note": "usage passed; changelog failed after a saved edit due to Gemini network disconnect; readme-check received an empty Gemini response. Successful browser runs are preserved separately in browser-demo.json and live-browser.json.",
+  "latest_live_browser_success": true,
+  "full_suite_tests": 498,
+  "full_suite_passed": true
+}

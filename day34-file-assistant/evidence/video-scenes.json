@@ -1,0 +1,37 @@
+{
+  "video": "G:\\AIModels\\ai-advent-challenge\\ChallengeVideos\\day34-demo.mp4",
+  "voiced": false,
+  "model": "gemini:gemini-3.5-flash-lite",
+  "scenes": [
+    {
+      "id": "intro",
+      "duration_sec": 13.02,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day34-file-assistant\\video-frames\\short\\00-intro.png",
+      "audio": null
+    },
+    {
+      "id": "question",
+      "duration_sec": 13.57,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day34-file-assistant\\video-frames\\short\\01-question.png",
+      "audio": null
+    },
+    {
+      "id": "steps",
+      "duration_sec": 13.35,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day34-file-assistant\\video-frames\\short\\02-steps.png",
+      "audio": null
+    },
+    {
+      "id": "write",
+      "duration_sec": 12.25,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day34-file-assistant\\video-frames\\short\\03-write.png",
+      "audio": null
+    },
+    {
+      "id": "result",
+      "duration_sec": 15.275,
+      "frame": "G:\\AIModels\\ai-advent-challenge\\day34-file-assistant\\video-frames\\short\\04-result.png",
+      "audio": null
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>День 34 — ассистент для работы с файлами проекта</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>День 34 · Файловый ассистент проекта</h1>
+  <p class="subtitle">Модель сама выбирает инструменты MCP: читает, ищет, анализирует и изменяет файлы.
+     Цель формулируется на уровне задачи, а не «открой файл X».</p>
+  <div id="badges" class="badges"><span class="badge muted">загрузка…</span></div>
+</header>
+
+<main>
+  <section class="panel" id="goal-panel">
+    <h2>Цель</h2>
+    <textarea id="goal" rows="4" maxlength="1000"
+      placeholder="Например: обнови CHANGELOG.md по изменениям в коде"></textarea>
+    <div class="scenarios" id="scenarios"></div>
+    <div class="actions">
+      <button id="run" class="primary">▶ Запустить ассистента</button>
+      <button id="reset" class="ghost" title="Восстановить sample_project из эталона">↺ Сбросить проект</button>
+    </div>
+    <p class="hint" id="status-line"></p>
+  </section>
+
+  <section class="panel" id="trace-panel">
+    <h2>Журнал работы агента <span id="step-count" class="badge muted"></span></h2>
+    <div id="steps" class="steps empty">Здесь появятся шаги: какой инструмент вызван, с какими аргументами и что вернул проект.</div>
+  </section>
+
+  <section class="panel hidden" id="answer-panel">
+    <h2>Ответ ассистента</h2>
+    <div id="answer" class="answer"></div>
+  </section>
+
+  <section class="panel hidden" id="diff-panel">
+    <h2>Изменения файлов (session_diff)</h2>
+    <div id="changed-files" class="chips"></div>
+    <pre id="diff" class="diff"></pre>
+  </section>
+
+  <section class="panel hidden" id="error-panel">
+    <h2>Ошибка</h2>
+    <pre id="error" class="error"></pre>
+  </section>
+
+  <section class="panel" id="tools-panel">
+    <h2>Каталог инструментов MCP <span class="badge muted">tools/list</span></h2>
+    <div id="tools" class="tools"></div>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
