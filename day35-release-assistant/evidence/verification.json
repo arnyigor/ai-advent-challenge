@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-16T15:16:59.123Z",
+  "syntax_files": [
+    "capture-demo.mjs",
+    "checks.mjs",
+    "cli.mjs",
+    "config.mjs",
+    "git.mjs",
+    "model.mjs",
+    "release.mjs",
+    "report.mjs",
+    "server.mjs",
+    "verify-live.mjs",
+    "verify.mjs",
+    "web\\app.js",
+    "test\\release.test.mjs"
+  ],
+  "secret_scan": {
+    "files": 32,
+    "leaks": []
+  },
+  "exit_code": 0,
+  "tests_output": "✔ collector uses exact SHA, includes workflow and detects dirty working tree (1728.7721ms)\n✔ secret and hidden paths are excluded while workflows are allowed (0.3313ms)\n✔ invalid and missing refs fail (37.6226ms)\n✔ non-ancestor range is rejected (75.8875ms)\n✔ empty range contains no changes (414.921ms)\n✔ context truncation is explicit (1204.8074ms)\n✔ unknown evidence ID and textual citation are rejected (0.7664ms)\n✔ wrong response fields rejected (0.1756ms)\n✔ not-run and wrong-SHA checks never become success (0.2762ms)\n✔ failed/timeout checks block even with valid AI (0.1654ms)\n✔ model network failure and incomplete answer remain errors (0.9649ms)\n✔ invalid JSON rejected and valid JSON accepted through adapter (0.5559ms)\n✔ model refuses nonloopback local endpoint (0.1937ms)\n✔ temporary HTTP error retries same model and records attempt (2011.1955ms)\n✔ process failures and timeout carry correct statuses (205.3532ms)\n✔ HTML output escapes model data (0.3856ms)\n✔ facts-only orchestrator writes real artifacts and keeps incomplete (1221.9309ms)\n✔ HTTP rejects cross-origin execution and arbitrary artifact paths (25.7815ms)\n✔ full HTTP flow calls local model and exposes saved artifacts (1335.3033ms)\nℹ tests 19\nℹ suites 0\nℹ pass 19\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 8355.4317\n"
+}

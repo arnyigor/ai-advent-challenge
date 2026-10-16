@@ -1,0 +1,98 @@
+{
+  "at": "2026-10-16T15:16:50.157Z",
+  "run_id": "2d55af03-83ae-4673-9827-a122c0af8667",
+  "model": "gemini:gemini-3.8-flash",
+  "result_status": "checks_passed_review_needed",
+  "base_sha": "7ca367d33b2d8b4b0e751e900236e7937e4a8b11",
+  "head_sha": "13da58f60d53fe2f3aa05246cdb5d1f9bdbbd5b1",
+  "commits": 8,
+  "changed_files": 30,
+  "sources": 32,
+  "coverage_complete": true,
+  "changes": 8,
+  "manual_checks": 6,
+  "checks": [
+    {
+      "id": "shared-jvm-tests",
+      "task": ":shared:jvmTest",
+      "required": true,
+      "argv": [
+        "java",
+        "org.gradle.wrapper.GradleWrapperMain",
+        ":shared:jvmTest",
+        "--no-daemon",
+        "--console=plain"
+      ],
+      "tested_sha": "13da58f60d53fe2f3aa05246cdb5d1f9bdbbd5b1",
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 18426,
+      "log_path": "logs/shared-jvm-tests.log"
+    },
+    {
+      "id": "android-debug",
+      "task": ":androidApp:assembleDebug",
+      "required": true,
+      "argv": [
+        "java",
+        "org.gradle.wrapper.GradleWrapperMain",
+        ":androidApp:assembleDebug",
+        "--no-daemon",
+        "--console=plain"
+      ],
+      "tested_sha": "13da58f60d53fe2f3aa05246cdb5d1f9bdbbd5b1",
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 19940,
+      "log_path": "logs/android-debug.log"
+    },
+    {
+      "id": "desktop-package",
+      "task": ":desktopApp:createDistributable",
+      "required": true,
+      "argv": [
+        "java",
+        "org.gradle.wrapper.GradleWrapperMain",
+        ":desktopApp:createDistributable",
+        "--no-daemon",
+        "--console=plain"
+      ],
+      "tested_sha": "13da58f60d53fe2f3aa05246cdb5d1f9bdbbd5b1",
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 31071,
+      "log_path": "logs/desktop-package.log"
+    }
+  ],
+  "jvm_tests": {
+    "tests": 35,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "build_artifacts": [
+    {
+      "kind": "android-debug-apk",
+      "file": "androidApp/build/outputs/apk/debug/androidApp-debug.apk",
+      "bytes": 26859153,
+      "sha256": "16321ba189adce277d9a889080e6591f1bc23678f7b7a0fd655c997592177da2"
+    },
+    {
+      "kind": "windows-launcher",
+      "file": "desktopApp/build/compose/binaries/main/app/DnsHostsGenerator/DnsHostsGenerator.exe",
+      "bytes": 559104,
+      "sha256": "5a05cef09aad7b87140e5239bfe1a00a84013e471d855f24a4b7cd5f44f9296a"
+    },
+    {
+      "kind": "bundled-jvm",
+      "file": "desktopApp/build/compose/binaries/main/app/DnsHostsGenerator/runtime/bin/server/jvm.dll",
+      "bytes": 14071328,
+      "sha256": "957299089f1b98f0e1b0cf9f9da1094004aa868d4272c5a9cdc315024f36bf58"
+    }
+  ],
+  "limitations": [
+    "Смысловая точность AI требует просмотра",
+    "Desktop проверен только на Windows",
+    "Production-подпись и реальные устройства не проверены"
+  ]
+}

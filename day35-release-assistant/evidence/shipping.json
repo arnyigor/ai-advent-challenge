@@ -1,0 +1,13 @@
+{
+  "verified_at": "2026-10-16T15:18:05.7730443Z",
+  "video_url": "https://yadi.sk/i/nPoncA9xQkpg6g",
+  "local_video": "ChallengeVideos/day35-demo.mp4",
+  "remote_video": "yandex_challenge:AI Advent Challenge/Day 35/day35-demo.mp4",
+  "local_bytes": 1722753,
+  "remote_bytes": 1722753,
+  "sha256": "f1e6cc8838581c98e3e423ab119df8571035d421a5c5f8fe7c05d860f09f7a52",
+  "python_tests": 498,
+  "node_tests": 19,
+  "python_warning": "Starlette / anyio deprecation",
+  "cleanup": "Ignored local video frames retained: automatic approval review blocked recursive removal"
+}

@@ -1,0 +1,85 @@
+{
+  "id": "2d55af03-83ae-4673-9827-a122c0af8667",
+  "events": [
+    {
+      "at": "2026-10-16T12:30:52.778Z",
+      "stage": "git",
+      "message": "Читаем выбранные версии Git"
+    },
+    {
+      "at": "2026-10-16T12:31:01.545Z",
+      "stage": "git",
+      "message": "8 коммитов · 30 файлов · 32 источников"
+    },
+    {
+      "at": "2026-10-16T12:31:01.548Z",
+      "stage": "checks",
+      "message": "Создаём отдельную копию выбранного SHA для проверок"
+    },
+    {
+      "at": "2026-10-16T12:31:01.891Z",
+      "stage": "checks",
+      "message": "Проверка: shared-jvm-tests"
+    },
+    {
+      "at": "2026-10-16T12:31:20.318Z",
+      "stage": "checks",
+      "message": "shared-jvm-tests: passed"
+    },
+    {
+      "at": "2026-10-16T12:31:20.318Z",
+      "stage": "checks",
+      "message": "Проверка: android-debug"
+    },
+    {
+      "at": "2026-10-16T12:31:40.259Z",
+      "stage": "checks",
+      "message": "android-debug: passed"
+    },
+    {
+      "at": "2026-10-16T12:31:40.259Z",
+      "stage": "checks",
+      "message": "Проверка: desktop-package"
+    },
+    {
+      "at": "2026-10-16T12:32:11.331Z",
+      "stage": "checks",
+      "message": "desktop-package: passed"
+    },
+    {
+      "at": "2026-10-16T12:32:11.331Z",
+      "stage": "model",
+      "message": "Генерация gemini:gemini-3.8-flash · 32 источников"
+    },
+    {
+      "at": "2026-10-16T12:32:13.489Z",
+      "stage": "model",
+      "message": "gemini: HTTP 503; повтор 2/3 на той же модели"
+    },
+    {
+      "at": "2026-10-16T12:32:33.768Z",
+      "stage": "validation",
+      "message": "JSON и ссылки на источники проверены"
+    },
+    {
+      "at": "2026-10-16T12:32:33.768Z",
+      "stage": "complete",
+      "message": "Итог: checks_passed_review_needed"
+    }
+  ],
+  "error": null,
+  "model": "gemini:gemini-3.8-flash",
+  "usage": {
+    "promptTokenCount": 66451,
+    "candidatesTokenCount": 2219,
+    "totalTokenCount": 68670,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 66451
+      }
+    ],
+    "serviceTier": "standard"
+  },
+  "result_status": "checks_passed_review_needed"
+}
